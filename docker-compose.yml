@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  sms-sender:
+    build:
+      context: ./web_app
+      dockerfile: Dockerfile
+    container_name: sms-sender-pro
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DATA_DIR=/app/data
+    volumes:
+      - sms_data:/app/data
+
+volumes:
+  sms_data:

@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Bazy numerów i wrażliwe pliki z danymi (RODO / Ochrona bazy)
+*.csv
+sms_state.json
+**/sms_state.json
+data/
+**/data/
+
+# Wirtualne środowiska i edytory
+.venv/
+venv/
+env/
+.idea/
+.vscode/
+*.log
+.env

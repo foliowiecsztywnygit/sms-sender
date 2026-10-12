@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Sender PRO - Turbo 3 Devices & DualSIM AntiSpam</title>
+    <style>
+        :root {
+            --bg-color: #1e1e2e;
+            --panel-bg: #313244;
+            --log-bg: #181825;
+            --border-color: #45475a;
+            --text-color: #cdd6f4;
+            --text-muted: #a6adc8;
+            --accent-blue: #89b4fa;
+            --accent-cyan: #74c7ec;
+            --btn-start: #a6e3a1;
+            --btn-pause: #f9e2af;
+            --btn-terminate: #f38ba8;
+            --btn-clear: #6c7086;
+            --status-color: #f5e0dc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 14px;
+            padding: 16px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .section-label {
+            color: var(--accent-blue);
+            font-size: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        textarea {
+            width: 100%;
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            padding: 8px 10px;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus, input[type="text"]:focus, input[type="number"]:focus {
+            border-color: var(--accent-blue);
+        }
+
+        .csv-box {
+            height: 140px;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        .sms-box {
+            height: 120px;
+            white-space: pre-wrap;
+        }
+
+        /* Ustawienia rzędowe */
+        .settings-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            padding: 2px 0;
+        }
+
+        .settings-label {
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .settings-label-bold {
+            color: var(--text-color);
+            font-size: 14px;
+            font-weight: bold;
+            min-width: 100px;
+        }
+
+        input[type="number"], input[type="text"] {
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            padding: 4px 8px;
+            width: 70px;
+            text-align: center;
+            outline: none;
+        }
+
+        /* Radio & Checkbox */
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .radio-item, .checkbox-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .radio-cyan {
+            color: var(--accent-cyan);
+        }
+
+        .radio-turbo {
+            color: #f38ba8;
+            font-weight: bold;
+        }
+
+        .radio-sim {
+            color: #a6e3a1;
+        }
+
+        .checkbox-switch {
+            color: #f9e2af;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            accent-color: var(--accent-blue);
+            cursor: pointer;
+            width: 15px;
+            height: 15px;
+        }
+
+        /* Przyciski */
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .btn {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            border-radius: 3px;
+            padding: 7px 18px;
+            cursor: pointer;
+            transition: opacity 0.15s, transform 0.05s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-start {
+            background-color: var(--btn-start);
+            color: #1e1e2e;
+        }
+
+        .btn-pause {
+            background-color: var(--btn-pause);
+            color: #1e1e2e;
+        }
+
+        .btn-terminate {
+            background-color: var(--btn-terminate);
+            color: #1e1e2e;
+        }
+
+        .btn-clear {
+            background-color: var(--btn-clear);
+            color: var(--text-color);
+        }
+
+        /* Status */
+        .status-display {
+            color: var(--status-color);
+            font-size: 16px;
+            font-weight: bold;
+            padding: 2px 0;
+            min-height: 24px;
+        }
+
+        /* Logi */
+        .log-container {
+            background-color: var(--log-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px 10px;
+            height: 220px;
+            overflow-y: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* Scrollbary */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #585b70;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 1. DANE CSV -->
+        <div class="section-label">📋  Dane CSV (wklej wiersze):</div>
+        <textarea id="csvInput" class="csv-box" placeholder="Nazwa,Miasto,48123456789&#10;..."></textarea>
+
+        <!-- 2. SZABLONY SMS -->
+        <div class="section-label">✉️  Szablony SMS (oddzielaj kolejne wpisując '---' w nowej linii):</div>
+        <textarea id="smsTemplate" class="sms-box" placeholder="{Dzień dobry|Cześć} {Name:Kliencie}! [Sprawdź|Zobacz ofertę] w {City:Twojej okolicy}.&#10;---&#10;{Hej|Dzień dobry}! Nowa oferta dla firm z {City:Twojego miasta}."></textarea>
+
+        <!-- 3. USTAWIENIA CZASU -->
+        <div class="settings-row">
+            <span class="settings-label">⏱ Długie Opóźnienie (sekundy) - Min:</span>
+            <input type="number" id="delayMin" step="0.5" value="40.5">
+            <span class="settings-label">Max:</span>
+            <input type="number" id="delayMax" step="0.5" value="90.5">
+        </div>
+
+        <!-- 4. TRYB PRACY -->
+        <div class="settings-row">
+            <span class="settings-label-bold">📲 Tryb Pracy:</span>
+            <div class="radio-group">
+                <label class="radio-item radio-cyan">
+                    <input type="radio" name="deviceMode" value="1" id="mode1"> Tel 1 (DualSIM)
+                </label>
+                <label class="radio-item radio-cyan">
+                    <input type="radio" name="deviceMode" value="2" id="mode2"> Tel 2 (1 SIM)
+                </label>
+                <label class="radio-item radio-cyan">
+                    <input type="radio" name="deviceMode" value="3" id="mode3"> Tel 3 (DualSIM)
+                </label>
+                <label class="radio-item radio-turbo">
+                    <input type="radio" name="deviceMode" value="4" id="mode4" checked> 🚀 WSZYSTKIE (Turbo 5 kart: 1-&gt;2-&gt;3-&gt;1-&gt;3-&gt;Pauza)
+                </label>
+            </div>
+        </div>
+
+        <!-- 5. KARTY SIM -->
+        <div class="settings-row" id="simRow">
+            <span class="settings-label-bold">📱 Karty SIM:</span>
+            <div class="radio-group" id="simGroup">
+                <label class="radio-item radio-sim">
+                    <input type="radio" name="sim" value="1" id="sim1" checked> Start SIM 1
+                </label>
+                <label class="radio-item radio-sim">
+                    <input type="radio" name="sim" value="2" id="sim2"> Start SIM 2
+                </label>
+                <label class="checkbox-item checkbox-switch" style="margin-left: 20px;">
+                    <input type="checkbox" id="autoSwitch"> Rotacja SIM po wysłanym SMS (Tel 1 &amp; Tel 3 - DualSIM)
+                </label>
+            </div>
+            <span id="simHint" style="color: var(--text-muted); font-size: 12px; margin-left: 10px;">(W Turbo sekwencja automatycznie używa wszystkich 5 kart)</span>
+        </div>
+
+        <!-- 6. PRZYCISKI AKCJI -->
+        <div class="button-row">
+            <button class="btn btn-start" onclick="handleAction('start')">▶  START</button>
+            <button class="btn btn-pause" onclick="handleAction('pause')">⏸  PAUZA</button>
+            <button class="btn btn-terminate" onclick="handleAction('terminate')">⏹  TERMINACJA</button>
+            <button class="btn btn-clear" onclick="handleAction('clear')">🗑  WYCZYŚĆ DANE</button>
+        </div>
+
+        <!-- 7. STATUS -->
+        <div id="statusLabel" class="status-display">Status: IDLE | Gotowy do startu</div>
+
+        <!-- 8. LOG ZDARZEŃ -->
+        <div class="section-label">📝  Log zdarzeń:</div>
+        <div id="logArea" class="log-container"></div>
+    </div>
+
+    <script>
+        let isSaving = false;
+        let isFetching = false;
+        let isInitialized = false;
+
+        const csvInput = document.getElementById('csvInput');
+        const smsTemplate = document.getElementById('smsTemplate');
+        const delayMin = document.getElementById('delayMin');
+        const delayMax = document.getElementById('delayMax');
+        const autoSwitch = document.getElementById('autoSwitch');
+        const statusLabel = document.getElementById('statusLabel');
+        const logArea = document.getElementById('logArea');
+
+        function getSelectedDeviceMode() {
+            const el = document.querySelector('input[name="deviceMode"]:checked');
+            return el ? parseInt(el.value) : 4;
+        }
+
+        function getSelectedSim() {
+            const el = document.querySelector('input[name="sim"]:checked');
+            return el ? parseInt(el.value) : 1;
+        }
+
+        async function saveConfig() {
+            if (isSaving) return;
+            isSaving = true;
+            try {
+                const payload = {
+                    csv: csvInput.value,
+                    sms_template: smsTemplate.value,
+                    delay_min: delayMin.value,
+                    delay_max: delayMax.value,
+                    device_mode: getSelectedDeviceMode(),
+                    current_sim: getSelectedSim(),
+                    auto_switch: autoSwitch.checked
+                };
+                await fetch('/api/save_config', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.error("Błąd zapisu konfiguracji:", err);
+            } finally {
+                isSaving = false;
+            }
+        }
+
+        // Auto-save przy edycji
+        csvInput.addEventListener('change', saveConfig);
+        smsTemplate.addEventListener('change', saveConfig);
+        delayMin.addEventListener('change', saveConfig);
+        delayMax.addEventListener('change', saveConfig);
+        autoSwitch.addEventListener('change', saveConfig);
+        function updateSimControlsUI() {
+            const mode = getSelectedDeviceMode();
+            const simGroup = document.getElementById('simGroup');
+            const simHint = document.getElementById('simHint');
+            const simInputs = simGroup.querySelectorAll('input');
+
+            if (mode === 4) {
+                // Turbo
+                simGroup.style.opacity = '0.4';
+                simInputs.forEach(i => i.disabled = true);
+                simHint.innerText = "(W trybie Turbo sekwencja automatycznie wykorzystuje wszystkie 5 kart SIM)";
+                simHint.style.display = 'inline';
+            } else if (mode === 2) {
+                // Tel 2 (Single SIM)
+                simGroup.style.opacity = '0.4';
+                simInputs.forEach(i => i.disabled = true);
+                simHint.innerText = "(Tel 2 posiada tylko 1 kartę SIM)";
+                simHint.style.display = 'inline';
+            } else {
+                // Tel 1 lub Tel 3 (Dual SIM)
+                simGroup.style.opacity = '1.0';
+                simInputs.forEach(i => i.disabled = false);
+                simHint.innerText = `(Aktywne dla Tel ${mode} - Dual SIM)`;
+                simHint.style.display = 'inline';
+            }
+        }
+
+        document.querySelectorAll('input[name="deviceMode"]').forEach(el => {
+            el.addEventListener('change', () => {
+                updateSimControlsUI();
+                saveConfig();
+            });
+        });
+        document.querySelectorAll('input[name="sim"]').forEach(el => el.addEventListener('change', saveConfig));
+
+        async function handleAction(action) {
+            await saveConfig();
+            try {
+                const res = await fetch(`/api/${action}`, { method: 'POST' });
+                const data = await res.json();
+                if (data.status === 'error') {
+                    alert(data.message);
+                }
+            } catch (err) {
+                console.error(`Błąd akcji ${action}:`, err);
+            }
+            fetchState();
+        }
+
+        async function fetchState() {
+            if (isFetching) return;
+            isFetching = true;
+            try {
+                const res = await fetch('/api/state');
+                const data = await res.json();
+
+                // Przy pierwszym wczytaniu uzupełniamy pola danymi ze stanu
+                if (!isInitialized) {
+                    if (data.csv) csvInput.value = data.csv;
+                    if (data.sms_template) smsTemplate.value = data.sms_template;
+                    if (data.delay_min) delayMin.value = data.delay_min;
+                    if (data.delay_max) delayMax.value = data.delay_max;
+                    if (data.auto_switch !== undefined) autoSwitch.checked = data.auto_switch;
+                    
+                    const modeEl = document.getElementById(`mode${data.device_mode}`);
+                    if (modeEl) modeEl.checked = true;
+
+                    const simEl = document.getElementById(`sim${data.current_sim}`);
+                    if (simEl) simEl.checked = true;
+
+                    updateSimControlsUI();
+                    isInitialized = true;
+                } else if (data.status === 'IDLE' && document.activeElement !== csvInput && document.activeElement !== smsTemplate) {
+                    // Aktualizujemy zawartość gdy IDLE i użytkownik nie pisze akurat w polach
+                    if (data.csv !== undefined && csvInput.value === '') csvInput.value = data.csv;
+                    if (data.sms_template !== undefined && smsTemplate.value === '') smsTemplate.value = data.sms_template;
+                }
+
+                // Aktualizacja wskaźnika aktywnej karty SIM przy rotacji
+                const currentSimEl = document.getElementById(`sim${data.current_sim}`);
+                if (currentSimEl && data.status === 'RUNNING') {
+                    currentSimEl.checked = true;
+                }
+
+                // Aktualizacja paska statusu
+                if (data.status === 'IDLE') {
+                    statusLabel.innerText = data.current_index > 0 ? 
+                        `Wysłano ${data.current_index}/${data.total_lines} | Status: IDLE` : 
+                        "Status: IDLE | Gotowy do startu";
+                } else if (data.status === 'PAUSED') {
+                    statusLabel.innerText = `Wysłano ${data.current_index}/${data.total_lines} | Status: PAUZA`;
+                } else if (data.status === 'RUNNING') {
+                    statusLabel.innerText = `Wysłano ${data.current_index}/${data.total_lines} | Status: W TRAKCIE`;
+                }
+
+                // Aktualizacja logów z auto-scrollem
+                const wasAtBottom = (logArea.scrollHeight - logArea.scrollTop) <= (logArea.clientHeight + 15);
+                const newLogs = (data.logs || []).join('\n');
+                if (logArea.innerText !== newLogs) {
+                    logArea.innerText = newLogs;
+                    if (wasAtBottom) {
+                        logArea.scrollTop = logArea.scrollHeight;
+                    }
+                }
+            } catch (err) {
+                console.error("Błąd pobierania stanu:", err);
+            } finally {
+                isFetching = false;
+            }
+        }
+
+        setInterval(fetchState, 1000);
+        fetchState();
+    </script>
+</body>
+</html>
