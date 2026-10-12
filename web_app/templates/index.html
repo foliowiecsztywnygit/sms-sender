@@ -366,10 +366,20 @@
             }
         }
 
-        // Auto-save przy edycji
+        let debounceTimer;
+        function debouncedSave() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(saveConfig, 400);
+        }
+
+        // Auto-save przy edycji (natychmiast z debouncem przy wpisywaniu/wklejaniu oraz na change)
+        csvInput.addEventListener('input', debouncedSave);
         csvInput.addEventListener('change', saveConfig);
+        smsTemplate.addEventListener('input', debouncedSave);
         smsTemplate.addEventListener('change', saveConfig);
+        delayMin.addEventListener('input', debouncedSave);
         delayMin.addEventListener('change', saveConfig);
+        delayMax.addEventListener('input', debouncedSave);
         delayMax.addEventListener('change', saveConfig);
         autoSwitch.addEventListener('change', saveConfig);
         function updateSimControlsUI() {
