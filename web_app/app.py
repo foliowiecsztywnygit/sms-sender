@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 SMS Sender PRO - Wersja Webowa (FastAPI + Coolify Docker)
-Obsługa 3 telefonów, trybu Turbo (5 kart naprzemiennie), zaawansowanego spintaxu,
-bezpiecznej obfuscacji URL i ciągłej pracy w tle z ochroną przed FUP.
+Obsługa 3 telefonów, trybu Turbo (5 kart zbalansowanych), zaawansowanego spintaxu,
+bezpiecznej obfuscacji URL i ochrony modemu DSDS przed błędem Generic Failure.
 """
 
 import json
@@ -34,14 +34,28 @@ CREDENTIALS = {
     3: ("QL5Z7O", "4jzbmvhv6tpbmd")   # Telefon 3 (Dual SIM)
 }
 
-# Sekwencja Turbo 5 kart: Tel 1 (SIM 1) -> Tel 2 (SIM 1) -> Tel 3 (SIM 1) -> Tel 1 (SIM 2) -> Tel 3 (SIM 2)
+# Zoptymalizowana sekwencja Turbo (maksymalny odstęp czasu dla fizycznych aparatów Tel 1 i Tel 3)
 TURBO_SEQUENCE = [
     (1, 1),  # Tel 1, SIM 1
-    (2, 1),  # Tel 2, SIM 1
     (3, 1),  # Tel 3, SIM 1
-    (1, 2),  # Tel 1, SIM 2
-    (3, 2),  # Tel 3, SIM 2
+    (2, 1),  # Tel 2, SIM 1
+    (1, 2),  # Tel 1, SIM 2 (Tel 1 odpoczywał przez 2 inne telefony)
+    (3, 2),  # Tel 3, SIM 2 (Tel 3 odpoczywał przez 2 inne telefony)
 ]
+
+DEFAULT_TEMPLATES = """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Wtorkowy poranek po weekendowym zamieszaniu to chyba wreszcie moment na spokojniejszą kawę. Dopytam krótko z ciekawości – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez oddawania prowizji portalom. Podrzucić na spokojnie krótkie wideo z podglądem?
+---
+{Dzień dobry | Witam}! Krzysztof z tej strony. Złapałem chwilę we wtorkowe przedpołudnie, więc zapytam prosto z mostu. Czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio przez telefon bez konieczności wcześniejszego dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata wpada od razu na Państwa konto z pominięciem prowizji pośredników. Mogę podesłać szybkie demo do rzucenia okiem przy kawie?
+---
+{Dzień dobry | Cześć}! Z tej strony Krzysztof. Pora około południa we wtorek to zazwyczaj dobry moment, zanim od środy znowu zaczną się urywać telefony z pytaniami o weekend. Zastanawiałem się, czy macie już podpięty własny system rezerwacji na stronie? Uruchamiam proste kalendarze dla kwater, które same pilnują terminów i zdejmują ciągłe odpisywanie, a pełny zysk z pobytu zostaje u właściciela. Podesłać niezobowiązująco krótkie wideo, jak to działa w praktyce?
+---
+{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Łapię w nieco spokojniejszym momencie we wtorek z szybkim pytaniem branżowym. Czy korzystacie już z własnego modułu do rezerwacji online, czy większość rezerwacji wciąż wpada przez portale pośredniczące? Wdrażam lokalnie proste narzędzia, które pozwalają turystom rezerwować nocleg bezpośrednio z telefonu, dzięki czemu nie oddajecie kilkunastu procent prowizji od każdej doby. Mogę podrzucić link do 2-minutowego demo?
+---
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sprawa we wtorkowe przedpołudnie. Widzę po rynku, że coraz więcej osób szuka noclegów w biegu na telefonie i woli od razu kliknąć wolny termin oraz opłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji bez zbędnych komplikacji – system przyjmuje wpłaty 24/7, a pieniądze trafiają prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia w wolnej chwili?
+---
+{Dzień dobry | Witam}! Tu Krzysztof. Wtorek koło południa, więc mam nadzieję, że poranne sprawy w obiekcie już ogarnięte i jest chwila wytchnienia. Dopytam z ciekawości – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
+---
+{Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając z luźniejszego wtorkowego przedpołudnia, pozwolę sobie zadać jedno krótkie pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe do rzucenia okiem w wolnej chwili?"""
 
 # Obsługa wolumenu danych pod Coolify
 DATA_DIR = Path(os.getenv("DATA_DIR", Path(__file__).resolve().parent / "data"))
@@ -55,14 +69,14 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 # Stan aplikacji
 state = {
     "csv": "",
-    "sms_template": "",
+    "sms_template": DEFAULT_TEMPLATES,
     "current_index": 0,
     "turbo_step": 0,
     "device_mode": 4,      # 1=Tel1, 2=Tel2, 3=Tel3, 4=Turbo (5 kart)
     "current_sim": 1,      # 1 lub 2
     "auto_switch": False,  # Rotacja SIM dla trybu pojedynczego (Tel 1 i Tel 3)
-    "delay_min": 40.5,
-    "delay_max": 90.5,
+    "delay_min": 40.0,
+    "delay_max": 75.0,
     "status": "IDLE",      # IDLE, RUNNING, PAUSED
     "logs": []
 }
@@ -83,7 +97,7 @@ def save_state():
     with state_lock:
         try:
             s = state.copy()
-            s["logs"] = s["logs"][-50:]  # Ostatnie 50 logów do trwałego zapisu
+            s["logs"] = s["logs"][-50:]
             STATE_FILE.write_text(json.dumps(s, ensure_ascii=False, indent=2), encoding="utf-8")
         except Exception as e:
             print(f"Błąd zapisu stanu: {e}")
@@ -95,10 +109,11 @@ def load_state():
         s = json.loads(STATE_FILE.read_text(encoding="utf-8"))
         with state_lock:
             state.update(s)
-            # Przy restarcie serwera/kontenera w Coolify, jeśli był RUNNING, ustawiamy PAUSED
+            if not state.get("sms_template"):
+                state["sms_template"] = DEFAULT_TEMPLATES
             if state.get("status") == "RUNNING":
                 state["status"] = "PAUSED"
-                _log(f"🔄 Wczytano stan po restarcie: wiersz {state['current_index'] + 1} (PAUZA - kliknij START)")
+                _log(f"🔄 Wczytano stan po restarcie: wiersz {state['current_index'] + 1} (PAUZA)")
             elif state.get("current_index", 0) > 0:
                 _log(f"🔄 Wczytano stan: zapisany wiersz {state['current_index'] + 1}")
     except Exception as e:
@@ -162,21 +177,12 @@ def parse_csv_line(line: str) -> dict | None:
 # ZAAWANSOWANY SPINTAX I ANTY-SPAM
 # ──────────────────────────────────────────────
 def resolve_spintax(text: str, context: dict | None = None) -> str:
-    """
-    Zaawansowany parser spintax:
-    - Zmienne: {Name}, {Name:Klient}, {City}, {City:Twojej okolicy}
-    - Zagnieżdżony spintax: {Dzień dobry|{Cześć|Hej}}
-    - Opcjonalne fragmenty: [tekst] (50% szans) oraz puste wybory {opcja|}
-    - Unikalne identyfikatory anty-spamowe: {rand_num:MIN:MAX}, {rand_code:DŁUGOŚĆ}
-    - Czyszczenie wielokrotnych spacji po pustych opcjach.
-    """
     if context is None:
         context = {}
         
     name = context.get("name", "").strip()
     city = context.get("city", "").strip()
 
-    # 1. Obsługa zmiennych {Name} i {City} (z opcją fallback {Name:Kliencie})
     def replace_var(m):
         var_name = m.group(1).lower()
         fallback = m.group(2) if m.group(2) is not None else ""
@@ -188,7 +194,6 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
 
     text = re.sub(r'\{(Name|City)(?::([^}]*))?\}', replace_var, text, flags=re.IGNORECASE)
 
-    # 2. Losowe kody i numery zapobiegające blokadom powtarzalnego tekstu
     def replace_rand_num(m):
         try:
             return str(random.randint(int(m.group(1)), int(m.group(2))))
@@ -205,20 +210,15 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
             return m.group(0)
     text = re.sub(r'\{rand_code:(\d+)\}', replace_rand_code, text, flags=re.IGNORECASE)
 
-    # 3. Opcjonalne fragmenty [tekst] lub [opcja1|opcja2]
     bracket_pattern = re.compile(r'\[([^\[\]]+)\]')
     while True:
         match = bracket_pattern.search(text)
         if not match:
             break
         options = match.group(1).split('|')
-        if len(options) == 1:
-            choice = options[0] if random.random() < 0.5 else ""
-        else:
-            choice = random.choice(options)
+        choice = (options[0] if random.random() < 0.5 else "") if len(options) == 1 else random.choice(options)
         text = text[:match.start()] + choice + text[match.end():]
 
-    # 4. Zagnieżdżony Spintax {opcja1|opcja2|{a|b}}
     pattern = re.compile(r'\{([^{}]+)\}')
     loops = 0
     while loops < 100:
@@ -230,14 +230,10 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
         text = text[:match.start()] + choice + text[match.end():]
         loops += 1
 
-    # 5. Normalizacja spacji
     lines = [re.sub(r'[ \t]{2,}', ' ', l).strip() for l in text.splitlines()]
     return "\n".join(lines)
 
 def apply_obfuscation(text: str) -> str:
-    """
-    Subtelna obfuskacja znaków z pełną ochroną adresów URL przed zniekształceniem.
-    """
     url_pattern = re.compile(r'https?://[^\s]+')
     urls = []
     def save_url(m):
@@ -265,19 +261,22 @@ def apply_obfuscation(text: str) -> str:
         result = result.replace(f"__URL_{i}__", url)
     return result
 
+
 # ──────────────────────────────────────────────
 # WYSYŁKA SMS PRZEZ API
 # ──────────────────────────────────────────────
 def send_sms_request(phone: str, text: str, device_number: int, sim_number: int) -> tuple[bool, bool]:
+    # withDeliveryReport: False zapobiega blokowaniu modemu DSDS przez nasłuch ACK
     payload = {
         "textMessage": {"text": text},
         "phoneNumbers": [phone],
-        "simNumber": sim_number
+        "simNumber": sim_number,
+        "withDeliveryReport": False
     }
     username, password = CREDENTIALS.get(device_number, CREDENTIALS[1])
     try:
         resp = requests.post(
-            API_URL, json=payload, auth=HTTPBasicAuth(username, password), timeout=30
+            API_URL, json=payload, auth=HTTPBasicAuth(username, password), timeout=25
         )
         if resp.status_code in (200, 201, 202):
             return True, False
@@ -295,18 +294,20 @@ def send_sms_request(phone: str, text: str, device_number: int, sim_number: int)
 def worker_loop():
     global state
     lines = [l for l in state["csv"].splitlines() if l.strip()]
-    templates = [t.strip() for t in state["sms_template"].split('---') if t.strip()]
+    templates_list = [t.strip() for t in state["sms_template"].split('---') if t.strip()]
+    if not templates_list:
+        templates_list = [t.strip() for t in DEFAULT_TEMPLATES.split('---') if t.strip()]
     total = len(lines)
     
     dev_mode = state["device_mode"]
-    mode_str = "TURBO 5 KART (Tel 1 SIM 1 -> Tel 2 SIM 1 -> Tel 3 SIM 1 -> Tel 1 SIM 2 -> Tel 3 SIM 2)" if dev_mode == 4 else f"Tylko Telefon {dev_mode}"
+    mode_str = "TURBO 5 KART (Zbalansowany przepływ)" if dev_mode == 4 else f"Tylko Telefon {dev_mode}"
     _log(f"🚀 Start wysyłki ({mode_str}): {total} wierszy.")
 
     turbo_step = state.get("turbo_step", 0)
 
     while state["current_index"] < total:
         if stop_event.is_set():
-            _log("🛑 Wysyłka przerwana (TERMINACJA).")
+            _log("🛑 Wysyłka zatrzymana.")
             return
 
         while not pause_event.is_set():
@@ -326,12 +327,14 @@ def worker_loop():
             continue
 
         phone = parsed["phone"]
-        base_tpl = random.choice(templates)
+        base_tpl = random.choice(templates_list)
         text_spun = resolve_spintax(base_tpl, {"name": parsed["name"], "city": parsed["city"]})
         final_text = apply_obfuscation(text_spun)
 
         # Wybór urządzenia i karty SIM
         if dev_mode == 4:
+            if turbo_step >= len(TURBO_SEQUENCE):
+                turbo_step = 0
             current_dev, sim_to_use = TURBO_SEQUENCE[turbo_step]
         else:
             current_dev = dev_mode
@@ -343,40 +346,41 @@ def worker_loop():
 
         if success:
             _log(f"  ✅ Wysłano do {phone}")
-            # Rotacja SIM - tylko w trybie pojedynczego telefonu dla Tel 1 i Tel 3
-            if state["auto_switch"] and current_dev in (1, 3) and dev_mode != 4:
-                state["current_sim"] = 2 if state["current_sim"] == 1 else 1
         else:
-            _log(f"  ❌ Błąd wysyłki do {phone}")
+            _log(f"  ❌ Błąd wysyłki do {phone} (Tel {current_dev}, SIM {sim_to_use})")
+
+        # Rotacja w trybie pojedynczego telefonu – zmieniamy ZAWSZE, by nie blokować kolejki po błędzie
+        if state["auto_switch"] and current_dev in (1, 3) and dev_mode != 4:
+            state["current_sim"] = 2 if state["current_sim"] == 1 else 1
+
+        # W trybie Turbo przechodzimy do kolejnego urządzenia w sekwencji
+        if dev_mode == 4:
+            turbo_step = (turbo_step + 1) % len(TURBO_SEQUENCE)
+            state["turbo_step"] = turbo_step
 
         state["current_index"] += 1
         save_state()
 
+        # Odpoczynek modemu – kluczowy punkt ochrony przed FUP i kolizjami DSDS
         if state["current_index"] < total and not stop_event.is_set():
-            # Sekwencja trybu Turbo 5 kart
-            if dev_mode == 4:
-                turbo_step += 1
-                if turbo_step < len(TURBO_SEQUENCE):
-                    next_dev, next_sim = TURBO_SEQUENCE[turbo_step]
-                    state["turbo_step"] = turbo_step
-                    save_state()
-                    _log(f"  ⚡ Tryb Turbo ({turbo_step}/5): Następny -> Tel {next_dev} (SIM {next_sim})...")
-                    time.sleep(1.0)
-                    continue
-                else:
-                    turbo_step = 0
-                    state["turbo_step"] = 0
-                    save_state()
-                    # Po pełnym cyklu 5 kart przechodzimy do długiego odpoczynku sprzętu
-
-            # Standardowe oczekiwanie na odpoczynek sprzętu / zapobieganie FUP
             if skip_wait:
-                _log("  ⚡ Omijam długie czekanie (odrzucony numer)")
+                _log("  ⚡ Pomijam przerwę (błędny numer 400)")
             else:
-                d_min = float(state["delay_min"])
-                d_max = float(state["delay_max"])
-                delay = random.uniform(d_min, d_max)
-                _log(f"  ⏳ Odpoczynek sprzętu. Czekam {delay:.1f}s...")
+                d_min = float(state.get("delay_min", 40.0))
+                d_max = float(state.get("delay_max", 75.0))
+
+                if dev_mode == 4:
+                    # Rozkładamy ruch na pojedyncze wiadomości: odstęp 20-35s między kolejnymi SMS-ami.
+                    # Dzięki temu dany telefon (np. Tel 1) czeka min. 60-80s przed ponownym nadaniem!
+                    step_min = max(20.0, d_min / 2.0)
+                    step_max = max(30.0, d_max / 2.0)
+                    delay = random.uniform(step_min, step_max)
+                    next_dev, next_sim = TURBO_SEQUENCE[turbo_step]
+                    _log(f"  ⏳ Chłodzenie modemu. Następny: Tel {next_dev} (SIM {next_sim}) za {delay:.1f}s...")
+                else:
+                    delay = random.uniform(d_min, d_max)
+                    _log(f"  ⏳ Odpoczynek sprzętu. Czekam {delay:.1f}s...")
+
                 steps = int(delay * 10)
                 for _ in range(steps):
                     if stop_event.is_set():
@@ -446,8 +450,8 @@ async def start_campaign():
         return {"status": "already_running"}
 
     lines = [l for l in state["csv"].splitlines() if l.strip()]
-    templates = [t.strip() for t in state["sms_template"].split('---') if t.strip()]
-    if not lines or not templates:
+    templates_list = [t.strip() for t in state["sms_template"].split('---') if t.strip()]
+    if not lines or not templates_list:
         return {"status": "error", "message": "Brak danych CSV lub szablonów SMS."}
 
     if state["status"] == "PAUSED":
@@ -500,23 +504,22 @@ async def clear_data():
         state["current_index"] = 0
         state["turbo_step"] = 0
         state["csv"] = ""
-        state["sms_template"] = ""
+        state["sms_template"] = DEFAULT_TEMPLATES
         state["logs"] = []
     if STATE_FILE.exists():
         STATE_FILE.unlink()
-    _log("🗑 Dane wyczyszczone, plik stanu usunięty.")
+    _log("🗑 Dane wyczyszczone, przywrócono domyślne szablony.")
     return {"status": "ok"}
 
 @app.post("/api/test_spintax")
 async def test_spintax(request: Request):
-    """Pomocniczy test spintaxu z przykładowymi danymi bez wysyłki SMS."""
     data = await request.json()
     template_raw = data.get("template", "").strip()
-    templates = [t.strip() for t in template_raw.split('---') if t.strip()]
-    if not templates:
+    templates_list = [t.strip() for t in template_raw.split('---') if t.strip()]
+    if not templates_list:
         return {"status": "error", "message": "Brak szablonu SMS."}
-    tpl = random.choice(templates)
-    sample_context = {"name": data.get("name", "Jan"), "city": data.get("city", "Warszawa")}
+    tpl = random.choice(templates_list)
+    sample_context = {"name": data.get("name", "Jan"), "city": data.get("city", "Zakopane")}
     spun = resolve_spintax(tpl, sample_context)
     obfuscated = apply_obfuscation(spun)
     return {"status": "ok", "raw_template": tpl, "spun": spun, "final": obfuscated}
