@@ -34,16 +34,6 @@ CREDENTIALS = {
     3: ("QL5Z7O", "4jzbmvhv6tpbmd")   # Telefon 3 (Dual SIM)
 }
 
-<<<<<<< HEAD
-# Zoptymalizowana sekwencja Turbo (maksymalny odstęp czasu dla fizycznych aparatów Tel 1 i Tel 3)
-TURBO_SEQUENCE = [
-    (1, 1),  # Tel 1, SIM 1
-    (3, 1),  # Tel 3, SIM 1
-    (2, 1),  # Tel 2, SIM 1
-    (1, 2),  # Tel 1, SIM 2 (Tel 1 odpoczywał przez 2 inne telefony)
-    (3, 2),  # Tel 3, SIM 2 (Tel 3 odpoczywał przez 2 inne telefony)
-]
-
 DEFAULT_TEMPLATES = """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Wtorkowy poranek po weekendowym zamieszaniu to chyba wreszcie moment na spokojniejszą kawę. Dopytam krótko z ciekawości – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez oddawania prowizji portalom. Podrzucić na spokojnie krótkie wideo z podglądem?
 ---
 {Dzień dobry | Witam}! Krzysztof z tej strony. Złapałem chwilę we wtorkowe przedpołudnie, więc zapytam prosto z mostu. Czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio przez telefon bez konieczności wcześniejszego dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata wpada od razu na Państwa konto z pominięciem prowizji pośredników. Mogę podesłać szybkie demo do rzucenia okiem przy kawie?
@@ -57,7 +47,7 @@ DEFAULT_TEMPLATES = """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Wtorkowy
 {Dzień dobry | Witam}! Tu Krzysztof. Wtorek koło południa, więc mam nadzieję, że poranne sprawy w obiekcie już ogarnięte i jest chwila wytchnienia. Dopytam z ciekawości – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
 ---
 {Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając z luźniejszego wtorkowego przedpołudnia, pozwolę sobie zadać jedno krótkie pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe do rzucenia okiem w wolnej chwili?"""
-=======
+
 # Dostępne karty SIM:
 AVAILABLE_SIMS = [
     (1, 1, "Tel 1 – SIM 1"),
@@ -86,7 +76,6 @@ def build_interleaved_sequence(selected_sims: list) -> list[tuple[int, int]]:
     sim1.sort(key=lambda c: c[0])
     sim2.sort(key=lambda c: c[0])
     return sim1 + sim2
->>>>>>> ba9aa74 (Synchronize Web App with desktop features, dynamic port support & Coolify 8000 fix)
 
 # Obsługa wolumenu danych pod Coolify
 DATA_DIR = Path(os.getenv("DATA_DIR", Path(__file__).resolve().parent / "data"))
@@ -104,13 +93,6 @@ state = {
     "current_index": 0,
     "sim_step": 0,
     "turbo_step": 0,
-<<<<<<< HEAD
-    "device_mode": 4,      # 1=Tel1, 2=Tel2, 3=Tel3, 4=Turbo (5 kart)
-    "current_sim": 1,      # 1 lub 2
-    "auto_switch": False,  # Rotacja SIM dla trybu pojedynczego (Tel 1 i Tel 3)
-    "delay_min": 40.0,
-    "delay_max": 75.0,
-=======
     "selected_sims": ["1_1", "1_2", "2_1", "3_1", "3_2"],
     "delay_min": 40.5,
     "delay_max": 90.5,
@@ -118,7 +100,6 @@ state = {
     "same_phone_max": 45.0,
     "diff_phone_min": 3.0,
     "diff_phone_max": 6.0,
->>>>>>> ba9aa74 (Synchronize Web App with desktop features, dynamic port support & Coolify 8000 fix)
     "status": "IDLE",      # IDLE, RUNNING, PAUSED
     "logs": []
 }
@@ -151,10 +132,8 @@ def load_state():
         s = json.loads(STATE_FILE.read_text(encoding="utf-8"))
         with state_lock:
             state.update(s)
-<<<<<<< HEAD
             if not state.get("sms_template"):
                 state["sms_template"] = DEFAULT_TEMPLATES
-=======
             if "selected_sims" not in s:
                 dev_mode = s.get("device_mode", 4)
                 if dev_mode == 4:
@@ -168,7 +147,6 @@ def load_state():
             if "sim_step" not in s:
                 state["sim_step"] = s.get("turbo_step", 0)
             # Przy restarcie serwera/kontenera w Coolify, jeśli był RUNNING, ustawiamy PAUSED
->>>>>>> ba9aa74 (Synchronize Web App with desktop features, dynamic port support & Coolify 8000 fix)
             if state.get("status") == "RUNNING":
                 state["status"] = "PAUSED"
                 _log(f"🔄 Wczytano stan po restarcie: wiersz {state['current_index'] + 1} (PAUZA)")
