@@ -31,14 +31,28 @@ CREDENTIALS = {
     3: ("QL5Z7O", "4jzbmvhv6tpbmd")   # Telefon 3 (Dual SIM)
 }
 
-# Sekwencja Turbo 5 kart: Tel 1 (SIM 1) -> Tel 2 (SIM 1) -> Tel 3 (SIM 1) -> Tel 1 (SIM 2) -> Tel 3 (SIM 2)
-TURBO_SEQUENCE = [
-    (1, 1),  # Tel 1, SIM 1
-    (2, 1),  # Tel 2, SIM 1
-    (3, 1),  # Tel 3, SIM 1
-    (1, 2),  # Tel 1, SIM 2
-    (3, 2),  # Tel 3, SIM 2
+# Dostępne karty SIM w telefonach:
+AVAILABLE_SIMS = [
+    (1, 1, "Tel 1 – SIM 1"),
+    (1, 2, "Tel 1 – SIM 2"),
+    (2, 1, "Tel 2 – SIM 1"),
+    (3, 1, "Tel 3 – SIM 1"),
+    (3, 2, "Tel 3 – SIM 2"),
 ]
+
+def build_interleaved_sequence(selected_sims: list[tuple[int, int]]) -> list[tuple[int, int]]:
+    """
+    Tworzy zoptymalizowaną sekwencję kart SIM, maksymalizując odstęp między SIM-ami tego samego telefonu.
+    Np. mając [(1, 1), (1, 2), (2, 1), (3, 1), (3, 2)], daje:
+    [(1, 1), (2, 1), (3, 1), (1, 2), (3, 2)]
+    """
+    if not selected_sims:
+        return []
+    sim1 = [c for c in selected_sims if c[1] == 1]
+    sim2 = [c for c in selected_sims if c[1] == 2]
+    sim1.sort(key=lambda c: c[0])
+    sim2.sort(key=lambda c: c[0])
+    return sim1 + sim2
 # ──────────────────────────────────────────────
 
 STATE_FILE = Path(__file__).parent / "sms_state.json"
@@ -210,8 +224,7 @@ class SMSSenderApp:
         self.root.configure(bg="#1e1e2e")
 
         self.current_index = 0
-        self.turbo_step = 0
-        self.current_sim = 1        
+        self.sim_step = 0
         self.status = "IDLE"        
         self.worker_thread: threading.Thread | None = None
         self.stop_event = threading.Event()
@@ -249,61 +262,97 @@ class SMSSenderApp:
         self.sms_text.pack(fill="x", padx=4, pady=4)
 
         # USTAWIENIA CZASU
-        settings_frame = tk.Frame(self.root, bg="#1e1e2e")
-        settings_frame.pack(fill="x", padx=10, pady=4)
-        
-        tk.Label(settings_frame, text="⏱ Długie Opóźnienie (sekundy) - Min:", bg="#1e1e2e", fg="#cdd6f4", font=("Segoe UI", 10)).pack(side="left")
+        settings_frame = tk.LabelFrame(
+            self.root, text="⏱  Ustawienia Odstępów Czasowych (sekundy)",
+            bg="#1e1e2e", fg="#89b4fa", font=("Segoe UI", 10, "bold"), bd=1, relief="solid"
+        )
+        settings_frame.pack(fill="x", padx=10, pady=(0, 6))
+
+        times_row = tk.Frame(settings_frame, bg="#1e1e2e")
+        times_row.pack(fill="x", padx=8, pady=4)
+
+        # 1. Pauza po pełnym cyklu
+        tk.Label(times_row, text="Długa pauza po pełnym cyklu:", bg="#1e1e2e", fg="#cdd6f4", font=("Segoe UI", 9, "bold")).pack(side="left")
+        tk.Label(times_row, text="Min:", bg="#1e1e2e", fg="#a6adc8", font=("Segoe UI", 9)).pack(side="left", padx=(4, 2))
         self.delay_min_var = tk.StringVar(value="40.5")
-        tk.Entry(settings_frame, textvariable=self.delay_min_var, width=6, font=("Consolas", 10), bg="#313244", fg="#cdd6f4", bd=1, relief="solid").pack(side="left", padx=5)
-        
-        tk.Label(settings_frame, text="Max:", bg="#1e1e2e", fg="#cdd6f4", font=("Segoe UI", 10)).pack(side="left", padx=(10, 0))
+        tk.Entry(times_row, textvariable=self.delay_min_var, width=5, font=("Consolas", 10), bg="#313244", fg="#cdd6f4", bd=1, relief="solid").pack(side="left", padx=2)
+        tk.Label(times_row, text="Max:", bg="#1e1e2e", fg="#a6adc8", font=("Segoe UI", 9)).pack(side="left", padx=(4, 2))
         self.delay_max_var = tk.StringVar(value="90.5")
-        tk.Entry(settings_frame, textvariable=self.delay_max_var, width=6, font=("Consolas", 10), bg="#313244", fg="#cdd6f4", bd=1, relief="solid").pack(side="left", padx=5)
+        tk.Entry(times_row, textvariable=self.delay_max_var, width=5, font=("Consolas", 10), bg="#313244", fg="#cdd6f4", bd=1, relief="solid").pack(side="left", padx=2)
 
-        # USTAWIENIA URZĄDZENIA I SIM
-        hardware_frame = tk.Frame(self.root, bg="#1e1e2e")
-        hardware_frame.pack(fill="x", padx=10, pady=4)
-        
-        # Sekcja telefonu
-        device_row = tk.Frame(hardware_frame, bg="#1e1e2e")
-        device_row.pack(fill="x", pady=(0, 5))
-        tk.Label(device_row, text="📲 Tryb Pracy:", bg="#1e1e2e", fg="#cdd6f4", font=("Segoe UI", 10, "bold"), width=12, anchor="w").pack(side="left")
-        self.device_mode_var = tk.IntVar(value=4)
-        tk.Radiobutton(device_row, text="Tel 1 (DualSIM)", variable=self.device_mode_var, value=1, bg="#1e1e2e", fg="#74c7ec", selectcolor="#313244", activebackground="#1e1e2e", activeforeground="#74c7ec", font=("Segoe UI", 10)).pack(side="left", padx=2)
-        tk.Radiobutton(device_row, text="Tel 2 (1 SIM)", variable=self.device_mode_var, value=2, bg="#1e1e2e", fg="#74c7ec", selectcolor="#313244", activebackground="#1e1e2e", activeforeground="#74c7ec", font=("Segoe UI", 10)).pack(side="left", padx=2)
-        tk.Radiobutton(device_row, text="Tel 3 (DualSIM)", variable=self.device_mode_var, value=3, bg="#1e1e2e", fg="#74c7ec", selectcolor="#313244", activebackground="#1e1e2e", activeforeground="#74c7ec", font=("Segoe UI", 10)).pack(side="left", padx=2)
-        tk.Radiobutton(device_row, text="🚀 WSZYSTKIE (Turbo 5 kart: 1->2->3->1->3->Pauza)", variable=self.device_mode_var, value=4, bg="#1e1e2e", fg="#f38ba8", selectcolor="#313244", activebackground="#1e1e2e", activeforeground="#f38ba8", font=("Segoe UI", 10, "bold")).pack(side="left", padx=(10, 0))
+        tk.Label(times_row, text="│", bg="#1e1e2e", fg="#45475a").pack(side="left", padx=8)
 
-        # Sekcja SIM
-        sim_row = tk.Frame(hardware_frame, bg="#1e1e2e")
-        sim_row.pack(fill="x")
-        tk.Label(sim_row, text="📱 Karty SIM:", bg="#1e1e2e", fg="#cdd6f4", font=("Segoe UI", 10, "bold"), width=12, anchor="w").pack(side="left")
-        self.sim_var = tk.IntVar(value=1)
-        self.sim1_rb = tk.Radiobutton(sim_row, text="Start SIM 1", variable=self.sim_var, value=1, bg="#1e1e2e", fg="#a6e3a1", selectcolor="#313244", activebackground="#1e1e2e", activeforeground="#a6e3a1", font=("Segoe UI", 10))
-        self.sim1_rb.pack(side="left", padx=5)
-        self.sim2_rb = tk.Radiobutton(sim_row, text="Start SIM 2", variable=self.sim_var, value=2, bg="#1e1e2e", fg="#a6e3a1", selectcolor="#313244", activebackground="#1e1e2e", activeforeground="#a6e3a1", font=("Segoe UI", 10))
-        self.sim2_rb.pack(side="left", padx=5)
-        self.auto_switch_var = tk.BooleanVar(value=False)
-        self.switch_cb = tk.Checkbutton(sim_row, text="Rotacja SIM po wysłanym SMS (Tel 1 & Tel 3 - DualSIM)", variable=self.auto_switch_var, bg="#1e1e2e", fg="#f9e2af", selectcolor="#313244", activebackground="#1e1e2e", activeforeground="#f9e2af", font=("Segoe UI", 10))
-        self.switch_cb.pack(side="left", padx=(30, 0))
-        self.sim_hint_label = tk.Label(sim_row, text="(W Turbo leci sekwencja wszystkich 5 kart)", bg="#1e1e2e", fg="#a6adc8", font=("Segoe UI", 9))
-        self.sim_hint_label.pack(side="left", padx=(10, 0))
+        # 2. Odstęp ten sam telefon (SIM1/SIM2)
+        tk.Label(times_row, text="Ten sam telefon (SIM 1 ↔ SIM 2):", bg="#1e1e2e", fg="#f9e2af", font=("Segoe UI", 9, "bold")).pack(side="left")
+        tk.Label(times_row, text="Min:", bg="#1e1e2e", fg="#a6adc8", font=("Segoe UI", 9)).pack(side="left", padx=(4, 2))
+        self.same_phone_min_var = tk.StringVar(value="30.0")
+        tk.Entry(times_row, textvariable=self.same_phone_min_var, width=5, font=("Consolas", 10), bg="#313244", fg="#cdd6f4", bd=1, relief="solid").pack(side="left", padx=2)
+        tk.Label(times_row, text="Max:", bg="#1e1e2e", fg="#a6adc8", font=("Segoe UI", 9)).pack(side="left", padx=(4, 2))
+        self.same_phone_max_var = tk.StringVar(value="45.0")
+        tk.Entry(times_row, textvariable=self.same_phone_max_var, width=5, font=("Consolas", 10), bg="#313244", fg="#cdd6f4", bd=1, relief="solid").pack(side="left", padx=2)
 
-        def _on_device_mode_change(*_):
-            mode = self.device_mode_var.get()
-            st = "disabled" if mode in (2, 4) else "normal"
-            self.sim1_rb.configure(state=st)
-            self.sim2_rb.configure(state=st)
-            self.switch_cb.configure(state=st)
-            if mode == 4:
-                self.sim_hint_label.configure(text="(W Turbo sekwencja automatycznie używa 5 kart)")
-            elif mode == 2:
-                self.sim_hint_label.configure(text="(Tel 2 posiada tylko 1 kartę SIM)")
-            else:
-                self.sim_hint_label.configure(text=f"(Aktywne dla Tel {mode} - Dual SIM)")
+        tk.Label(times_row, text="│", bg="#1e1e2e", fg="#45475a").pack(side="left", padx=8)
 
-        self.device_mode_var.trace_add("write", _on_device_mode_change)
-        _on_device_mode_change()
+        # 3. Odstęp różne telefony
+        tk.Label(times_row, text="Różne telefony:", bg="#1e1e2e", fg="#74c7ec", font=("Segoe UI", 9, "bold")).pack(side="left")
+        tk.Label(times_row, text="Min:", bg="#1e1e2e", fg="#a6adc8", font=("Segoe UI", 9)).pack(side="left", padx=(4, 2))
+        self.diff_phone_min_var = tk.StringVar(value="3.0")
+        tk.Entry(times_row, textvariable=self.diff_phone_min_var, width=5, font=("Consolas", 10), bg="#313244", fg="#cdd6f4", bd=1, relief="solid").pack(side="left", padx=2)
+        tk.Label(times_row, text="Max:", bg="#1e1e2e", fg="#a6adc8", font=("Segoe UI", 9)).pack(side="left", padx=(4, 2))
+        self.diff_phone_max_var = tk.StringVar(value="6.0")
+        tk.Entry(times_row, textvariable=self.diff_phone_max_var, width=5, font=("Consolas", 10), bg="#313244", fg="#cdd6f4", bd=1, relief="solid").pack(side="left", padx=2)
+
+        # USTAWIENIA KART SIM
+        sim_frame = tk.LabelFrame(
+            self.root, text="📱  Karty SIM do wysyłki (zaznacz aktywne karty)",
+            bg="#1e1e2e", fg="#89b4fa", font=("Segoe UI", 10, "bold"), bd=1, relief="solid"
+        )
+        sim_frame.pack(fill="x", padx=10, pady=(0, 6))
+
+        sim_row = tk.Frame(sim_frame, bg="#1e1e2e")
+        sim_row.pack(fill="x", padx=8, pady=4)
+
+        self.sim_checkboxes: dict[tuple[int, int], tk.BooleanVar] = {}
+        sim_defs = [
+            (1, 1, "Tel 1 – SIM 1", "#74c7ec"),
+            (1, 2, "Tel 1 – SIM 2", "#74c7ec"),
+            (2, 1, "Tel 2 – SIM 1", "#f9e2af"),
+            (3, 1, "Tel 3 – SIM 1", "#a6e3a1"),
+            (3, 2, "Tel 3 – SIM 2", "#a6e3a1"),
+        ]
+
+        for dev, sim, label, col in sim_defs:
+            var = tk.BooleanVar(value=True)
+            self.sim_checkboxes[(dev, sim)] = var
+            cb = tk.Checkbutton(
+                sim_row, text=label, variable=var,
+                bg="#1e1e2e", fg=col, selectcolor="#313244",
+                activebackground="#1e1e2e", activeforeground=col,
+                font=("Segoe UI", 10, "bold")
+            )
+            cb.pack(side="left", padx=6)
+
+        btn_all = tk.Button(
+            sim_row, text="Zaznacz wszystkie", font=("Segoe UI", 8, "bold"),
+            bg="#45475a", fg="#cdd6f4", activebackground="#585b70",
+            relief="flat", bd=0, padx=8, pady=2, cursor="hand2",
+            command=self._select_all_sims
+        )
+        btn_all.pack(side="left", padx=(12, 4))
+
+        btn_none = tk.Button(
+            sim_row, text="Odznacz wszystkie", font=("Segoe UI", 8, "bold"),
+            bg="#45475a", fg="#cdd6f4", activebackground="#585b70",
+            relief="flat", bd=0, padx=8, pady=2, cursor="hand2",
+            command=self._deselect_all_sims
+        )
+        btn_none.pack(side="left", padx=2)
+
+        self.sim_info_label = tk.Label(
+            sim_row, text="(Skrypt automatycznie przeplata karty i dba o bezpieczny odpoczynek modemu)",
+            bg="#1e1e2e", fg="#a6adc8", font=("Segoe UI", 9)
+        )
+        self.sim_info_label.pack(side="left", padx=(10, 0))
 
         # PRZYCISKI
         btn_row = tk.Frame(self.root, bg="#1e1e2e")
@@ -332,6 +381,17 @@ class SMSSenderApp:
         log_sb.pack(side="right", fill="y")
         self.log_text.pack(fill="both", expand=True, padx=4, pady=4)
 
+    def _select_all_sims(self):
+        for var in self.sim_checkboxes.values():
+            var.set(True)
+
+    def _deselect_all_sims(self):
+        for var in self.sim_checkboxes.values():
+            var.set(False)
+
+    def _get_selected_sims(self) -> list[tuple[int, int]]:
+        return [key for key, var in self.sim_checkboxes.items() if var.get()]
+
     def _log(self, msg: str):
         def _append():
             self.log_text.configure(state="normal")
@@ -346,16 +406,20 @@ class SMSSenderApp:
         ))
 
     def _save_state(self):
+        selected_sims_keys = [f"{d}_{s}" for (d, s), var in self.sim_checkboxes.items() if var.get()]
         state = {
             "csv": self.csv_text.get("1.0", "end-1c"),
             "sms_template": self.sms_text.get("1.0", "end-1c"),
             "current_index": self.current_index,
-            "turbo_step": self.turbo_step,
-            "device_mode": self.device_mode_var.get(),
-            "current_sim": self.current_sim,
-            "auto_switch": self.auto_switch_var.get(),
+            "sim_step": getattr(self, "sim_step", 0),
+            "turbo_step": getattr(self, "sim_step", 0),
+            "selected_sims": selected_sims_keys,
             "delay_min": self.delay_min_var.get(),
             "delay_max": self.delay_max_var.get(),
+            "same_phone_min": self.same_phone_min_var.get(),
+            "same_phone_max": self.same_phone_max_var.get(),
+            "diff_phone_min": self.diff_phone_min_var.get(),
+            "diff_phone_max": self.diff_phone_max_var.get(),
             "status": self.status,
         }
         try:
@@ -371,13 +435,37 @@ class SMSSenderApp:
             return
 
         self.current_index = state.get("current_index", 0)
-        self.turbo_step = state.get("turbo_step", 0)
-        self.device_mode_var.set(state.get("device_mode", 4))
-        self.current_sim = state.get("current_sim", 1)
-        self.sim_var.set(self.current_sim)
-        self.auto_switch_var.set(state.get("auto_switch", False))
-        self.delay_min_var.set(state.get("delay_min", "40.5"))
-        self.delay_max_var.set(state.get("delay_max", "90.5"))
+        self.sim_step = state.get("sim_step", state.get("turbo_step", 0))
+        self.delay_min_var.set(str(state.get("delay_min", "40.5")))
+        self.delay_max_var.set(str(state.get("delay_max", "90.5")))
+        self.same_phone_min_var.set(str(state.get("same_phone_min", "30.0")))
+        self.same_phone_max_var.set(str(state.get("same_phone_max", "45.0")))
+        self.diff_phone_min_var.set(str(state.get("diff_phone_min", "3.0")))
+        self.diff_phone_max_var.set(str(state.get("diff_phone_max", "6.0")))
+
+        saved_sims = state.get("selected_sims")
+        if saved_sims is not None and isinstance(saved_sims, list):
+            saved_set = set(saved_sims)
+            for (d, s), var in self.sim_checkboxes.items():
+                var.set(f"{d}_{s}" in saved_set)
+        else:
+            dev_mode = state.get("device_mode", 4)
+            if dev_mode == 4:
+                for var in self.sim_checkboxes.values(): var.set(True)
+            elif dev_mode == 1:
+                self.sim_checkboxes[(1, 1)].set(True)
+                self.sim_checkboxes[(1, 2)].set(state.get("auto_switch", False) or state.get("current_sim") == 2)
+                self.sim_checkboxes[(2, 1)].set(False)
+                self.sim_checkboxes[(3, 1)].set(False)
+                self.sim_checkboxes[(3, 2)].set(False)
+            elif dev_mode == 2:
+                for k, var in self.sim_checkboxes.items(): var.set(k == (2, 1))
+            elif dev_mode == 3:
+                self.sim_checkboxes[(1, 1)].set(False)
+                self.sim_checkboxes[(1, 2)].set(False)
+                self.sim_checkboxes[(2, 1)].set(False)
+                self.sim_checkboxes[(3, 1)].set(True)
+                self.sim_checkboxes[(3, 2)].set(state.get("auto_switch", False) or state.get("current_sim") == 2)
 
         csv_data = state.get("csv", "")
         if csv_data:
@@ -413,40 +501,51 @@ class SMSSenderApp:
             messagebox.showwarning("Brak szablonu", "Wpisz co najmniej jeden szablon SMS.")
             return
             
+        selected_sims = self._get_selected_sims()
+        if not selected_sims:
+            messagebox.showwarning("Brak kart SIM", "Zaznacz co najmniej jedną kartę SIM z której będą wysyłane wiadomości.")
+            return
+
         try:
             float(self.delay_min_var.get())
             float(self.delay_max_var.get())
+            float(self.same_phone_min_var.get())
+            float(self.same_phone_max_var.get())
+            float(self.diff_phone_min_var.get())
+            float(self.diff_phone_max_var.get())
         except ValueError:
-            messagebox.showwarning("Błąd wartości", "Opóźnienia muszą być liczbami (np. 40.5).")
+            messagebox.showwarning("Błąd wartości", "Wszystkie opóźnienia muszą być liczbami (np. 30.0).")
             return
 
         if self.status == "PAUSED":
             self.pause_event.set()
             self.status = "RUNNING"
-            self.current_sim = self.sim_var.get()
             self._log("▶ Wznowiono wysyłkę.")
             if self.worker_thread is None or not self.worker_thread.is_alive():
-                self._start_worker(csv_raw, templates)
+                self._start_worker(csv_raw, templates, selected_sims)
             return
 
         self.current_index = 0
-        self.turbo_step = 0
-        self.current_sim = self.sim_var.get() 
+        self.sim_step = 0
         self.stop_event.clear()
         self.pause_event.set()
         self.status = "RUNNING"
-        self._start_worker(csv_raw, templates)
+        self._start_worker(csv_raw, templates, selected_sims)
 
-    def _start_worker(self, csv_raw: str, templates: list[str]):
+    def _start_worker(self, csv_raw: str, templates: list[str], selected_sims: list[tuple[int, int]]):
         lines = [l for l in csv_raw.splitlines() if l.strip()]
-        d_min = float(self.delay_min_var.get())
-        d_max = float(self.delay_max_var.get())
-        auto_switch = self.auto_switch_var.get()
-        dev_mode = self.device_mode_var.get()
+        delays = {
+            "cycle_min": float(self.delay_min_var.get()),
+            "cycle_max": float(self.delay_max_var.get()),
+            "same_phone_min": float(self.same_phone_min_var.get()),
+            "same_phone_max": float(self.same_phone_max_var.get()),
+            "diff_phone_min": float(self.diff_phone_min_var.get()),
+            "diff_phone_max": float(self.diff_phone_max_var.get()),
+        }
         
         self.worker_thread = threading.Thread(
             target=self._send_loop, 
-            args=(lines, templates, d_min, d_max, auto_switch, dev_mode), 
+            args=(lines, templates, selected_sims, delays), 
             daemon=True
         )
         self.worker_thread.start()
@@ -464,7 +563,7 @@ class SMSSenderApp:
         self.pause_event.set() 
         self.status = "IDLE"
         self.current_index = 0
-        self.turbo_step = 0
+        self.sim_step = 0
         self._save_state()
         self._log("⏹ Terminacja – postęp zresetowany.")
         self._update_status(0, 0, "IDLE")
@@ -477,7 +576,7 @@ class SMSSenderApp:
         self.pause_event.set()
         self.status = "IDLE"
         self.current_index = 0
-        self.turbo_step = 0
+        self.sim_step = 0
 
         self.csv_text.delete("1.0", "end")
         self.sms_text.delete("1.0", "end")
@@ -490,14 +589,27 @@ class SMSSenderApp:
             STATE_FILE.unlink()
         self._log("🗑 Dane wyczyszczone, plik stanu usunięty.")
 
-    def _send_loop(self, lines: list[str], templates: list[str], d_min: float, d_max: float, auto_switch: bool, device_mode: int):
+    def _send_loop(self, lines: list[str], templates: list[str], selected_sims: list[tuple[int, int]], delays: dict[str, float]):
         total = len(lines)
-        
-        mode_str = "TURBO 5 KART (Tel 1 SIM 1 -> Tel 2 SIM 1 -> Tel 3 SIM 1 -> Tel 1 SIM 2 -> Tel 3 SIM 2)" if device_mode == 4 else f"Tylko Telefon {device_mode}"
-        self._log(f"🚀 Start wysyłki ({mode_str}): {total} wierszy.")
+        active_sequence = build_interleaved_sequence(selected_sims)
+        if not active_sequence:
+            self._log("❌ Błąd: Nie wybrano żadnej karty SIM!")
+            return
+
+        seq_len = len(active_sequence)
+        seq_desc = " -> ".join([f"Tel {d} (SIM {s})" for d, s in active_sequence])
+        self._log(f"🚀 Start wysyłki ({seq_len} kart: {seq_desc}): {total} wierszy.")
 
         i = self.current_index
-        turbo_step = getattr(self, "turbo_step", 0)
+        sim_step = getattr(self, "sim_step", 0)
+        last_device_send_time: dict[int, float] = {}
+
+        cycle_min = delays["cycle_min"]
+        cycle_max = delays["cycle_max"]
+        same_phone_min = delays["same_phone_min"]
+        same_phone_max = delays["same_phone_max"]
+        diff_phone_min = delays["diff_phone_min"]
+        diff_phone_max = delays["diff_phone_max"]
 
         while i < total:
             if self.stop_event.is_set():
@@ -526,61 +638,67 @@ class SMSSenderApp:
             text_spun = resolve_spintax(base_tpl, {"name": parsed["name"], "city": parsed["city"]})
             final_text = apply_obfuscation(text_spun)
 
-            # Wybór urządzenia i karty SIM
-            if device_mode == 4:
-                current_dev, sim_to_use = TURBO_SEQUENCE[turbo_step]
-            else:
-                current_dev = device_mode
-                sim_to_use = self.current_sim if current_dev in (1, 3) else 1
+            current_dev, sim_to_use = active_sequence[sim_step % seq_len]
+
+            # ── BEZPIECZNY ODSTĘP MODEMU DLA TEGO SAMEGO TELEFONU ──
+            if current_dev in last_device_send_time:
+                elapsed = time.time() - last_device_send_time[current_dev]
+                required_wait = random.uniform(same_phone_min, same_phone_max)
+                if elapsed < required_wait:
+                    wait_needed = required_wait - elapsed
+                    self._log(f"  ⏳ Tel {current_dev}: modem odpoczywa (minęło {elapsed:.1f}s, czekam jeszcze {wait_needed:.1f}s na bezpieczne przełączenie SIM)...")
+                    steps = int(wait_needed * 10)
+                    for _ in range(steps):
+                        if self.stop_event.is_set():
+                            return
+                        while not self.pause_event.is_set():
+                            if self.stop_event.is_set(): return
+                            self._update_status(i, total, "PAUZA")
+                            time.sleep(0.3)
+                        time.sleep(0.1)
 
             self._log(f"  📤 Wiersz {i + 1}: Wysyłam do {phone} (Tel {current_dev}, SIM {sim_to_use})...")
             self._update_status(i, total, "W TRAKCIE")
 
             success, skip_wait = self._send_sms(phone, final_text, current_dev, sim_to_use)
+            last_device_send_time[current_dev] = time.time()
             
             if success:
                 self._log(f"  ✅ Wysłano do {phone}")
-                # Rotacja SIM - tylko w trybie pojedynczego telefonu dla Tel 1 i Tel 3
-                if auto_switch and current_dev in (1, 3) and device_mode != 4:
-                    self.current_sim = 2 if self.current_sim == 1 else 1
-                    self.root.after(0, lambda: self.sim_var.set(self.current_sim))
             else:
                 self._log(f"  ❌ Błąd wysyłki do {phone}")
 
             i += 1
+            sim_step += 1
             self.current_index = i
+            self.sim_step = sim_step
             self._save_state()
             self._update_status(i, total, "W TRAKCIE")
 
             if i < total and not self.stop_event.is_set():
-                
-                # Sekwencja trybu Turbo 5 kart (1 -> 2 -> 3 -> 1 -> 3 -> długa pauza)
-                if device_mode == 4:
-                    turbo_step += 1
-                    if turbo_step < len(TURBO_SEQUENCE):
-                        next_dev, next_sim = TURBO_SEQUENCE[turbo_step]
-                        self.turbo_step = turbo_step
-                        self._save_state()
-                        self._log(f"  ⚡ Tryb Turbo ({turbo_step}/5): Następny -> Tel {next_dev} (SIM {next_sim})...")
-                        time.sleep(1.0)
-                        continue
-                    else:
-                        turbo_step = 0
-                        self.turbo_step = 0
-                        self._save_state()
-                        # Po pełnym cyklu 5 kart przechodzimy do długiego odpoczynku sprzętu
-
-                # Standardowe oczekiwanie
                 if skip_wait:
-                    self._log("  ⚡ Omijam długie czekanie (odrzucony numer)")
+                    self._log("  ⚡ Omijam czekanie (odrzucony numer)")
+                    time.sleep(0.5)
+                    continue
+
+                # Czy zakończono pełny cykl wszystkich zaznaczonych kart?
+                if sim_step % seq_len == 0:
+                    delay = random.uniform(cycle_min, cycle_max)
+                    self._log(f"  ⏳ Pełny cykl kart zakończony ({seq_len} SMS). Długa pauza: {delay:.1f}s...")
                 else:
-                    delay = random.uniform(d_min, d_max)
-                    self._log(f"  ⏳ Odpoczynek sprzętu. Czekam {delay:.1f}s...")
-                    steps = int(delay * 10)
-                    for _ in range(steps):
-                        if self.stop_event.is_set():
-                            return
-                        time.sleep(0.1)
+                    delay = random.uniform(diff_phone_min, diff_phone_max)
+                    next_dev, next_sim = active_sequence[sim_step % seq_len]
+                    self._log(f"  ⚡ Następna karta -> Tel {next_dev} (SIM {next_sim}). Odstęp: {delay:.1f}s...")
+
+                steps = int(delay * 10)
+                for _ in range(steps):
+                    if self.stop_event.is_set():
+                        return
+                    while not self.pause_event.is_set():
+                        if self.stop_event.is_set(): return
+                        self._update_status(i, total, "PAUZA")
+                        time.sleep(0.3)
+                    time.sleep(0.1)
 
         self.status = "IDLE"
         self._update_status(total, total, "ZAKOŃCZONO ✅")
@@ -591,7 +709,8 @@ class SMSSenderApp:
         payload = {
             "textMessage": {"text": text},
             "phoneNumbers": [phone],
-            "simNumber": sim_number
+            "simNumber": sim_number,
+            "withDeliveryReport": False
         }
         
         username, password = CREDENTIALS.get(device_number, CREDENTIALS[1])

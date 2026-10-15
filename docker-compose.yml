@@ -12,6 +12,7 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - DATA_DIR=/app/data
+      - PORT=8000
     volumes:
       - sms_data:/app/data
 

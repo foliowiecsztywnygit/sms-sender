@@ -259,50 +259,65 @@
         <textarea id="smsTemplate" class="sms-box" placeholder="{Dzień dobry|Cześć} {Name:Kliencie}! [Sprawdź|Zobacz ofertę] w {City:Twojej okolicy}.&#10;---&#10;{Hej|Dzień dobry}! Nowa oferta dla firm z {City:Twojego miasta}."></textarea>
 
         <!-- 3. USTAWIENIA CZASU -->
-        <div class="settings-row">
-            <span class="settings-label">⏱ Długie Opóźnienie (sekundy) - Min:</span>
-            <input type="number" id="delayMin" step="0.5" value="40.5">
-            <span class="settings-label">Max:</span>
-            <input type="number" id="delayMax" step="0.5" value="90.5">
-        </div>
+        <div class="settings-row" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color);">
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="settings-label" style="font-weight: bold; color: var(--text-color);">⏱ Długa pauza (po cyklu):</span>
+                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Min:</span>
+                <input type="number" id="delayMin" step="0.5" value="40.5">
+                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Max:</span>
+                <input type="number" id="delayMax" step="0.5" value="90.5">
+            </div>
 
-        <!-- 4. TRYB PRACY -->
-        <div class="settings-row">
-            <span class="settings-label-bold">📲 Tryb Pracy:</span>
-            <div class="radio-group">
-                <label class="radio-item radio-cyan">
-                    <input type="radio" name="deviceMode" value="1" id="mode1"> Tel 1 (DualSIM)
-                </label>
-                <label class="radio-item radio-cyan">
-                    <input type="radio" name="deviceMode" value="2" id="mode2"> Tel 2 (1 SIM)
-                </label>
-                <label class="radio-item radio-cyan">
-                    <input type="radio" name="deviceMode" value="3" id="mode3"> Tel 3 (DualSIM)
-                </label>
-                <label class="radio-item radio-turbo">
-                    <input type="radio" name="deviceMode" value="4" id="mode4" checked> 🚀 WSZYSTKIE (Turbo 5 kart: 1-&gt;2-&gt;3-&gt;1-&gt;3-&gt;Pauza)
-                </label>
+            <span style="color: var(--border-color); margin: 0 4px;">│</span>
+
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="settings-label" style="font-weight: bold; color: #f9e2af;">Ten sam telefon (SIM 1 ↔ SIM 2):</span>
+                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Min:</span>
+                <input type="number" id="samePhoneMin" step="0.5" value="30.0">
+                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Max:</span>
+                <input type="number" id="samePhoneMax" step="0.5" value="45.0">
+            </div>
+
+            <span style="color: var(--border-color); margin: 0 4px;">│</span>
+
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="settings-label" style="font-weight: bold; color: #74c7ec;">Różne telefony:</span>
+                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Min:</span>
+                <input type="number" id="diffPhoneMin" step="0.5" value="3.0">
+                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Max:</span>
+                <input type="number" id="diffPhoneMax" step="0.5" value="6.0">
             </div>
         </div>
 
-        <!-- 5. KARTY SIM -->
-        <div class="settings-row" id="simRow">
+        <!-- 4. WYBÓR KART SIM -->
+        <div class="settings-row" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color);">
             <span class="settings-label-bold">📱 Karty SIM:</span>
             <div class="radio-group" id="simGroup">
-                <label class="radio-item radio-sim">
-                    <input type="radio" name="sim" value="1" id="sim1" checked> Start SIM 1
+                <label class="checkbox-item" style="color: #74c7ec; font-weight: bold;">
+                    <input type="checkbox" class="sim-checkbox" value="1_1" checked> Tel 1 – SIM 1
                 </label>
-                <label class="radio-item radio-sim">
-                    <input type="radio" name="sim" value="2" id="sim2"> Start SIM 2
+                <label class="checkbox-item" style="color: #74c7ec; font-weight: bold;">
+                    <input type="checkbox" class="sim-checkbox" value="1_2" checked> Tel 1 – SIM 2
                 </label>
-                <label class="checkbox-item checkbox-switch" style="margin-left: 20px;">
-                    <input type="checkbox" id="autoSwitch"> Rotacja SIM po wysłanym SMS (Tel 1 &amp; Tel 3 - DualSIM)
+                <label class="checkbox-item" style="color: #f9e2af; font-weight: bold;">
+                    <input type="checkbox" class="sim-checkbox" value="2_1" checked> Tel 2 – SIM 1
                 </label>
+                <label class="checkbox-item" style="color: #a6e3a1; font-weight: bold;">
+                    <input type="checkbox" class="sim-checkbox" value="3_1" checked> Tel 3 – SIM 1
+                </label>
+                <label class="checkbox-item" style="color: #a6e3a1; font-weight: bold;">
+                    <input type="checkbox" class="sim-checkbox" value="3_2" checked> Tel 3 – SIM 2
+                </label>
+
+                <div style="display: flex; gap: 6px; margin-left: 10px;">
+                    <button type="button" class="btn" style="background-color: #45475a; color: #cdd6f4; font-size: 11px; padding: 4px 8px;" onclick="selectAllSims(true)">Zaznacz wszystkie</button>
+                    <button type="button" class="btn" style="background-color: #45475a; color: #cdd6f4; font-size: 11px; padding: 4px 8px;" onclick="selectAllSims(false)">Odznacz wszystkie</button>
+                </div>
             </div>
-            <span id="simHint" style="color: var(--text-muted); font-size: 12px; margin-left: 10px;">(W Turbo sekwencja automatycznie używa wszystkich 5 kart)</span>
+            <span style="color: var(--text-muted); font-size: 12px; margin-left: 10px;">(Skrypt automatycznie przeplata karty i dba o bezpieczny odpoczynek modemu)</span>
         </div>
 
-        <!-- 6. PRZYCISKI AKCJI -->
+        <!-- 5. PRZYCISKI AKCJI -->
         <div class="button-row">
             <button class="btn btn-start" onclick="handleAction('start')">▶  START</button>
             <button class="btn btn-pause" onclick="handleAction('pause')">⏸  PAUZA</button>
@@ -310,10 +325,10 @@
             <button class="btn btn-clear" onclick="handleAction('clear')">🗑  WYCZYŚĆ DANE</button>
         </div>
 
-        <!-- 7. STATUS -->
+        <!-- 6. STATUS -->
         <div id="statusLabel" class="status-display">Status: IDLE | Gotowy do startu</div>
 
-        <!-- 8. LOG ZDARZEŃ -->
+        <!-- 7. LOG ZDARZEŃ -->
         <div class="section-label">📝  Log zdarzeń:</div>
         <div id="logArea" class="log-container"></div>
     </div>
@@ -327,18 +342,23 @@
         const smsTemplate = document.getElementById('smsTemplate');
         const delayMin = document.getElementById('delayMin');
         const delayMax = document.getElementById('delayMax');
-        const autoSwitch = document.getElementById('autoSwitch');
+        const samePhoneMin = document.getElementById('samePhoneMin');
+        const samePhoneMax = document.getElementById('samePhoneMax');
+        const diffPhoneMin = document.getElementById('diffPhoneMin');
+        const diffPhoneMax = document.getElementById('diffPhoneMax');
         const statusLabel = document.getElementById('statusLabel');
         const logArea = document.getElementById('logArea');
 
-        function getSelectedDeviceMode() {
-            const el = document.querySelector('input[name="deviceMode"]:checked');
-            return el ? parseInt(el.value) : 4;
+        function getSelectedSims() {
+            const checkboxes = document.querySelectorAll('.sim-checkbox:checked');
+            return Array.from(checkboxes).map(cb => cb.value);
         }
 
-        function getSelectedSim() {
-            const el = document.querySelector('input[name="sim"]:checked');
-            return el ? parseInt(el.value) : 1;
+        function selectAllSims(val) {
+            document.querySelectorAll('.sim-checkbox').forEach(cb => {
+                cb.checked = val;
+            });
+            saveConfig();
         }
 
         async function saveConfig() {
@@ -350,9 +370,11 @@
                     sms_template: smsTemplate.value,
                     delay_min: delayMin.value,
                     delay_max: delayMax.value,
-                    device_mode: getSelectedDeviceMode(),
-                    current_sim: getSelectedSim(),
-                    auto_switch: autoSwitch.checked
+                    same_phone_min: samePhoneMin.value,
+                    same_phone_max: samePhoneMax.value,
+                    diff_phone_min: diffPhoneMin.value,
+                    diff_phone_max: diffPhoneMax.value,
+                    selected_sims: getSelectedSims()
                 };
                 await fetch('/api/save_config', {
                     method: 'POST',
@@ -372,7 +394,7 @@
             debounceTimer = setTimeout(saveConfig, 400);
         }
 
-        // Auto-save przy edycji (natychmiast z debouncem przy wpisywaniu/wklejaniu oraz na change)
+        // Auto-save przy edycji
         csvInput.addEventListener('input', debouncedSave);
         csvInput.addEventListener('change', saveConfig);
         smsTemplate.addEventListener('input', debouncedSave);
@@ -381,41 +403,18 @@
         delayMin.addEventListener('change', saveConfig);
         delayMax.addEventListener('input', debouncedSave);
         delayMax.addEventListener('change', saveConfig);
-        autoSwitch.addEventListener('change', saveConfig);
-        function updateSimControlsUI() {
-            const mode = getSelectedDeviceMode();
-            const simGroup = document.getElementById('simGroup');
-            const simHint = document.getElementById('simHint');
-            const simInputs = simGroup.querySelectorAll('input');
+        samePhoneMin.addEventListener('input', debouncedSave);
+        samePhoneMin.addEventListener('change', saveConfig);
+        samePhoneMax.addEventListener('input', debouncedSave);
+        samePhoneMax.addEventListener('change', saveConfig);
+        diffPhoneMin.addEventListener('input', debouncedSave);
+        diffPhoneMin.addEventListener('change', saveConfig);
+        diffPhoneMax.addEventListener('input', debouncedSave);
+        diffPhoneMax.addEventListener('change', saveConfig);
 
-            if (mode === 4) {
-                // Turbo
-                simGroup.style.opacity = '0.4';
-                simInputs.forEach(i => i.disabled = true);
-                simHint.innerText = "(W trybie Turbo sekwencja automatycznie wykorzystuje wszystkie 5 kart SIM)";
-                simHint.style.display = 'inline';
-            } else if (mode === 2) {
-                // Tel 2 (Single SIM)
-                simGroup.style.opacity = '0.4';
-                simInputs.forEach(i => i.disabled = true);
-                simHint.innerText = "(Tel 2 posiada tylko 1 kartę SIM)";
-                simHint.style.display = 'inline';
-            } else {
-                // Tel 1 lub Tel 3 (Dual SIM)
-                simGroup.style.opacity = '1.0';
-                simInputs.forEach(i => i.disabled = false);
-                simHint.innerText = `(Aktywne dla Tel ${mode} - Dual SIM)`;
-                simHint.style.display = 'inline';
-            }
-        }
-
-        document.querySelectorAll('input[name="deviceMode"]').forEach(el => {
-            el.addEventListener('change', () => {
-                updateSimControlsUI();
-                saveConfig();
-            });
+        document.querySelectorAll('.sim-checkbox').forEach(cb => {
+            cb.addEventListener('change', saveConfig);
         });
-        document.querySelectorAll('input[name="sim"]').forEach(el => el.addEventListener('change', saveConfig));
 
         async function handleAction(action) {
             await saveConfig();
@@ -438,32 +437,26 @@
                 const res = await fetch('/api/state');
                 const data = await res.json();
 
-                // Przy pierwszym wczytaniu uzupełniamy pola danymi ze stanu
                 if (!isInitialized) {
                     if (data.csv) csvInput.value = data.csv;
                     if (data.sms_template) smsTemplate.value = data.sms_template;
-                    if (data.delay_min) delayMin.value = data.delay_min;
-                    if (data.delay_max) delayMax.value = data.delay_max;
-                    if (data.auto_switch !== undefined) autoSwitch.checked = data.auto_switch;
-                    
-                    const modeEl = document.getElementById(`mode${data.device_mode}`);
-                    if (modeEl) modeEl.checked = true;
+                    if (data.delay_min !== undefined) delayMin.value = data.delay_min;
+                    if (data.delay_max !== undefined) delayMax.value = data.delay_max;
+                    if (data.same_phone_min !== undefined) samePhoneMin.value = data.same_phone_min;
+                    if (data.same_phone_max !== undefined) samePhoneMax.value = data.same_phone_max;
+                    if (data.diff_phone_min !== undefined) diffPhoneMin.value = data.diff_phone_min;
+                    if (data.diff_phone_max !== undefined) diffPhoneMax.value = data.diff_phone_max;
 
-                    const simEl = document.getElementById(`sim${data.current_sim}`);
-                    if (simEl) simEl.checked = true;
-
-                    updateSimControlsUI();
+                    if (data.selected_sims && Array.isArray(data.selected_sims)) {
+                        const set = new Set(data.selected_sims);
+                        document.querySelectorAll('.sim-checkbox').forEach(cb => {
+                            cb.checked = set.has(cb.value);
+                        });
+                    }
                     isInitialized = true;
                 } else if (data.status === 'IDLE' && document.activeElement !== csvInput && document.activeElement !== smsTemplate) {
-                    // Aktualizujemy zawartość gdy IDLE i użytkownik nie pisze akurat w polach
                     if (data.csv !== undefined && csvInput.value === '') csvInput.value = data.csv;
                     if (data.sms_template !== undefined && smsTemplate.value === '') smsTemplate.value = data.sms_template;
-                }
-
-                // Aktualizacja wskaźnika aktywnej karty SIM przy rotacji
-                const currentSimEl = document.getElementById(`sim${data.current_sim}`);
-                if (currentSimEl && data.status === 'RUNNING') {
-                    currentSimEl.checked = true;
                 }
 
                 // Aktualizacja paska statusu

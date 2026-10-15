@@ -10,11 +10,14 @@ Dostępny w dwóch wersjach:
 
 ## ⚡ Główne Funkcje
 
-- **Tryb Turbo (5 kart SIM):**
-  Wysyłka sekwencyjna przeplatana po telefonach:
-  $$\text{Tel 1 (SIM 1)} \longrightarrow \text{Tel 2 (SIM 1)} \longrightarrow \text{Tel 3 (SIM 1)} \longrightarrow \text{Tel 1 (SIM 2)} \longrightarrow \text{Tel 3 (SIM 2)}$$
-  Z krótkim (1.0s) odstępem między urządzeniami, a po 5 SMS-ach następuje długa pauza (np. 180s - 600s), co idealnie rozkłada kampanię na cały dzień.
-- **Wybór pojedynczych urządzeń:** Tel 1 (Dual SIM), Tel 2 (1 SIM), Tel 3 (Dual SIM) z obsługą wyboru i automatycznej rotacji SIM 1 / SIM 2.
+- **Elastyczny wybór kart SIM (Checkboxy):**
+  Możliwość bezpośredniego zaznaczenia dowolnych kart SIM spośród 5 dostępnych (Tel 1: SIM 1, SIM 2; Tel 2: SIM 1; Tel 3: SIM 1, SIM 2). Skrypt automatycznie optymalizuje kolejność, przeplatając urządzenia w bezpiecznym cyklu.
+- **Inteligentna ochrona modemu (Per-Device Cooldown):**
+  Gwarantowany, bezpieczny odstęp czasowy dla tego samego telefonu (pomiędzy SIM 1 a SIM 2, np. 30–45s). Zapobiega to kolizjom radiowym modemu w telefonach Dual SIM i gwarantuje 100% skuteczność wysyłki.
+- **Konfigurowalne odstępy czasowe:**
+  - Odstęp między różnymi telefonami (np. 3–6s)
+  - Odstęp dla tego samego telefonu / między slotami SIM (np. 30–45s)
+  - Długa pauza po pełnym cyklu zaznaczonych kart (np. 40–90s)
 - **Zaawansowany Spintax:**
   - Dynamiczne zmienne z wartościami domyślnymi: `{Name:Kliencie}`, `{City:Twojej okolicy}`
   - Zagnieżdżone warianty: `{Dzień dobry|{Cześć|Hej}}`

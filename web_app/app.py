@@ -34,6 +34,7 @@ CREDENTIALS = {
     3: ("QL5Z7O", "4jzbmvhv6tpbmd")   # Telefon 3 (Dual SIM)
 }
 
+<<<<<<< HEAD
 # Zoptymalizowana sekwencja Turbo (maksymalny odstęp czasu dla fizycznych aparatów Tel 1 i Tel 3)
 TURBO_SEQUENCE = [
     (1, 1),  # Tel 1, SIM 1
@@ -56,6 +57,36 @@ DEFAULT_TEMPLATES = """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Wtorkowy
 {Dzień dobry | Witam}! Tu Krzysztof. Wtorek koło południa, więc mam nadzieję, że poranne sprawy w obiekcie już ogarnięte i jest chwila wytchnienia. Dopytam z ciekawości – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
 ---
 {Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając z luźniejszego wtorkowego przedpołudnia, pozwolę sobie zadać jedno krótkie pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe do rzucenia okiem w wolnej chwili?"""
+=======
+# Dostępne karty SIM:
+AVAILABLE_SIMS = [
+    (1, 1, "Tel 1 – SIM 1"),
+    (1, 2, "Tel 1 – SIM 2"),
+    (2, 1, "Tel 2 – SIM 1"),
+    (3, 1, "Tel 3 – SIM 1"),
+    (3, 2, "Tel 3 – SIM 2"),
+]
+
+def build_interleaved_sequence(selected_sims: list) -> list[tuple[int, int]]:
+    """
+    Tworzy zoptymalizowaną sekwencję kart SIM, maksymalizując odstęp między SIM-ami tego samego telefonu.
+    Przyjmuje elementy w formacie (dev, sim) lub 'dev_sim'.
+    """
+    normalized = []
+    for item in selected_sims:
+        if isinstance(item, (list, tuple)) and len(item) >= 2:
+            normalized.append((int(item[0]), int(item[1])))
+        elif isinstance(item, str) and "_" in item:
+            parts = item.split("_")
+            normalized.append((int(parts[0]), int(parts[1])))
+    if not normalized:
+        return []
+    sim1 = [c for c in normalized if c[1] == 1]
+    sim2 = [c for c in normalized if c[1] == 2]
+    sim1.sort(key=lambda c: c[0])
+    sim2.sort(key=lambda c: c[0])
+    return sim1 + sim2
+>>>>>>> ba9aa74 (Synchronize Web App with desktop features, dynamic port support & Coolify 8000 fix)
 
 # Obsługa wolumenu danych pod Coolify
 DATA_DIR = Path(os.getenv("DATA_DIR", Path(__file__).resolve().parent / "data"))
@@ -71,12 +102,23 @@ state = {
     "csv": "",
     "sms_template": DEFAULT_TEMPLATES,
     "current_index": 0,
+    "sim_step": 0,
     "turbo_step": 0,
+<<<<<<< HEAD
     "device_mode": 4,      # 1=Tel1, 2=Tel2, 3=Tel3, 4=Turbo (5 kart)
     "current_sim": 1,      # 1 lub 2
     "auto_switch": False,  # Rotacja SIM dla trybu pojedynczego (Tel 1 i Tel 3)
     "delay_min": 40.0,
     "delay_max": 75.0,
+=======
+    "selected_sims": ["1_1", "1_2", "2_1", "3_1", "3_2"],
+    "delay_min": 40.5,
+    "delay_max": 90.5,
+    "same_phone_min": 30.0,
+    "same_phone_max": 45.0,
+    "diff_phone_min": 3.0,
+    "diff_phone_max": 6.0,
+>>>>>>> ba9aa74 (Synchronize Web App with desktop features, dynamic port support & Coolify 8000 fix)
     "status": "IDLE",      # IDLE, RUNNING, PAUSED
     "logs": []
 }
@@ -109,8 +151,24 @@ def load_state():
         s = json.loads(STATE_FILE.read_text(encoding="utf-8"))
         with state_lock:
             state.update(s)
+<<<<<<< HEAD
             if not state.get("sms_template"):
                 state["sms_template"] = DEFAULT_TEMPLATES
+=======
+            if "selected_sims" not in s:
+                dev_mode = s.get("device_mode", 4)
+                if dev_mode == 4:
+                    state["selected_sims"] = ["1_1", "1_2", "2_1", "3_1", "3_2"]
+                elif dev_mode == 1:
+                    state["selected_sims"] = ["1_1", "1_2"] if s.get("auto_switch") else ["1_1"]
+                elif dev_mode == 2:
+                    state["selected_sims"] = ["2_1"]
+                elif dev_mode == 3:
+                    state["selected_sims"] = ["3_1", "3_2"] if s.get("auto_switch") else ["3_1"]
+            if "sim_step" not in s:
+                state["sim_step"] = s.get("turbo_step", 0)
+            # Przy restarcie serwera/kontenera w Coolify, jeśli był RUNNING, ustawiamy PAUSED
+>>>>>>> ba9aa74 (Synchronize Web App with desktop features, dynamic port support & Coolify 8000 fix)
             if state.get("status") == "RUNNING":
                 state["status"] = "PAUSED"
                 _log(f"🔄 Wczytano stan po restarcie: wiersz {state['current_index'] + 1} (PAUZA)")
@@ -299,11 +357,20 @@ def worker_loop():
         templates_list = [t.strip() for t in DEFAULT_TEMPLATES.split('---') if t.strip()]
     total = len(lines)
     
-    dev_mode = state["device_mode"]
-    mode_str = "TURBO 5 KART (Zbalansowany przepływ)" if dev_mode == 4 else f"Tylko Telefon {dev_mode}"
-    _log(f"🚀 Start wysyłki ({mode_str}): {total} wierszy.")
+    selected_sims = state.get("selected_sims", [])
+    active_sequence = build_interleaved_sequence(selected_sims)
+    if not active_sequence:
+        _log("❌ Błąd: Nie wybrano żadnej karty SIM!")
+        state["status"] = "IDLE"
+        save_state()
+        return
 
-    turbo_step = state.get("turbo_step", 0)
+    seq_len = len(active_sequence)
+    seq_desc = " -> ".join([f"Tel {d} (SIM {s})" for d, s in active_sequence])
+    _log(f"🚀 Start wysyłki ({seq_len} kart: {seq_desc}): {total} wierszy.")
+
+    sim_step = state.get("sim_step", state.get("turbo_step", 0))
+    last_device_send_time: dict[int, float] = {}
 
     while state["current_index"] < total:
         if stop_event.is_set():
@@ -331,72 +398,83 @@ def worker_loop():
         text_spun = resolve_spintax(base_tpl, {"name": parsed["name"], "city": parsed["city"]})
         final_text = apply_obfuscation(text_spun)
 
-        # Wybór urządzenia i karty SIM
-        if dev_mode == 4:
-            if turbo_step >= len(TURBO_SEQUENCE):
-                turbo_step = 0
-            current_dev, sim_to_use = TURBO_SEQUENCE[turbo_step]
-        else:
-            current_dev = dev_mode
-            sim_to_use = state["current_sim"] if current_dev in (1, 3) else 1
+        current_dev, sim_to_use = active_sequence[sim_step % seq_len]
+
+        # ── BEZPIECZNY ODSTĘP MODEMU DLA TEGO SAMEGO TELEFONU ──
+        if current_dev in last_device_send_time:
+            elapsed = time.time() - last_device_send_time[current_dev]
+            same_min = float(state.get("same_phone_min", 3.0))
+            same_max = float(state.get("same_phone_max", 4.0))
+            required_wait = random.uniform(same_min, same_max)
+            if elapsed < required_wait:
+                wait_needed = required_wait - elapsed
+                _log(f"  ⏳ Tel {current_dev}: modem odpoczywa (minęło {elapsed:.1f}s, czekam jeszcze {wait_needed:.1f}s na bezpieczne przełączenie SIM)...")
+                steps = int(wait_needed * 10)
+                for _ in range(steps):
+                    if stop_event.is_set():
+                        return
+                    while not pause_event.is_set():
+                        if stop_event.is_set():
+                            return
+                        time.sleep(0.3)
+                    time.sleep(0.1)
 
         _log(f"  📤 Wiersz {i + 1}: Wysyłam do {phone} (Tel {current_dev}, SIM {sim_to_use})...")
 
         success, skip_wait = send_sms_request(phone, final_text, current_dev, sim_to_use)
+        last_device_send_time[current_dev] = time.time()
 
         if success:
             _log(f"  ✅ Wysłano do {phone}")
         else:
             _log(f"  ❌ Błąd wysyłki do {phone} (Tel {current_dev}, SIM {sim_to_use})")
 
-        # Rotacja w trybie pojedynczego telefonu – zmieniamy ZAWSZE, by nie blokować kolejki po błędzie
-        if state["auto_switch"] and current_dev in (1, 3) and dev_mode != 4:
-            state["current_sim"] = 2 if state["current_sim"] == 1 else 1
-
-        # W trybie Turbo przechodzimy do kolejnego urządzenia w sekwencji
-        if dev_mode == 4:
-            turbo_step = (turbo_step + 1) % len(TURBO_SEQUENCE)
-            state["turbo_step"] = turbo_step
-
         state["current_index"] += 1
+        sim_step += 1
+        state["sim_step"] = sim_step
+        state["turbo_step"] = sim_step % seq_len
         save_state()
 
-        # Odpoczynek modemu – kluczowy punkt ochrony przed FUP i kolizjami DSDS
         if state["current_index"] < total and not stop_event.is_set():
             if skip_wait:
-                _log("  ⚡ Pomijam przerwę (błędny numer 400)")
+                _log("  ⚡ Omijam czekanie (odrzucony numer)")
+                time.sleep(0.5)
+                continue
+
+            # Czy zakończono pełny cykl wszystkich zaznaczonych kart?
+            if sim_step % seq_len == 0:
+                d_min = float(state.get("delay_min", 20.0))
+                d_max = float(state.get("delay_max", 26.0))
+                delay = random.uniform(d_min, d_max)
+                _log(f"  ⏳ Pełny cykl kart zakończony ({seq_len} SMS). Długa pauza: {delay:.1f}s...")
             else:
-                d_min = float(state.get("delay_min", 40.0))
-                d_max = float(state.get("delay_max", 75.0))
+                diff_min = float(state.get("diff_phone_min", 3.0))
+                diff_max = float(state.get("diff_phone_max", 6.0))
+                delay = random.uniform(diff_min, diff_max)
+                next_dev, next_sim = active_sequence[sim_step % seq_len]
+                _log(f"  ⚡ Następna karta -> Tel {next_dev} (SIM {next_sim}). Odstęp: {delay:.1f}s...")
 
-                if dev_mode == 4:
-                    # Rozkładamy ruch na pojedyncze wiadomości: odstęp 20-35s między kolejnymi SMS-ami.
-                    # Dzięki temu dany telefon (np. Tel 1) czeka min. 60-80s przed ponownym nadaniem!
-                    step_min = max(20.0, d_min / 2.0)
-                    step_max = max(30.0, d_max / 2.0)
-                    delay = random.uniform(step_min, step_max)
-                    next_dev, next_sim = TURBO_SEQUENCE[turbo_step]
-                    _log(f"  ⏳ Chłodzenie modemu. Następny: Tel {next_dev} (SIM {next_sim}) za {delay:.1f}s...")
-                else:
-                    delay = random.uniform(d_min, d_max)
-                    _log(f"  ⏳ Odpoczynek sprzętu. Czekam {delay:.1f}s...")
-
-                steps = int(delay * 10)
-                for _ in range(steps):
+            steps = int(delay * 10)
+            for _ in range(steps):
+                if stop_event.is_set():
+                    return
+                while not pause_event.is_set():
                     if stop_event.is_set():
                         return
-                    time.sleep(0.1)
+                    time.sleep(0.3)
+                time.sleep(0.1)
 
     state["status"] = "IDLE"
     _log("🏁 Kampania zakończona!")
     save_state()
+
 
 # ──────────────────────────────────────────────
 # ENDPOINTY API
 # ──────────────────────────────────────────────
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-    return templates.TemplateResponse(request=request, name="index.html")
+    return templates.TemplateResponse(request=request, name="index.html", context={"request": request})
 
 @app.get("/api/state")
 async def get_state():
@@ -405,12 +483,15 @@ async def get_state():
         "status": state["status"],
         "current_index": state["current_index"],
         "total_lines": total_lines,
+        "sim_step": state.get("sim_step", 0),
         "turbo_step": state.get("turbo_step", 0),
-        "device_mode": state["device_mode"],
-        "current_sim": state["current_sim"],
-        "auto_switch": state["auto_switch"],
+        "selected_sims": state.get("selected_sims", ["1_1", "1_2", "2_1", "3_1", "3_2"]),
         "delay_min": state["delay_min"],
         "delay_max": state["delay_max"],
+        "same_phone_min": state.get("same_phone_min", 30.0),
+        "same_phone_max": state.get("same_phone_max", 45.0),
+        "diff_phone_min": state.get("diff_phone_min", 3.0),
+        "diff_phone_max": state.get("diff_phone_max", 6.0),
         "csv": state["csv"],
         "sms_template": state["sms_template"],
         "logs": state["logs"]
@@ -425,21 +506,25 @@ async def save_config(request: Request):
         if "sms_template" in data:
             state["sms_template"] = data["sms_template"]
         if "delay_min" in data:
-            try:
-                state["delay_min"] = float(data["delay_min"])
-            except ValueError:
-                pass
+            try: state["delay_min"] = float(data["delay_min"])
+            except ValueError: pass
         if "delay_max" in data:
-            try:
-                state["delay_max"] = float(data["delay_max"])
-            except ValueError:
-                pass
-        if "device_mode" in data:
-            state["device_mode"] = int(data["device_mode"])
-        if "current_sim" in data:
-            state["current_sim"] = int(data["current_sim"])
-        if "auto_switch" in data:
-            state["auto_switch"] = bool(data["auto_switch"])
+            try: state["delay_max"] = float(data["delay_max"])
+            except ValueError: pass
+        if "same_phone_min" in data:
+            try: state["same_phone_min"] = float(data["same_phone_min"])
+            except ValueError: pass
+        if "same_phone_max" in data:
+            try: state["same_phone_max"] = float(data["same_phone_max"])
+            except ValueError: pass
+        if "diff_phone_min" in data:
+            try: state["diff_phone_min"] = float(data["diff_phone_min"])
+            except ValueError: pass
+        if "diff_phone_max" in data:
+            try: state["diff_phone_max"] = float(data["diff_phone_max"])
+            except ValueError: pass
+        if "selected_sims" in data and isinstance(data["selected_sims"], list):
+            state["selected_sims"] = data["selected_sims"]
     save_state()
     return {"status": "ok"}
 
@@ -454,6 +539,9 @@ async def start_campaign():
     if not lines or not templates_list:
         return {"status": "error", "message": "Brak danych CSV lub szablonów SMS."}
 
+    if not state.get("selected_sims"):
+        return {"status": "error", "message": "Zaznacz co najmniej jedną kartę SIM do wysyłki."}
+
     if state["status"] == "PAUSED":
         state["status"] = "RUNNING"
         pause_event.set()
@@ -464,6 +552,7 @@ async def start_campaign():
         return {"status": "ok"}
 
     state["current_index"] = 0
+    state["sim_step"] = 0
     state["turbo_step"] = 0
     state["status"] = "RUNNING"
     stop_event.clear()
@@ -488,6 +577,7 @@ async def terminate_campaign():
         pause_event.set()
         state["status"] = "IDLE"
         state["current_index"] = 0
+        state["sim_step"] = 0
         state["turbo_step"] = 0
         save_state()
         _log("⏹ Terminacja – postęp zresetowany.")
@@ -502,6 +592,7 @@ async def clear_data():
     with state_lock:
         state["status"] = "IDLE"
         state["current_index"] = 0
+        state["sim_step"] = 0
         state["turbo_step"] = 0
         state["csv"] = ""
         state["sms_template"] = DEFAULT_TEMPLATES

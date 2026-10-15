@@ -4,7 +4,8 @@ WORKDIR /app
 
 # Konfiguracja pod Coolify
 ENV PYTHONUNBUFFERED=1 \
-    DATA_DIR=/app/data
+    DATA_DIR=/app/data \
+    PORT=8000
 
 RUN mkdir -p /app/data
 
@@ -16,5 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY web_app/ .
 
 EXPOSE 8000
+EXPOSE 80
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]

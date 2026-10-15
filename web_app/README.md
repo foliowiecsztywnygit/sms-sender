@@ -25,7 +25,8 @@ Otwórz w przeglądarce: `http://localhost:8000`
 
 ## ⚙️ Kluczowe Cechy
 
-- **Tryb Turbo (5 kart)**: Wysyła w cyklu: Tel 1 (SIM 1) -> Tel 2 (SIM 1) -> Tel 3 (SIM 1) -> Tel 1 (SIM 2) -> Tel 3 (SIM 2) z odstępem 1.0s, po czym następuje długa pauza (np. 180s - 600s), co idealnie rozkłada wysyłkę na cały dzień i chroni przed łamaniem FUP u operatorów.
+- **Elastyczny wybór kart SIM**: Możliwość zaznaczania dowolnych kart SIM (Tel 1: SIM 1, SIM 2; Tel 2: SIM 1; Tel 3: SIM 1, SIM 2) z automatycznym przeplataniem urządzeń.
+- **Inteligentna ochrona modemu (Per-Device Cooldown)**: Gwarantowany odstęp czasowy (np. 30–45s) dla tego samego telefonu między SIM 1 a SIM 2, zapobiegający blokowaniu modemu. Konfigurowalne odstępy między różnymi telefonami oraz po pełnym cyklu.
 - **Trwała praca w tle**: Proces działa w procesie uvicorn/fastapi bez względu na to, czy przeglądarka jest otwarta czy zamknięta.
 - **Zaawansowany Spintax**:
   - Zmienne z wartością domyślną: `{Name:Kliencie}`, `{City:Twojej okolicy}`
