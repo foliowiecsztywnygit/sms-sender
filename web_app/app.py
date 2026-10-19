@@ -241,6 +241,7 @@ state = {
     # Opcje anty-spam i duplikaty
     "obfuscation_enabled": True,
     "skip_duplicates": True,
+    "smart_greeting_enabled": True,  # Automatyczny dobór: Dzień dobry (w dzień) / Dobry wieczór (od 17:00)
     # Statystyki dzienne i całkowite
     "stats_date": "",
     "sent_today_total": 0,
@@ -442,6 +443,104 @@ def parse_csv_line(line: str) -> dict | None:
 
 
 # ──────────────────────────────────────────────
+# INTELIGENTNE POWITANIA I ADAPTACJA DO PORY DNIA
+# ──────────────────────────────────────────────
+DAYS_STEMS = {
+    "poniedziałek": ("poniedziałkowy", "poniedziałkowe", "poniedziałkowym"),
+    "wtorek": ("wtorkowy", "wtorkowe", "wtorkowym"),
+    "środa": ("środowy", "środowe", "środowym"),
+    "czwartek": ("czwartkowy", "czwartkowe", "czwartkowym"),
+    "piątek": ("piątkowy", "piątkowe", "piątkowym"),
+    "sobota": ("sobotni", "sobotnie", "sobotnim"),
+    "niedziela": ("niedzielny", "niedzielne", "niedzielnym"),
+}
+
+def get_time_of_day_context(dt: datetime | None = None) -> dict:
+    if dt is None:
+        dt = now_pl()
+    hour = dt.hour
+    minute = dt.minute
+    total_min = hour * 60 + minute
+
+    # Rano: do 12:00, Popołudnie: 12:00 - 17:00, Wieczór: od 17:00
+    if total_min < 12 * 60:
+        greetings = ["Dzień dobry", "Witam serdecznie", "Witam", "Cześć"]
+        pora_dnia = "przedpołudnie"
+        pora_opis = "poranek"
+    elif total_min < 17 * 60:
+        greetings = ["Dzień dobry", "Witam serdecznie", "Witam", "Cześć"]
+        pora_dnia = "popołudnie"
+        pora_opis = "popołudnie"
+    else:
+        # Od 17:00 (wieczór)
+        greetings = ["Dobry wieczór", "Witam serdecznie", "Witam", "Cześć"]
+        pora_dnia = "wieczór"
+        pora_opis = "wieczór"
+
+    return {
+        "dt": dt,
+        "hour": hour,
+        "is_evening": total_min >= 17 * 60,
+        "is_afternoon": 12 * 60 <= total_min < 17 * 60,
+        "greetings": greetings,
+        "greeting": random.choice(greetings),
+        "pora_dnia": pora_dnia,
+        "pora_opis": pora_opis,
+    }
+
+
+def adapt_time_of_day(text: str, dt: datetime | None = None) -> str:
+    """
+    Automatycznie dostosowuje powitania i kontekstowe pory dnia w tekście:
+    - Od 17:00: zamienia 'Dzień dobry' na 'Dobry wieczór' oraz 'poranek'/'przedpołudnie' na 'wieczór'.
+    - Przed 17:00: zamienia ewentualny 'Dobry wieczór' na 'Dzień dobry'.
+    - W godzinach popołudniowych (12:00-17:00): zamienia zwroty poranne na 'popołudnie'.
+    """
+    tod = get_time_of_day_context(dt)
+    is_evening = tod["is_evening"]
+    is_afternoon = tod["is_afternoon"]
+
+    def _replace_keep_case(pattern: str, replacement: str, string: str) -> str:
+        def _cb(m):
+            matched = m.group(0)
+            rep = replacement
+            if matched and matched[0].isupper():
+                rep = rep[0].upper() + rep[1:]
+            return rep
+        return re.sub(pattern, _cb, string, flags=re.IGNORECASE)
+
+    # 1. Adaptacja bezpośrednich powitań
+    if is_evening:
+        text = _replace_keep_case(r"\b[Dd]zień dobry\b", "Dobry wieczór", text)
+    else:
+        text = _replace_keep_case(r"\b[Dd]obry wieczór\b", "Dzień dobry", text)
+
+    # 2. Zwroty z dniami tygodnia (np. wtorkowy poranek -> wtorkowy wieczór)
+    for _, (masc, neut, _) in DAYS_STEMS.items():
+        if is_evening:
+            text = _replace_keep_case(rf"\b{masc}\s+poranek\b", f"{masc} wieczór", text)
+            text = _replace_keep_case(rf"\bwe?\s+{neut}\s+przedpołudnie\b", f"w ten {masc} wieczór", text)
+            text = _replace_keep_case(rf"\b{neut}\s+przedpołudnie\b", f"{masc} wieczór", text)
+            text = _replace_keep_case(rf"\b{neut}\s+popołudnie\b", f"{masc} wieczór", text)
+        elif is_afternoon:
+            text = _replace_keep_case(rf"\b{masc}\s+poranek\b", f"{neut} popołudnie", text)
+            text = _replace_keep_case(rf"\bwe?\s+{neut}\s+przedpołudnie\b", f"w {neut} popołudnie", text)
+            text = _replace_keep_case(rf"\b{neut}\s+przedpołudnie\b", f"{neut} popołudnie", text)
+
+    if is_evening:
+        text = _replace_keep_case(r"\b(o|około|koło)\s+południa\b", "wieczorem", text)
+        text = _replace_keep_case(r"\bwe?\s+przedpołudnie\b", "wieczorem", text)
+        text = _replace_keep_case(r"\bporann(e|ych)\s+sprawy\b", "dzisiejsze sprawy", text)
+        text = _replace_keep_case(r"\bporanną kawę\b", "wieczorną herbatę", text)
+        text = _replace_keep_case(r"\bprzy kawie\b", "wieczorem", text)
+    elif is_afternoon:
+        text = _replace_keep_case(r"\bporann(e|ych)\s+sprawy\b", "dzisiejsze sprawy", text)
+        text = _replace_keep_case(r"\bporanną kawę\b", "popołudniową kawę", text)
+
+    return text
+
+
+# ──────────────────────────────────────────────
 # ZAAWANSOWANY SPINTAX I BEZPIECZNA OBFUSKACJA
 # ──────────────────────────────────────────────
 def resolve_spintax(text: str, context: dict | None = None) -> str:
@@ -450,6 +549,8 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
 
     name = context.get("name", "").strip()
     city = context.get("city", "").strip()
+    dt = context.get("dt") or now_pl()
+    tod = get_time_of_day_context(dt)
 
     def replace_var(m):
         var_name = m.group(1).lower()
@@ -461,6 +562,11 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
         return m.group(0)
 
     text = re.sub(r"\{(Name|City)(?::([^}]*))?\}", replace_var, text, flags=re.IGNORECASE)
+
+    # Dynamiczne tagi pory dnia i powitania: {Powitanie}, {Greeting}, {Pora_dnia}, {Pora_opis}
+    text = re.sub(r"\{(Powitanie|Greeting)\}", lambda m: tod["greeting"], text, flags=re.IGNORECASE)
+    text = re.sub(r"\{(Pora_dnia|Time_of_day)\}", lambda m: tod["pora_dnia"], text, flags=re.IGNORECASE)
+    text = re.sub(r"\{(Pora_opis)\}", lambda m: tod["pora_opis"], text, flags=re.IGNORECASE)
 
     def replace_rand_num(m):
         try:
@@ -505,7 +611,14 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
         loops += 1
 
     lines = [re.sub(r"[ \t]{2,}", " ", l).strip() for l in text.splitlines()]
-    return "\n".join(lines)
+    result = "\n".join(lines)
+
+    # Automatyczna adaptacja powitań i pory dnia (jeśli opcja włączona)
+    smart_greeting = context.get("smart_greeting", state.get("smart_greeting_enabled", True))
+    if smart_greeting:
+        result = adapt_time_of_day(result, dt)
+
+    return result
 
 
 def apply_obfuscation(text: str) -> str:
@@ -778,7 +891,7 @@ def worker_loop():
             sim_step = int(state.get("sim_step", 0))
 
         base_tpl = random.choice(templates_list)
-        text_spun = resolve_spintax(base_tpl, {"name": parsed["name"], "city": parsed["city"]})
+        text_spun = resolve_spintax(base_tpl, {"name": parsed["name"], "city": parsed["city"], "dt": dt_now})
         final_text = apply_obfuscation(text_spun) if obfuscate else text_spun
 
         sim_info = active_sims[sim_step % len(active_sims)]
@@ -991,6 +1104,7 @@ async def get_state():
             "active_days": state.get("active_days", [0, 1, 2, 3, 4, 5, 6]),
             "obfuscation_enabled": state.get("obfuscation_enabled", True),
             "skip_duplicates": state.get("skip_duplicates", True),
+            "smart_greeting_enabled": state.get("smart_greeting_enabled", True),
             "sent_today_total": state.get("sent_today_total", 0),
             "sent_today_per_sim": state.get("sent_today_per_sim", {}),
             "sent_total_all_time": state.get("sent_total_all_time", len(sent_numbers_set)),
@@ -1047,6 +1161,8 @@ async def save_config(request: Request):
             state["obfuscation_enabled"] = bool(data["obfuscation_enabled"])
         if "skip_duplicates" in data:
             state["skip_duplicates"] = bool(data["skip_duplicates"])
+        if "smart_greeting_enabled" in data:
+            state["smart_greeting_enabled"] = bool(data["smart_greeting_enabled"])
 
     save_state()
     return {"status": "ok"}
@@ -1331,7 +1447,20 @@ async def test_spintax(request: Request):
         return {"status": "error", "message": "Brak szablonów SMS w tym dniu."}
 
     tpl = random.choice(templates_list)
-    sample_context = {"name": data.get("name", "Willa Panorama"), "city": data.get("city", "Zakopane")}
+    test_dt = now_pl()
+    if "hour" in data and str(data["hour"]).isdigit():
+        try:
+            test_dt = test_dt.replace(hour=int(data["hour"]), minute=int(data.get("minute", 0)))
+        except ValueError:
+            pass
+
+    tod = get_time_of_day_context(test_dt)
+    sample_context = {
+        "name": data.get("name", "Willa Panorama"),
+        "city": data.get("city", "Zakopane"),
+        "dt": test_dt,
+        "smart_greeting": bool(data.get("smart_greeting", state.get("smart_greeting_enabled", True))),
+    }
     spun = resolve_spintax(tpl, sample_context)
     obfuscated = apply_obfuscation(spun) if state.get("obfuscation_enabled", True) else spun
     return {
@@ -1341,4 +1470,7 @@ async def test_spintax(request: Request):
         "spun": spun,
         "final": obfuscated,
         "char_count": len(obfuscated),
+        "simulated_time": test_dt.strftime("%H:%M"),
+        "is_evening": tod["is_evening"],
+        "pora_dnia": tod["pora_dnia"],
     }

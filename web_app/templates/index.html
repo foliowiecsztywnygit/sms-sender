@@ -643,12 +643,15 @@
                         </div>
                     </div>
 
-                    <div class="settings-row" style="margin-top: 2px; gap: 16px;">
+                    <div class="settings-row" style="margin-top: 2px; gap: 16px; flex-wrap: wrap;">
                         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12.5px;">
                             <input type="checkbox" id="skipDuplicates" checked> 🛡️ Pomijaj numery z bazy wysłanych
                         </label>
                         <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12.5px;">
                             <input type="checkbox" id="obfuscationEnabled" checked> 🔀 Obfuskacja anty-spamowa (chroni URL)
+                        </label>
+                        <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12.5px; color: var(--accent-yellow); font-weight: 600;">
+                            <input type="checkbox" id="smartGreetingEnabled" checked> 🕒 Inteligentne powitanie (Dzień dobry w dzień / Dobry wieczór od 17:00)
                         </label>
                     </div>
                 </div>
@@ -701,9 +704,11 @@
                 <div class="section-title">
                     <span>📅 Skrypty SMS na 7 Dni Tygodnia (Samograj sam przełącza skrypt o północy zgodnie z dniem tygodnia)</span>
                 </div>
-                <div style="display: flex; gap: 6px;">
-                    <button class="btn btn-skip btn-sm" onclick="testCurrentDaySpintax()">🎲 Losuj podgląd SMS z wybranego dnia</button>
-                    <button class="btn btn-secondary btn-sm" onclick="restoreDayTemplates()">🔄 Przywróć domyślne dla tego dnia</button>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <button class="btn btn-skip btn-sm" onclick="testCurrentDaySpintax()">🎲 Testuj wg obecnej godziny</button>
+                    <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(10)" title="Zobacz jak tekst wygląda rano o 10:00 (Dzień dobry)">☀️ Test Rano (10:00)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(18)" title="Zobacz jak tekst wygląda wieczorem po 17:00 (Dobry wieczór)">🌙 Test Wieczór (18:30)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="restoreDayTemplates()">🔄 Przywróć domyślne dnia</button>
                 </div>
             </div>
 
@@ -717,9 +722,9 @@
                 <button class="tab-btn" data-day="6" onclick="selectDayTab('6')">Niedziela <span id="todayBadge6" class="tab-today-dot" style="display:none;">DZIŚ</span></button>
             </div>
 
-            <div style="font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+            <div style="font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                 <span id="dayTemplateInfo">Edytujesz szablony na: Poniedziałek (oddzielaj kolejne warianty linijką '---')</span>
-                <span>Obsługiwane tagi: <code>{opcja1|opcja2}</code>, <code>[opcjonalny]</code>, <code>{Name:Kliencie}</code>, <code>{City:Twojej okolicy}</code></span>
+                <span>Tagi: <code>{Powitanie}</code>, <code>{Pora_dnia}</code>, <code>{opcja1|opcja2}</code>, <code>[opcjonalny]</code>, <code>{Name:Kliencie}</code>, <code>{City:Twojej okolicy}</code></span>
             </div>
 
             <textarea id="dayTemplateEditor" style="height: 175px; white-space: pre-wrap;"></textarea>
@@ -811,6 +816,7 @@
         const weekendEnd = document.getElementById('weekendEnd');
         const skipDuplicates = document.getElementById('skipDuplicates');
         const obfuscationEnabled = document.getElementById('obfuscationEnabled');
+        const smartGreetingEnabled = document.getElementById('smartGreetingEnabled');
         const logArea = document.getElementById('logArea');
 
         function updateIntervalHumanHint() {
@@ -1055,15 +1061,20 @@
             fetchState();
         }
 
-        async function testCurrentDaySpintax() {
+        async function testCurrentDaySpintax(simulatedHour = null) {
             dailyTemplatesCache[selectedDayTab] = dayTemplateEditor.value;
+            const payload = {
+                day: selectedDayTab,
+                template: dayTemplateEditor.value,
+                smart_greeting: smartGreetingEnabled.checked
+            };
+            if (simulatedHour !== null) {
+                payload.hour = simulatedHour;
+            }
             const res = await fetch('/api/test_spintax', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    day: selectedDayTab,
-                    template: dayTemplateEditor.value
-                })
+                body: JSON.stringify(payload)
             });
             const data = await res.json();
             if (data.status === 'error') {
@@ -1072,8 +1083,9 @@
             }
             const box = document.getElementById('spintaxPreviewBox');
             box.style.display = 'block';
+            const timeTag = data.simulated_time ? ` (Godz. ${data.simulated_time} • ${data.is_evening ? '🌙 WIECZÓR' : '☀️ DZIEŃ'})` : '';
             document.getElementById('spintaxPreviewTitle').innerText =
-                `🎲 Wylosowany SMS na ${DAY_NAMES[selectedDayTab]} (spośród ${data.variants_count} wariantów):`;
+                `🎲 Wylosowany SMS na ${DAY_NAMES[selectedDayTab]}${timeTag} (wariant z ${data.variants_count}):`;
             document.getElementById('spintaxPreviewChars').innerText = `${data.char_count} znaków`;
             document.getElementById('spintaxPreviewText').innerText = data.final;
         }
@@ -1115,7 +1127,8 @@
                     weekend_end: weekendEnd.value,
                     active_days: activeDaysCache,
                     skip_duplicates: skipDuplicates.checked,
-                    obfuscation_enabled: obfuscationEnabled.checked
+                    obfuscation_enabled: obfuscationEnabled.checked,
+                    smart_greeting_enabled: smartGreetingEnabled.checked
                 };
 
                 await fetch('/api/save_config', {
@@ -1141,7 +1154,7 @@
             el.addEventListener('change', saveConfig);
         });
 
-        [scheduleEnabled, workdaysStart, workdaysEnd, weekendStart, weekendEnd, skipDuplicates, obfuscationEnabled].forEach(el => {
+        [scheduleEnabled, workdaysStart, workdaysEnd, weekendStart, weekendEnd, skipDuplicates, obfuscationEnabled, smartGreetingEnabled].forEach(el => {
             el.addEventListener('change', saveConfig);
         });
 
@@ -1236,6 +1249,9 @@
                     activeDaysCache = data.active_days || [0, 1, 2, 3, 4, 5, 6];
                     skipDuplicates.checked = !!data.skip_duplicates;
                     obfuscationEnabled.checked = !!data.obfuscation_enabled;
+                    if (data.smart_greeting_enabled !== undefined) {
+                        smartGreetingEnabled.checked = !!data.smart_greeting_enabled;
+                    }
 
                     renderDayChips();
                     updateIntervalHumanHint();
