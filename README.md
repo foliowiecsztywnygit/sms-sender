@@ -1,37 +1,31 @@
-# SMS Sender PRO 🚀
+# SMS Sender PRO – Samograj 24/7 🚀
 
-Kompletny system do masowej i bezpiecznej wysyłki SMS przez bramki **SMS-gate.app**, zaprojektowany z myślą o unikaniu limitów FUP (Fair Use Policy) u operatorów telekomunikacyjnych oraz zaawansowanej personalizacji anty-spamowej.
+Nowoczesny system do bezpiecznej i zautomatyzowanej wysyłki SMS przez bramki **SMS-gate.app**, zaprojektowany z myślą o unikaniu limitów FUP (Fair Use Policy) u operatorów oraz pełnej integracji z **Chatwoot**.
 
-Dostępny w dwóch wersjach:
-1. **Desktopowa (Tkinter):** `sms_sender.py` do natywnego uruchamiania na Windows / Linux / macOS.
-2. **Webowa (FastAPI + Docker):** w folderze `web_app/` przygotowana do wdrożenia w **Coolify** (działa w tle 24/7).
+**Zasada działania:** Wrzucasz leady, zostawiasz działającą maszynę 24/7, a odpisujesz tylko na te wiadomości, które spłyną z odpowiedziami do Chatwoot.
 
 ---
 
-## ⚡ Główne Funkcje
+## ⚡ Główne Funkcje Samograja
 
-- **Elastyczny wybór kart SIM (Checkboxy):**
-  Możliwość bezpośredniego zaznaczenia dowolnych kart SIM spośród 5 dostępnych (Tel 1: SIM 1, SIM 2; Tel 2: SIM 1; Tel 3: SIM 1, SIM 2). Skrypt automatycznie optymalizuje kolejność, przeplatając urządzenia w bezpiecznym cyklu.
-- **Inteligentna ochrona modemu (Per-Device Cooldown):**
-  Gwarantowany, bezpieczny odstęp czasowy dla tego samego telefonu (pomiędzy SIM 1 a SIM 2, np. 30–45s). Zapobiega to kolizjom radiowym modemu w telefonach Dual SIM i gwarantuje 100% skuteczność wysyłki.
-- **Konfigurowalne odstępy czasowe:**
-  - Odstęp między różnymi telefonami (np. 3–6s)
-  - Odstęp dla tego samego telefonu / między slotami SIM (np. 30–45s)
-  - Długa pauza po pełnym cyklu zaznaczonych kart (np. 40–90s)
-- **Zaawansowany Spintax:**
-  - Dynamiczne zmienne z wartościami domyślnymi: `{Name:Kliencie}`, `{City:Twojej okolicy}`
-  - Zagnieżdżone warianty: `{Dzień dobry|{Cześć|Hej}}`
-  - Wstawki opcjonalne: `[opcjonalny tekst]` (50% losowej obecności) oraz `{wariant|}`
-  - Unikalne identyfikatory anty-spamowe: `{rand_code:5}`, `{rand_num:10:99}`
-- **Bezpieczna Obfuskacja:** Subtelna podmiana polskich znaków diakrytycznych i interpunkcji, z **ochroną adresów URL** (`http://`, `https://`) przed ich uszkodzeniem.
-- **Trwałość stanu:** Postęp i stan kampanii zapisywany po każdym SMS-ie w `sms_state.json`.
+- **Autopilot 7 Dni w Tygodniu (Always-On):**
+  Praca ciągła w tle (np. na VPS w Coolify / Docker). Po restarcie kontenera maszyna automatycznie kontynuuje pracę. Gdy skończą się kontakty, samograj czeka w gotowości i natychmiast rusza po dorzuceniu kolejnych leadów.
+- **Gotowe szablony na każdy dzień tygodnia (Poniedziałek – Niedziela):**
+  Zestawy po 7 wariantów na każdy z 7 dni tygodnia (49 szablonów ze spintaxem dopasowanych do poniedziałkowej kawy, środka tygodnia, piątkowego meldowania czy weekendu). Maszyna sama przełącza skrypt o północy.
+- **Duże, bezpieczne odstępy czasowe:**
+  Wysyłka pojedynczych SMS-ów (np. co 3–7 minut) rotacyjnie z kolejnych kart SIM. Gwarantowany odpoczynek modemu Dual SIM oraz konfigurowalny dzienny limit na kartę SIM.
+- **Zarządzanie telefonami i kartami SIM na żywo:**
+  Włączanie i wyłączanie kart SIM 1 kliknięciem bez przerywania pracy. Dodawanie i edycja nowych telefonów z loginem/hasłem bezpośrednio z panelu WWW.
+- **Kolejka leadów i automatyczna blokada duplikatów:**
+  Możliwość dorzucania kolejnych plików lub wklejania CSV w trakcie pracy maszyny. Pomyślnie wysłane numery trafiają do trwałej bazy i nigdy nie są wysyłane powtórnie.
+- **Harmonogram godzinowy (Europe/Warsaw):**
+  Automatyczna przerwa nocna w wyznaczonych godzinach (np. 09:00–17:30 w tygodniu i 10:00–16:00 w weekendy) i samoczynne wznawianie rano.
 
 ---
 
-## 🚀 Wdrożenie w Coolify (1 kliknięcie)
+## 🚀 Wdrożenie w Coolify
 
-1. W Coolify utwórz nowy projekt / zasób -> **Application** -> **Public/Private GitHub Repository**.
-2. Wklej URL repozytorium: `https://github.com/foliowiecsztywnygit/sms-sender.git`.
-3. Coolify automatycznie wykryje plik `docker-compose.yml`.
-4. Kliknij **Deploy**.
-5. Port aplikacji: `8000`. Wolumen `sms_data` dba o zachowanie bazy i postępu między restartami kontenera.
+1. W Coolify utwórz nową aplikację z repozytorium GitHub.
+2. Wykryje automatycznie `docker-compose.yml` lub `Dockerfile`.
+3. Wolumen `sms_data` zapewnia zachowanie bazy wysłanych numerów, kolejki i konfiguracji telefonów.
+4. Port: `8000`.

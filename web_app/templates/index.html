@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMS Sender PRO - Turbo 3 Devices & DualSIM AntiSpam</title>
+    <title>SMS Sender PRO – Samograj 24/7 (Autopilot 7 Dni)</title>
     <style>
         :root {
-            --bg-color: #1e1e2e;
+            --bg-color: #181825;
+            --card-bg: #1e1e2e;
             --panel-bg: #313244;
-            --log-bg: #181825;
+            --log-bg: #11111b;
             --border-color: #45475a;
             --text-color: #cdd6f4;
             --text-muted: #a6adc8;
             --accent-blue: #89b4fa;
             --accent-cyan: #74c7ec;
-            --btn-start: #a6e3a1;
-            --btn-pause: #f9e2af;
-            --btn-terminate: #f38ba8;
-            --btn-clear: #6c7086;
-            --status-color: #f5e0dc;
+            --accent-green: #a6e3a1;
+            --accent-yellow: #f9e2af;
+            --accent-red: #f38ba8;
+            --accent-purple: #cba6f7;
         }
 
         * {
@@ -31,147 +31,162 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 14px;
-            padding: 16px 20px;
+            font-size: 13.5px;
+            padding: 14px 18px 30px 18px;
             min-height: 100vh;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1260px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 14px;
         }
 
-        .section-label {
-            color: var(--accent-blue);
-            font-size: 15px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        textarea {
-            width: 100%;
-            background-color: var(--panel-bg);
-            color: var(--text-color);
+        /* Pasek nagłówka i statusu Samograja */
+        .top-bar {
+            background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 13px;
-            padding: 8px 10px;
-            resize: vertical;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        textarea:focus, input[type="text"]:focus, input[type="number"]:focus {
-            border-color: var(--accent-blue);
-        }
-
-        .csv-box {
-            height: 140px;
-            white-space: pre;
-            overflow-x: auto;
-        }
-
-        .sms-box {
-            height: 120px;
-            white-space: pre-wrap;
-        }
-
-        /* Ustawienia rzędowe */
-        .settings-row {
+            border-radius: 8px;
+            padding: 14px 18px;
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
-            gap: 12px;
-            padding: 2px 0;
-        }
-
-        .settings-label {
-            color: var(--text-color);
-            font-size: 14px;
-            font-weight: normal;
-        }
-
-        .settings-label-bold {
-            color: var(--text-color);
-            font-size: 14px;
-            font-weight: bold;
-            min-width: 100px;
-        }
-
-        input[type="number"], input[type="text"] {
-            background-color: var(--panel-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-family: 'Consolas', monospace;
-            font-size: 13px;
-            padding: 4px 8px;
-            width: 70px;
-            text-align: center;
-            outline: none;
-        }
-
-        /* Radio & Checkbox */
-        .radio-group {
-            display: flex;
-            flex-wrap: wrap;
+            justify-content: space-between;
             align-items: center;
             gap: 14px;
         }
 
-        .radio-item, .checkbox-item {
-            display: inline-flex;
+        .brand-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .brand-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent-blue);
+            display: flex;
             align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            user-select: none;
+            gap: 10px;
         }
 
-        .radio-cyan {
-            color: var(--accent-cyan);
+        .status-badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
         }
 
-        .radio-turbo {
-            color: #f38ba8;
-            font-weight: bold;
+        .status-running {
+            background: rgba(166, 227, 161, 0.18);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
         }
 
-        .radio-sim {
-            color: #a6e3a1;
+        .status-paused {
+            background: rgba(249, 226, 175, 0.18);
+            color: var(--accent-yellow);
+            border: 1px solid var(--accent-yellow);
         }
 
-        .checkbox-switch {
-            color: #f9e2af;
+        .status-idle {
+            background: rgba(166, 173, 200, 0.15);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
         }
 
-        input[type="radio"], input[type="checkbox"] {
-            accent-color: var(--accent-blue);
-            cursor: pointer;
-            width: 15px;
-            height: 15px;
+        .phase-detail {
+            font-size: 13.5px;
+            color: var(--accent-yellow);
+            font-weight: 600;
+        }
+
+        .clock-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Karty KPI */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 10px;
+        }
+
+        .kpi-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .kpi-title {
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .kpi-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-color);
+        }
+
+        .kpi-sub {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Sekcje */
+        .section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 1px solid rgba(69, 71, 90, 0.5);
+            padding-bottom: 8px;
+        }
+
+        .section-title {
+            color: var(--accent-blue);
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         /* Przyciski */
-        .button-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
         .btn {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 13px;
-            font-weight: bold;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 700;
             border: none;
-            border-radius: 3px;
-            padding: 7px 18px;
+            border-radius: 6px;
+            padding: 7px 14px;
             cursor: pointer;
             transition: opacity 0.15s, transform 0.05s;
             display: inline-flex;
@@ -187,195 +202,922 @@
             transform: scale(0.98);
         }
 
-        .btn-start {
-            background-color: var(--btn-start);
-            color: #1e1e2e;
+        .btn-start { background-color: var(--accent-green); color: #11111b; }
+        .btn-pause { background-color: var(--accent-yellow); color: #11111b; }
+        .btn-skip  { background-color: var(--accent-cyan); color: #11111b; }
+        .btn-danger { background-color: var(--accent-red); color: #11111b; }
+        .btn-secondary { background-color: var(--panel-bg); color: var(--text-color); border: 1px solid var(--border-color); }
+        .btn-sm { padding: 4px 10px; font-size: 11.5px; border-radius: 4px; }
+
+        /* Karty Telefonów i SIM */
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 12px;
         }
 
-        .btn-pause {
-            background-color: var(--btn-pause);
-            color: #1e1e2e;
+        .device-card {
+            background-color: rgba(49, 50, 68, 0.45);
+            border: 1px solid var(--border-color);
+            border-radius: 7px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .btn-terminate {
-            background-color: var(--btn-terminate);
-            color: #1e1e2e;
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .btn-clear {
-            background-color: var(--btn-clear);
+        .device-name {
+            font-weight: 700;
+            font-size: 14px;
             color: var(--text-color);
         }
 
-        /* Status */
-        .status-display {
-            color: var(--status-color);
-            font-size: 16px;
-            font-weight: bold;
-            padding: 2px 0;
-            min-height: 24px;
+        .device-login {
+            font-family: 'Consolas', monospace;
+            font-size: 11.5px;
+            color: var(--text-muted);
+            background: var(--bg-color);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .sim-slots-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .sim-pill {
+            border-radius: 6px;
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: all 0.15s;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+        }
+
+        .sim-pill.active {
+            border-color: var(--accent-green);
+            background-color: rgba(166, 227, 161, 0.1);
+        }
+
+        .sim-pill-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sim-toggle-btn {
+            width: 100%;
+            text-align: left;
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 12.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sim-status-dot {
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .dot-on { background: var(--accent-green); color: #11111b; }
+        .dot-off { background: var(--panel-bg); color: var(--text-muted); }
+
+        .sim-pill-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11.5px;
+            color: var(--text-muted);
+        }
+
+        /* Formularze i inputy */
+        input[type="number"], input[type="text"], input[type="password"], input[type="time"] {
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Consolas', monospace;
+            font-size: 13px;
+            padding: 5px 8px;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--accent-blue);
+        }
+
+        textarea {
+            width: 100%;
+            background-color: var(--panel-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: 'Consolas', monospace;
+            font-size: 12.5px;
+            padding: 9px 11px;
+            resize: vertical;
+            outline: none;
+            line-height: 1.45;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 12px;
+        }
+
+        .settings-box {
+            background-color: rgba(49, 50, 68, 0.35);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .settings-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .day-chip {
+            padding: 4px 9px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background-color: var(--panel-bg);
+            color: var(--text-muted);
+            user-select: none;
+        }
+
+        .day-chip.active {
+            background-color: rgba(166, 227, 161, 0.2);
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+        }
+
+        /* Dwukolumnowy układ dla leadów */
+        .leads-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        @media (max-width: 860px) {
+            .leads-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Zakładki dni tygodnia dla szablonów */
+        .tabs-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tab-btn {
+            background-color: var(--panel-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 7px 13px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn.active {
+            background-color: var(--accent-blue);
+            color: #11111b;
+            border-color: var(--accent-blue);
+        }
+
+        .tab-today-dot {
+            background-color: var(--accent-green);
+            color: #11111b;
+            font-size: 10px;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 800;
         }
 
         /* Logi */
         .log-container {
             background-color: var(--log-bg);
             border: 1px solid var(--border-color);
-            border-radius: 4px;
-            padding: 8px 10px;
-            height: 220px;
+            border-radius: 6px;
+            padding: 9px 12px;
+            height: 210px;
             overflow-y: auto;
             font-family: 'Consolas', monospace;
-            font-size: 13px;
-            line-height: 1.4;
+            font-size: 12.5px;
+            line-height: 1.45;
             white-space: pre-wrap;
-            word-break: break-all;
+            word-break: break-word;
         }
 
-        /* Scrollbary */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
+        /* Modal dodawania/edycji telefonu */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
         }
-        ::-webkit-scrollbar-track {
-            background: var(--bg-color);
+
+        .modal-backdrop.open {
+            display: flex;
         }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 4px;
+
+        .modal-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--accent-blue);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 440px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #585b70;
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .form-field label {
+            font-size: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .form-field input[type="text"], .form-field input[type="password"] {
+            width: 100%;
+            text-align: left;
+        }
+
+        .toast-msg {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--accent-green);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 1. DANE CSV -->
-        <div class="section-label">📋  Dane CSV (wklej wiersze):</div>
-        <textarea id="csvInput" class="csv-box" placeholder="Nazwa,Miasto,48123456789&#10;..."></textarea>
-
-        <!-- 2. SZABLONY SMS -->
-        <div class="section-label">✉️  Szablony SMS (oddzielaj kolejne wpisując '---' w nowej linii):</div>
-        <textarea id="smsTemplate" class="sms-box" placeholder="{Dzień dobry|Cześć} {Name:Kliencie}! [Sprawdź|Zobacz ofertę] w {City:Twojej okolicy}.&#10;---&#10;{Hej|Dzień dobry}! Nowa oferta dla firm z {City:Twojego miasta}."></textarea>
-
-        <!-- 3. USTAWIENIA CZASU -->
-        <div class="settings-row" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color);">
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <span class="settings-label" style="font-weight: bold; color: var(--text-color);">⏱ Długa pauza (po cyklu):</span>
-                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Min:</span>
-                <input type="number" id="delayMin" step="0.5" value="40.5">
-                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Max:</span>
-                <input type="number" id="delayMax" step="0.5" value="90.5">
+        <!-- 1. GÓRNY PASEK KONTROLNY SAMOGRAJA -->
+        <div class="top-bar">
+            <div class="brand-box">
+                <div class="brand-title">
+                    <span>🤖 SMS Sender PRO – Samograj 24/7</span>
+                    <span id="statusBadge" class="status-badge status-idle">IDLE</span>
+                </div>
+                <div id="phaseDetail" class="phase-detail">Ładowanie stanu maszyny...</div>
             </div>
 
-            <span style="color: var(--border-color); margin: 0 4px;">│</span>
+            <div class="clock-box">
+                <div style="text-align: right; margin-right: 8px;">
+                    <div id="clockDisplay" style="font-family: 'Consolas', monospace; font-size: 14px; font-weight: bold; color: var(--accent-cyan);">--:--:--</div>
+                    <div id="dayDisplay" style="font-size: 12px; color: var(--text-muted);">Dzień tygodnia: --</div>
+                </div>
 
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <span class="settings-label" style="font-weight: bold; color: #f9e2af;">Ten sam telefon (SIM 1 ↔ SIM 2):</span>
-                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Min:</span>
-                <input type="number" id="samePhoneMin" step="0.5" value="30.0">
-                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Max:</span>
-                <input type="number" id="samePhoneMax" step="0.5" value="45.0">
-            </div>
-
-            <span style="color: var(--border-color); margin: 0 4px;">│</span>
-
-            <div style="display: flex; align-items: center; gap: 6px;">
-                <span class="settings-label" style="font-weight: bold; color: #74c7ec;">Różne telefony:</span>
-                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Min:</span>
-                <input type="number" id="diffPhoneMin" step="0.5" value="3.0">
-                <span class="settings-label" style="color: var(--text-muted); font-size: 12px;">Max:</span>
-                <input type="number" id="diffPhoneMax" step="0.5" value="6.0">
+                <button class="btn btn-start" onclick="handleAction('start')">▶ WŁĄCZ SAMOGRAJ 24/7</button>
+                <button class="btn btn-pause" onclick="handleAction('pause')">⏸ PAUZA</button>
+                <button id="btnSkipWait" class="btn btn-skip" onclick="handleAction('skip_wait')" title="Natychmiast kończy aktualne odliczanie i wysyła kolejny SMS">⚡ Wyślij następny teraz</button>
             </div>
         </div>
 
-        <!-- 4. WYBÓR KART SIM -->
-        <div class="settings-row" style="background: rgba(255,255,255,0.02); padding: 8px 12px; border-radius: 4px; border: 1px solid var(--border-color);">
-            <span class="settings-label-bold">📱 Karty SIM:</span>
-            <div class="radio-group" id="simGroup">
-                <label class="checkbox-item" style="color: #74c7ec; font-weight: bold;">
-                    <input type="checkbox" class="sim-checkbox" value="1_1" checked> Tel 1 – SIM 1
-                </label>
-                <label class="checkbox-item" style="color: #74c7ec; font-weight: bold;">
-                    <input type="checkbox" class="sim-checkbox" value="1_2" checked> Tel 1 – SIM 2
-                </label>
-                <label class="checkbox-item" style="color: #f9e2af; font-weight: bold;">
-                    <input type="checkbox" class="sim-checkbox" value="2_1" checked> Tel 2 – SIM 1
-                </label>
-                <label class="checkbox-item" style="color: #a6e3a1; font-weight: bold;">
-                    <input type="checkbox" class="sim-checkbox" value="3_1" checked> Tel 3 – SIM 1
-                </label>
-                <label class="checkbox-item" style="color: #a6e3a1; font-weight: bold;">
-                    <input type="checkbox" class="sim-checkbox" value="3_2" checked> Tel 3 – SIM 2
-                </label>
+        <!-- 2. KARTY KPI NA ŻYWO -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-title">📋 KOLEJKA OCZEKUJĄCYCH LEADÓW</div>
+                <div class="kpi-value" id="kpiQueueCount" style="color: var(--accent-cyan);">0</div>
+                <div class="kpi-sub" id="kpiNextLead">Następny: brak w kolejce</div>
+            </div>
 
-                <div style="display: flex; gap: 6px; margin-left: 10px;">
-                    <button type="button" class="btn" style="background-color: #45475a; color: #cdd6f4; font-size: 11px; padding: 4px 8px;" onclick="selectAllSims(true)">Zaznacz wszystkie</button>
-                    <button type="button" class="btn" style="background-color: #45475a; color: #cdd6f4; font-size: 11px; padding: 4px 8px;" onclick="selectAllSims(false)">Odznacz wszystkie</button>
+            <div class="kpi-card">
+                <div class="kpi-title">✅ WYSŁANO DZISIAJ (WSZYSTKIE SIM)</div>
+                <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                    <div class="kpi-value" id="kpiSentToday" style="color: var(--accent-green);">0</div>
+                    <button class="btn btn-secondary btn-sm" onclick="handleAction('reset_daily_counters')" title="Zeruj dzisiejsze liczniki kart SIM">Zeruj dziś</button>
+                </div>
+                <div class="kpi-sub" id="kpiFailedToday">Błędy dzisiaj: 0 | Szacowane tempo: --</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-title">🛡️ BAZA WYSŁANYCH (ANTY-DUPLIKAT)</div>
+                <div style="display: flex; align-items: baseline; justify-content: space-between;">
+                    <div class="kpi-value" id="kpiHistoryCount" style="color: var(--accent-purple);">0</div>
+                    <button class="btn btn-secondary btn-sm" onclick="confirmClearHistory()" title="Wyczyść pamięć wysłanych numerów">Reset bazy</button>
+                </div>
+                <div class="kpi-sub">Chroni przed podwójną wysyłką do tego samego leada</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-title">📤 OSTATNIO WYSŁANY SMS</div>
+                <div class="kpi-value" id="kpiLastPhone" style="font-size: 16px; color: var(--accent-yellow);">—</div>
+                <div class="kpi-sub" id="kpiLastMeta">Brak wysyłki w tej sesji</div>
+            </div>
+        </div>
+
+        <!-- 3. ZARZĄDZANIE TELEFONAMI I KARTAMI SIM W CZASIE RZECZYWISTYM -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>📱 Telefony i Karty SIM (Włączaj / Wyłączaj / Dodawaj na żywo w trakcie działania)</span>
+                </div>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <button class="btn btn-start btn-sm" onclick="openDeviceModal()">➕ Dodaj nowy telefon / SIM</button>
                 </div>
             </div>
-            <span style="color: var(--text-muted); font-size: 12px; margin-left: 10px;">(Skrypt automatycznie przeplata karty i dba o bezpieczny odpoczynek modemu)</span>
+
+            <div id="devicesGrid" class="devices-grid"></div>
+
+            <div style="font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;">
+                <span id="rotationPreview">🔄 Aktywna kolejność rotacji: ładowanie...</span>
+                <span>💡 Kliknij na wybrany slot SIM, aby błyskawicznie włączyć lub wyłączyć kartę bez przerywania pracy maszyny.</span>
+            </div>
         </div>
 
-        <!-- 5. PRZYCISKI AKCJI -->
-        <div class="button-row">
-            <button class="btn btn-start" onclick="handleAction('start')">▶  START</button>
-            <button class="btn btn-pause" onclick="handleAction('pause')">⏸  PAUZA</button>
-            <button class="btn btn-terminate" onclick="handleAction('terminate')">⏹  TERMINACJA</button>
-            <button class="btn btn-clear" onclick="handleAction('clear')">🗑  WYCZYŚĆ DANE</button>
+        <!-- 4. ODSTĘPY CZASOWE, LIMITY I HARMONOGRAM DOBOWY (7 DNI W TYGODNIU) -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title">⏱ Rytm Samograja, Duże Odstępy i Harmonogram 7 Dni (Zmiana na żywo)</div>
+                <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <span style="font-size: 12px; color: var(--text-muted); align-self: center;">Szybkie presety odstępu:</span>
+                    <button class="btn btn-secondary btn-sm" onclick="setIntervalPreset(240, 480)">🐢 4–8 min (Ultra-Bezpieczny)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="setIntervalPreset(180, 420)">⚖️ 3–7 min (Zalecany Samograj)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="setIntervalPreset(90, 180)">🚀 1.5–3 min (Szybszy)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="setIntervalPreset(25, 50)">⚡ 25–50 sek (Szybki)</button>
+                </div>
+            </div>
+
+            <div class="settings-grid">
+                <!-- Kolumna A: Odstępy i Limity -->
+                <div class="settings-box">
+                    <div style="font-weight: 700; color: var(--accent-cyan); font-size: 13px;">⏳ Odstęp między kolejnymi SMS-ami i limity SIM</div>
+
+                    <div class="settings-row">
+                        <span>Odstęp losowy od:</span>
+                        <input type="number" id="intervalMin" step="5" min="1" style="width: 75px; text-align: center;">
+                        <span>s do:</span>
+                        <input type="number" id="intervalMax" step="5" min="1" style="width: 75px; text-align: center;">
+                        <span>s</span>
+                        <span id="intervalHumanHint" style="color: var(--accent-green); font-size: 12px; font-weight: 600;">(3.0 – 7.0 min)</span>
+                    </div>
+
+                    <div class="settings-row">
+                        <span>Dzienny limit na 1 kartę SIM:</span>
+                        <input type="number" id="dailyLimitPerSim" step="5" min="0" style="width: 70px; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 12px;">SMS / dzień (0 = bez limitu)</span>
+                    </div>
+
+                    <div class="settings-row">
+                        <span>Cooldown modemu Dual SIM (ten sam tel.):</span>
+                        <input type="number" id="samePhoneCooldown" step="5" min="0" style="width: 70px; text-align: center;">
+                        <span style="color: var(--text-muted); font-size: 12px;">sekund odpoczynku</span>
+                    </div>
+                </div>
+
+                <!-- Kolumna B: Harmonogram 7 dni i opcje Anty-Spam -->
+                <div class="settings-box">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: var(--accent-yellow); font-size: 13px;">🌙 Okno godzinowe wysyłki (Czas PL)</span>
+                        <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12.5px; font-weight: 600;">
+                            <input type="checkbox" id="scheduleEnabled" checked> Aktywne okno godzinowe
+                        </label>
+                    </div>
+
+                    <div class="settings-row">
+                        <span style="min-width: 115px;">Poniedziałek – Piątek:</span>
+                        <input type="time" id="workdaysStart" value="09:00" style="width: 95px;">
+                        <span>—</span>
+                        <input type="time" id="workdaysEnd" value="17:30" style="width: 95px;">
+                        <span style="margin-left: 10px;">Weekend (Sob–Nd):</span>
+                        <input type="time" id="weekendStart" value="10:00" style="width: 95px;">
+                        <span>—</span>
+                        <input type="time" id="weekendEnd" value="16:00" style="width: 95px;">
+                    </div>
+
+                    <div class="settings-row">
+                        <span style="font-size: 12px; color: var(--text-muted);">Dni wysyłki:</span>
+                        <div id="activeDaysGroup" style="display: flex; gap: 5px; flex-wrap: wrap;">
+                            <span class="day-chip active" data-day="0" onclick="toggleDayChip(0)">Pon</span>
+                            <span class="day-chip active" data-day="1" onclick="toggleDayChip(1)">Wt</span>
+                            <span class="day-chip active" data-day="2" onclick="toggleDayChip(2)">Śr</span>
+                            <span class="day-chip active" data-day="3" onclick="toggleDayChip(3)">Czw</span>
+                            <span class="day-chip active" data-day="4" onclick="toggleDayChip(4)">Pt</span>
+                            <span class="day-chip active" data-day="5" onclick="toggleDayChip(5)">Sob</span>
+                            <span class="day-chip active" data-day="6" onclick="toggleDayChip(6)">Niedz</span>
+                        </div>
+                    </div>
+
+                    <div class="settings-row" style="margin-top: 2px; gap: 16px;">
+                        <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12.5px;">
+                            <input type="checkbox" id="skipDuplicates" checked> 🛡️ Pomijaj numery z bazy wysłanych
+                        </label>
+                        <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12.5px;">
+                            <input type="checkbox" id="obfuscationEnabled" checked> 🔀 Obfuskacja anty-spamowa (chroni URL)
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- 6. STATUS -->
-        <div id="statusLabel" class="status-display">Status: IDLE | Gotowy do startu</div>
+        <!-- 5. KOLEJKA LEADÓW: DORZUCANIE W LOCIE + PODGLĄD KOLEJKI -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title">📋 Leady (Dorzucaj w dowolnym momencie – maszyna automatycznie filtruje duplikaty i wysyła dalej)</div>
+                <span id="appendToast" class="toast-msg"></span>
+            </div>
+
+            <div class="leads-grid">
+                <!-- Lewa: Dorzucanie nowych leadów -->
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: var(--accent-green);">➕ Dorzuć nowe leady do kolejki:</span>
+                        <label class="btn btn-secondary btn-sm" style="cursor: pointer;">
+                            📂 Wczytaj z pliku .CSV
+                            <input type="file" id="csvFileInput" accept=".csv,.txt" style="display: none;" onchange="handleFileUpload(event)">
+                        </label>
+                    </div>
+                    <textarea id="newLeadsInput" style="height: 135px; white-space: pre;" placeholder="Wklej tutaj nowe wiersze CSV (np. Nazwa,Miasto,Telefon lub same numery) i kliknij przycisk poniżej..."></textarea>
+                    <button class="btn btn-start" style="justify-content: center; padding: 9px;" onclick="appendLeadsToQueue()">
+                        ➕ DORZUĆ DO KOLEJKI (Odfiltruj duplikaty i dopisz na koniec)
+                    </button>
+                </div>
+
+                <!-- Prawa: Aktualna kolejka oczekujących -->
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 700; color: var(--accent-cyan);">
+                            ⏳ Aktualna kolejka oczekujących (<span id="queueHeaderCount">0</span> wierszy – wiersz 1 leci następny):
+                        </span>
+                        <button class="btn btn-danger btn-sm" onclick="confirmClearQueue()">🗑 Wyczyść kolejkę</button>
+                    </div>
+                    <textarea id="csvQueueBox" style="height: 135px; white-space: pre;" placeholder="Kolejka jest obecnie pusta. Dorzuć leady w oknie po lewej lub wklej bezpośrednio tutaj..."></textarea>
+                    <div style="font-size: 11.5px; color: var(--text-muted); display: flex; justify-content: space-between;">
+                        <span>Po każdym wysłanym SMS-ie górny wiersz automatycznie znika z kolejki.</span>
+                        <span>Edycja ręczna zapisuje się automatycznie.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. SKRYPTY SMS NA KAŻDY DZIEŃ TYGODNIA (PONIEDZIAŁEK – NIEDZIELA) -->
+        <div class="section-card">
+            <div class="section-header">
+                <div class="section-title">
+                    <span>📅 Skrypty SMS na 7 Dni Tygodnia (Samograj sam przełącza skrypt o północy zgodnie z dniem tygodnia)</span>
+                </div>
+                <div style="display: flex; gap: 6px;">
+                    <button class="btn btn-skip btn-sm" onclick="testCurrentDaySpintax()">🎲 Losuj podgląd SMS z wybranego dnia</button>
+                    <button class="btn btn-secondary btn-sm" onclick="restoreDayTemplates()">🔄 Przywróć domyślne dla tego dnia</button>
+                </div>
+            </div>
+
+            <div class="tabs-row" id="dayTabsRow">
+                <button class="tab-btn" data-day="0" onclick="selectDayTab('0')">Poniedziałek <span id="todayBadge0" class="tab-today-dot" style="display:none;">DZIŚ</span></button>
+                <button class="tab-btn" data-day="1" onclick="selectDayTab('1')">Wtorek <span id="todayBadge1" class="tab-today-dot" style="display:none;">DZIŚ</span></button>
+                <button class="tab-btn" data-day="2" onclick="selectDayTab('2')">Środa <span id="todayBadge2" class="tab-today-dot" style="display:none;">DZIŚ</span></button>
+                <button class="tab-btn" data-day="3" onclick="selectDayTab('3')">Czwartek <span id="todayBadge3" class="tab-today-dot" style="display:none;">DZIŚ</span></button>
+                <button class="tab-btn" data-day="4" onclick="selectDayTab('4')">Piątek <span id="todayBadge4" class="tab-today-dot" style="display:none;">DZIŚ</span></button>
+                <button class="tab-btn" data-day="5" onclick="selectDayTab('5')">Sobota <span id="todayBadge5" class="tab-today-dot" style="display:none;">DZIŚ</span></button>
+                <button class="tab-btn" data-day="6" onclick="selectDayTab('6')">Niedziela <span id="todayBadge6" class="tab-today-dot" style="display:none;">DZIŚ</span></button>
+            </div>
+
+            <div style="font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center;">
+                <span id="dayTemplateInfo">Edytujesz szablony na: Poniedziałek (oddzielaj kolejne warianty linijką '---')</span>
+                <span>Obsługiwane tagi: <code>{opcja1|opcja2}</code>, <code>[opcjonalny]</code>, <code>{Name:Kliencie}</code>, <code>{City:Twojej okolicy}</code></span>
+            </div>
+
+            <textarea id="dayTemplateEditor" style="height: 175px; white-space: pre-wrap;"></textarea>
+
+            <div id="spintaxPreviewBox" style="display: none; background: rgba(116, 199, 236, 0.08); border: 1px solid var(--accent-cyan); border-radius: 6px; padding: 10px 12px; font-size: 12.5px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; color: var(--accent-cyan); font-weight: bold;">
+                    <span id="spintaxPreviewTitle">Podgląd wylosowanego SMS:</span>
+                    <span id="spintaxPreviewChars">0 znaków</span>
+                </div>
+                <div id="spintaxPreviewText" style="font-family: 'Consolas', monospace; color: var(--text-color);"></div>
+            </div>
+        </div>
 
         <!-- 7. LOG ZDARZEŃ -->
-        <div class="section-label">📝  Log zdarzeń:</div>
-        <div id="logArea" class="log-container"></div>
+        <div class="section-card">
+            <div class="section-header" style="padding-bottom: 4px; border-bottom: none;">
+                <div class="section-title">📝 Log zdarzeń na żywo (Ostatnie operacje Samograja)</div>
+            </div>
+            <div id="logArea" class="log-container"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DODAWANIA / EDYCJI TELEFONU -->
+    <div id="deviceModal" class="modal-backdrop">
+        <div class="modal-card">
+            <div style="font-size: 16px; font-weight: 700; color: var(--accent-blue);" id="deviceModalTitle">➕ Dodaj nowy telefon (SMS-Gate)</div>
+            <input type="hidden" id="devModalId" value="">
+
+            <div class="form-field">
+                <label>Nazwa wyświetlana telefonu:</label>
+                <input type="text" id="devModalName" placeholder="np. Telefon 4 (Motorola Dual SIM)">
+            </div>
+
+            <div class="form-field">
+                <label>Login API (Username z aplikacji SMS-Gate na telefonie):</label>
+                <input type="text" id="devModalUser" placeholder="np. AQWXKB">
+            </div>
+
+            <div class="form-field">
+                <label>Hasło API (Password z aplikacji SMS-Gate na telefonie):</label>
+                <input type="text" id="devModalPass" placeholder="np. rxjcknnvrkwd1s">
+            </div>
+
+            <div class="settings-row" style="margin-top: 4px; gap: 16px;">
+                <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 700; color: var(--accent-green);">
+                    <input type="checkbox" id="devModalSim1" checked> Aktywuj SIM 1
+                </label>
+                <label style="display: inline-flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 700; color: var(--accent-cyan);">
+                    <input type="checkbox" id="devModalSim2"> Aktywuj SIM 2 (Dual SIM)
+                </label>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px;">
+                <button class="btn btn-secondary" onclick="closeDeviceModal()">Anuluj</button>
+                <button class="btn btn-start" onclick="saveDeviceFromModal()">💾 Zapisz telefon na żywo</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        let isSaving = false;
-        let isFetching = false;
-        let isInitialized = false;
+        const DAY_NAMES = {
+            "0": "Poniedziałek",
+            "1": "Wtorek",
+            "2": "Środa",
+            "3": "Czwartek",
+            "4": "Piątek",
+            "5": "Sobota",
+            "6": "Niedziela"
+        };
 
-        const csvInput = document.getElementById('csvInput');
-        const smsTemplate = document.getElementById('smsTemplate');
-        const delayMin = document.getElementById('delayMin');
-        const delayMax = document.getElementById('delayMax');
-        const samePhoneMin = document.getElementById('samePhoneMin');
-        const samePhoneMax = document.getElementById('samePhoneMax');
-        const diffPhoneMin = document.getElementById('diffPhoneMin');
-        const diffPhoneMax = document.getElementById('diffPhoneMax');
-        const statusLabel = document.getElementById('statusLabel');
+        let isInitialized = false;
+        let isFetching = false;
+        let isSaving = false;
+        let selectedDayTab = "0";
+        let dailyTemplatesCache = {};
+        let devicesCache = [];
+        let activeDaysCache = [0, 1, 2, 3, 4, 5, 6];
+
+        const csvQueueBox = document.getElementById('csvQueueBox');
+        const dayTemplateEditor = document.getElementById('dayTemplateEditor');
+        const intervalMin = document.getElementById('intervalMin');
+        const intervalMax = document.getElementById('intervalMax');
+        const dailyLimitPerSim = document.getElementById('dailyLimitPerSim');
+        const samePhoneCooldown = document.getElementById('samePhoneCooldown');
+        const scheduleEnabled = document.getElementById('scheduleEnabled');
+        const workdaysStart = document.getElementById('workdaysStart');
+        const workdaysEnd = document.getElementById('workdaysEnd');
+        const weekendStart = document.getElementById('weekendStart');
+        const weekendEnd = document.getElementById('weekendEnd');
+        const skipDuplicates = document.getElementById('skipDuplicates');
+        const obfuscationEnabled = document.getElementById('obfuscationEnabled');
         const logArea = document.getElementById('logArea');
 
-        function getSelectedSims() {
-            const checkboxes = document.querySelectorAll('.sim-checkbox:checked');
-            return Array.from(checkboxes).map(cb => cb.value);
+        function updateIntervalHumanHint() {
+            const minS = parseFloat(intervalMin.value) || 0;
+            const maxS = parseFloat(intervalMax.value) || 0;
+            const avgS = (minS + maxS) / 2;
+            const perHour = avgS > 0 ? Math.round(3600 / avgS) : 0;
+            const minM = (minS / 60).toFixed(1);
+            const maxM = (maxS / 60).toFixed(1);
+            document.getElementById('intervalHumanHint').innerText =
+                `(${minM} – ${maxM} min | śr. ~${perHour} SMS/h)`;
         }
 
-        function selectAllSims(val) {
-            document.querySelectorAll('.sim-checkbox').forEach(cb => {
-                cb.checked = val;
-            });
+        function setIntervalPreset(minSec, maxSec) {
+            intervalMin.value = minSec;
+            intervalMax.value = maxSec;
+            updateIntervalHumanHint();
             saveConfig();
         }
 
+        function renderDayChips() {
+            const set = new Set(activeDaysCache);
+            document.querySelectorAll('#activeDaysGroup .day-chip').forEach(chip => {
+                const d = parseInt(chip.getAttribute('data-day'), 10);
+                chip.classList.toggle('active', set.has(d));
+            });
+        }
+
+        function toggleDayChip(dayInt) {
+            const idx = activeDaysCache.indexOf(dayInt);
+            if (idx >= 0) {
+                activeDaysCache.splice(idx, 1);
+            } else {
+                activeDaysCache.push(dayInt);
+                activeDaysCache.sort();
+            }
+            renderDayChips();
+            saveConfig();
+        }
+
+        function selectDayTab(dayKey) {
+            // Zapisz bieżący tekst przed zmianą zakładki
+            if (dailyTemplatesCache[selectedDayTab] !== undefined && dayTemplateEditor.value !== "") {
+                dailyTemplatesCache[selectedDayTab] = dayTemplateEditor.value;
+            }
+            selectedDayTab = String(dayKey);
+            document.querySelectorAll('#dayTabsRow .tab-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-day') === selectedDayTab);
+            });
+            const tplText = dailyTemplatesCache[selectedDayTab] || "";
+            dayTemplateEditor.value = tplText;
+            updateDayTemplateInfo();
+        }
+
+        function updateDayTemplateInfo() {
+            const raw = dayTemplateEditor.value || "";
+            const count = raw.split('---').map(s => s.trim()).filter(Boolean).length;
+            document.getElementById('dayTemplateInfo').innerText =
+                `Edytujesz szablony na: ${DAY_NAMES[selectedDayTab]} (${count} wariantów oddzielonych '---')`;
+        }
+
+        function renderDevices(devices, sentPerSim, dailyLimit) {
+            const grid = document.getElementById('devicesGrid');
+            grid.innerHTML = '';
+
+            devices.forEach(dev => {
+                const card = document.createElement('div');
+                card.className = 'device-card';
+
+                const simsHtml = (dev.sims || []).map(sim => {
+                    const key = `${dev.id}_${sim.slot}`;
+                    const sentCount = sentPerSim[key] || 0;
+                    const limitStr = dailyLimit > 0 ? `${sentCount} / ${dailyLimit} dziś` : `${sentCount} dziś`;
+                    const isOn = !!sim.enabled;
+                    return `
+                        <div class="sim-pill ${isOn ? 'active' : ''}">
+                            <div class="sim-pill-top">
+                                <button type="button" class="sim-toggle-btn" onclick="toggleSimLive(${dev.id}, ${sim.slot}, ${!isOn})">
+                                    <span>SIM ${sim.slot}</span>
+                                    <span class="sim-status-dot ${isOn ? 'dot-on' : 'dot-off'}">${isOn ? 'AKTYWNY' : 'WYŁ.'}</span>
+                                </button>
+                            </div>
+                            <div class="sim-pill-bottom">
+                                <span>📊 ${limitStr}</span>
+                                <button type="button" class="btn btn-secondary btn-sm" style="padding: 1px 6px; font-size: 10.5px;" onclick="promptTestSim(${dev.id}, ${sim.slot})">🧪 Test</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                card.innerHTML = `
+                    <div class="device-header">
+                        <div>
+                            <div class="device-name">📱 ${dev.name}</div>
+                            <span class="device-login">Login: ${dev.username}</span>
+                        </div>
+                        <div style="display: flex; gap: 4px;">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="editDevice(${dev.id})" title="Edytuj dane telefonu">✏️</button>
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="deleteDevice(${dev.id})" title="Usuń telefon">🗑</button>
+                        </div>
+                    </div>
+                    <div class="sim-slots-row">
+                        ${simsHtml}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function toggleSimLive(deviceId, slot, enabled) {
+            try {
+                await fetch('/api/sim/toggle', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ device_id: deviceId, slot: slot, enabled: enabled })
+                });
+                fetchState();
+            } catch (e) {
+                console.error("Błąd przełączania SIM:", e);
+            }
+        }
+
+        async function promptTestSim(deviceId, slot) {
+            const phone = prompt(`Podaj numer telefonu, na który wysłać testowy SMS z Tel ${deviceId} – SIM ${slot}:`);
+            if (!phone) return;
+            try {
+                const res = await fetch('/api/device/test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ device_id: deviceId, slot: slot, phone: phone })
+                });
+                const data = await res.json();
+                alert(data.message);
+                fetchState();
+            } catch (e) {
+                alert("Błąd wysyłki testowej: " + e);
+            }
+        }
+
+        function openDeviceModal(dev = null) {
+            document.getElementById('deviceModalTitle').innerText = dev ? `✏️ Edytuj ${dev.name}` : '➕ Dodaj nowy telefon (SMS-Gate)';
+            document.getElementById('devModalId').value = dev ? dev.id : '';
+            document.getElementById('devModalName').value = dev ? dev.name : '';
+            document.getElementById('devModalUser').value = dev ? dev.username : '';
+            document.getElementById('devModalPass').value = dev ? dev.password : '';
+            const sim1 = dev && dev.sims && dev.sims[0] ? !!dev.sims[0].enabled : true;
+            const sim2 = dev && dev.sims && dev.sims[1] ? !!dev.sims[1].enabled : false;
+            document.getElementById('devModalSim1').checked = sim1;
+            document.getElementById('devModalSim2').checked = sim2;
+            document.getElementById('deviceModal').classList.add('open');
+        }
+
+        function closeDeviceModal() {
+            document.getElementById('deviceModal').classList.remove('open');
+        }
+
+        function editDevice(devId) {
+            const dev = devicesCache.find(d => d.id === devId);
+            if (dev) openDeviceModal(dev);
+        }
+
+        async function saveDeviceFromModal() {
+            const payload = {
+                id: document.getElementById('devModalId').value || null,
+                name: document.getElementById('devModalName').value,
+                username: document.getElementById('devModalUser').value,
+                password: document.getElementById('devModalPass').value,
+                sim1_enabled: document.getElementById('devModalSim1').checked,
+                sim2_enabled: document.getElementById('devModalSim2').checked
+            };
+            const res = await fetch('/api/device/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.status === 'error') {
+                alert(data.message);
+                return;
+            }
+            closeDeviceModal();
+            fetchState();
+        }
+
+        async function deleteDevice(devId) {
+            if (!confirm(`Czy na pewno usunąć Telefon ID ${devId} z listy urządzeń?`)) return;
+            await fetch('/api/device/delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ device_id: devId })
+            });
+            fetchState();
+        }
+
+        async function appendLeadsToQueue() {
+            const box = document.getElementById('newLeadsInput');
+            const raw = box.value.trim();
+            if (!raw) {
+                alert("Wklej najpierw wiersze CSV lub wczytaj plik.");
+                return;
+            }
+            const res = await fetch('/api/leads/append', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ csv: raw })
+            });
+            const data = await res.json();
+            if (data.status === 'error') {
+                alert(data.message);
+                return;
+            }
+            box.value = '';
+            const toast = document.getElementById('appendToast');
+            toast.innerText = data.message;
+            setTimeout(() => { toast.innerText = ''; }, 7000);
+            fetchState();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const box = document.getElementById('newLeadsInput');
+                box.value = (box.value ? box.value + '\n' : '') + content.trim();
+                event.target.value = '';
+            };
+            reader.readAsText(file, 'UTF-8');
+        }
+
+        async function confirmClearQueue() {
+            if (!confirm("Czy na pewno wyczyścić całą kolejkę oczekujących leadów?")) return;
+            await fetch('/api/clear_queue', { method: 'POST' });
+            csvQueueBox.value = '';
+            fetchState();
+        }
+
+        async function confirmClearHistory() {
+            if (!confirm("Czy na pewno zresetować bazę wysłanych numerów (ochrona przed duplikatami)?")) return;
+            await fetch('/api/clear_sent_history', { method: 'POST' });
+            fetchState();
+        }
+
+        async function testCurrentDaySpintax() {
+            dailyTemplatesCache[selectedDayTab] = dayTemplateEditor.value;
+            const res = await fetch('/api/test_spintax', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    day: selectedDayTab,
+                    template: dayTemplateEditor.value
+                })
+            });
+            const data = await res.json();
+            if (data.status === 'error') {
+                alert(data.message);
+                return;
+            }
+            const box = document.getElementById('spintaxPreviewBox');
+            box.style.display = 'block';
+            document.getElementById('spintaxPreviewTitle').innerText =
+                `🎲 Wylosowany SMS na ${DAY_NAMES[selectedDayTab]} (spośród ${data.variants_count} wariantów):`;
+            document.getElementById('spintaxPreviewChars').innerText = `${data.char_count} znaków`;
+            document.getElementById('spintaxPreviewText').innerText = data.final;
+        }
+
+        async function restoreDayTemplates() {
+            if (!confirm(`Przywrócić domyślne szablony Krzysztofa na ${DAY_NAMES[selectedDayTab]}?`)) return;
+            const res = await fetch('/api/restore_default_templates', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ day: selectedDayTab })
+            });
+            const data = await res.json();
+            if (data.daily_templates) {
+                dailyTemplatesCache = data.daily_templates;
+                dayTemplateEditor.value = dailyTemplatesCache[selectedDayTab] || '';
+                updateDayTemplateInfo();
+            }
+        }
+
         async function saveConfig() {
-            if (isSaving) return;
+            if (isSaving || !isInitialized) return;
             isSaving = true;
             try {
+                dailyTemplatesCache[selectedDayTab] = dayTemplateEditor.value;
+                updateDayTemplateInfo();
+                updateIntervalHumanHint();
+
                 const payload = {
-                    csv: csvInput.value,
-                    sms_template: smsTemplate.value,
-                    delay_min: delayMin.value,
-                    delay_max: delayMax.value,
-                    same_phone_min: samePhoneMin.value,
-                    same_phone_max: samePhoneMax.value,
-                    diff_phone_min: diffPhoneMin.value,
-                    diff_phone_max: diffPhoneMax.value,
-                    selected_sims: getSelectedSims()
+                    csv_queue: csvQueueBox.value,
+                    daily_templates: dailyTemplatesCache,
+                    interval_min: intervalMin.value,
+                    interval_max: intervalMax.value,
+                    daily_limit_per_sim: dailyLimitPerSim.value,
+                    same_phone_cooldown: samePhoneCooldown.value,
+                    schedule_enabled: scheduleEnabled.checked,
+                    workdays_start: workdaysStart.value,
+                    workdays_end: workdaysEnd.value,
+                    weekend_start: weekendStart.value,
+                    weekend_end: weekendEnd.value,
+                    active_days: activeDaysCache,
+                    skip_duplicates: skipDuplicates.checked,
+                    obfuscation_enabled: obfuscationEnabled.checked
                 };
+
                 await fetch('/api/save_config', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -391,29 +1133,16 @@
         let debounceTimer;
         function debouncedSave() {
             clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(saveConfig, 400);
+            debounceTimer = setTimeout(saveConfig, 450);
         }
 
-        // Auto-save przy edycji
-        csvInput.addEventListener('input', debouncedSave);
-        csvInput.addEventListener('change', saveConfig);
-        smsTemplate.addEventListener('input', debouncedSave);
-        smsTemplate.addEventListener('change', saveConfig);
-        delayMin.addEventListener('input', debouncedSave);
-        delayMin.addEventListener('change', saveConfig);
-        delayMax.addEventListener('input', debouncedSave);
-        delayMax.addEventListener('change', saveConfig);
-        samePhoneMin.addEventListener('input', debouncedSave);
-        samePhoneMin.addEventListener('change', saveConfig);
-        samePhoneMax.addEventListener('input', debouncedSave);
-        samePhoneMax.addEventListener('change', saveConfig);
-        diffPhoneMin.addEventListener('input', debouncedSave);
-        diffPhoneMin.addEventListener('change', saveConfig);
-        diffPhoneMax.addEventListener('input', debouncedSave);
-        diffPhoneMax.addEventListener('change', saveConfig);
+        [csvQueueBox, dayTemplateEditor, intervalMin, intervalMax, dailyLimitPerSim, samePhoneCooldown].forEach(el => {
+            el.addEventListener('input', debouncedSave);
+            el.addEventListener('change', saveConfig);
+        });
 
-        document.querySelectorAll('.sim-checkbox').forEach(cb => {
-            cb.addEventListener('change', saveConfig);
+        [scheduleEnabled, workdaysStart, workdaysEnd, weekendStart, weekendEnd, skipDuplicates, obfuscationEnabled].forEach(el => {
+            el.addEventListener('change', saveConfig);
         });
 
         async function handleAction(action) {
@@ -437,41 +1166,100 @@
                 const res = await fetch('/api/state');
                 const data = await res.json();
 
-                if (!isInitialized) {
-                    if (data.csv) csvInput.value = data.csv;
-                    if (data.sms_template) smsTemplate.value = data.sms_template;
-                    if (data.delay_min !== undefined) delayMin.value = data.delay_min;
-                    if (data.delay_max !== undefined) delayMax.value = data.delay_max;
-                    if (data.same_phone_min !== undefined) samePhoneMin.value = data.same_phone_min;
-                    if (data.same_phone_max !== undefined) samePhoneMax.value = data.same_phone_max;
-                    if (data.diff_phone_min !== undefined) diffPhoneMin.value = data.diff_phone_min;
-                    if (data.diff_phone_max !== undefined) diffPhoneMax.value = data.diff_phone_max;
+                // Zegar i dzień tygodnia
+                document.getElementById('clockDisplay').innerText = `🕒 ${data.server_time} (PL)`;
+                document.getElementById('dayDisplay').innerText =
+                    `📅 ${data.current_weekday_name} • ${data.schedule_status_text}`;
 
-                    if (data.selected_sims && Array.isArray(data.selected_sims)) {
-                        const set = new Set(data.selected_sims);
-                        document.querySelectorAll('.sim-checkbox').forEach(cb => {
-                            cb.checked = set.has(cb.value);
-                        });
-                    }
-                    isInitialized = true;
-                } else if (data.status === 'IDLE' && document.activeElement !== csvInput && document.activeElement !== smsTemplate) {
-                    if (data.csv !== undefined && csvInput.value === '') csvInput.value = data.csv;
-                    if (data.sms_template !== undefined && smsTemplate.value === '') smsTemplate.value = data.sms_template;
+                for (let d = 0; d < 7; d++) {
+                    const badge = document.getElementById(`todayBadge${d}`);
+                    if (badge) badge.style.display = (d === data.current_weekday) ? 'inline-block' : 'none';
                 }
 
-                // Aktualizacja paska statusu
-                if (data.status === 'IDLE') {
-                    statusLabel.innerText = data.current_index > 0 ? 
-                        `Wysłano ${data.current_index}/${data.total_lines} | Status: IDLE` : 
-                        "Status: IDLE | Gotowy do startu";
+                // Status Samograja
+                const badge = document.getElementById('statusBadge');
+                if (data.status === 'RUNNING') {
+                    badge.className = 'status-badge status-running';
+                    badge.innerText = 'SAMOGRAJ AKTYWNY 24/7';
                 } else if (data.status === 'PAUSED') {
-                    statusLabel.innerText = `Wysłano ${data.current_index}/${data.total_lines} | Status: PAUZA`;
-                } else if (data.status === 'RUNNING') {
-                    statusLabel.innerText = `Wysłano ${data.current_index}/${data.total_lines} | Status: W TRAKCIE`;
+                    badge.className = 'status-badge status-paused';
+                    badge.innerText = 'PAUZA';
+                } else {
+                    badge.className = 'status-badge status-idle';
+                    badge.innerText = 'WYŁĄCZONY';
                 }
+
+                document.getElementById('phaseDetail').innerText = data.worker_phase_detail || '';
+
+                // KPI
+                document.getElementById('kpiQueueCount').innerText = data.queue_count;
+                document.getElementById('queueHeaderCount').innerText = data.queue_count;
+                if (data.next_lead && data.next_lead.phone) {
+                    const nl = data.next_lead;
+                    document.getElementById('kpiNextLead').innerText =
+                        `Następny: ${nl.phone}` + (nl.name ? ` (${nl.name})` : '');
+                } else {
+                    document.getElementById('kpiNextLead').innerText = 'Następny: brak w kolejce';
+                }
+
+                document.getElementById('kpiSentToday').innerText = data.sent_today_total;
+                const avgWait = ((parseFloat(data.interval_min) || 180) + (parseFloat(data.interval_max) || 420)) / 2;
+                const estHours = data.queue_count > 0 ? ((data.queue_count * avgWait) / 3600).toFixed(1) : '0';
+                document.getElementById('kpiFailedToday').innerText =
+                    `Błędy dziś: ${data.failed_today} | Kolejka na ~${estHours}h wysyłki`;
+
+                document.getElementById('kpiHistoryCount').innerText = data.sent_history_unique_count;
+
+                if (data.last_sent_info) {
+                    const ls = data.last_sent_info;
+                    document.getElementById('kpiLastPhone').innerText = `${ls.phone} (${ls.time})`;
+                    document.getElementById('kpiLastMeta').innerText =
+                        `${ls.sim_label} • ${ls.name || 'Brak nazwy'} (${ls.day_name})`;
+                }
+
+                // Pierwsza inicjalizacja formularzy
+                if (!isInitialized) {
+                    dailyTemplatesCache = data.daily_templates || {};
+                    selectedDayTab = String(data.current_weekday || 0);
+                    selectDayTab(selectedDayTab);
+
+                    csvQueueBox.value = data.csv_queue || '';
+                    intervalMin.value = data.interval_min;
+                    intervalMax.value = data.interval_max;
+                    dailyLimitPerSim.value = data.daily_limit_per_sim;
+                    samePhoneCooldown.value = data.same_phone_cooldown;
+                    scheduleEnabled.checked = !!data.schedule_enabled;
+                    workdaysStart.value = data.workdays_start || '09:00';
+                    workdaysEnd.value = data.workdays_end || '17:30';
+                    weekendStart.value = data.weekend_start || '10:00';
+                    weekendEnd.value = data.weekend_end || '16:00';
+                    activeDaysCache = data.active_days || [0, 1, 2, 3, 4, 5, 6];
+                    skipDuplicates.checked = !!data.skip_duplicates;
+                    obfuscationEnabled.checked = !!data.obfuscation_enabled;
+
+                    renderDayChips();
+                    updateIntervalHumanHint();
+                    isInitialized = true;
+                } else {
+                    // Aktualizuj okienko kolejki na żywo tylko gdy użytkownik aktualnie w nim nie pisze
+                    if (document.activeElement !== csvQueueBox && !isSaving) {
+                        if (csvQueueBox.value !== (data.csv_queue || '')) {
+                            csvQueueBox.value = data.csv_queue || '';
+                        }
+                    }
+                }
+
+                // Renderowanie kart telefonów i SIM
+                devicesCache = data.devices || [];
+                renderDevices(devicesCache, data.sent_today_per_sim || {}, data.daily_limit_per_sim || 0);
+
+                const seq = data.active_sequence_labels || [];
+                document.getElementById('rotationPreview').innerText = seq.length > 0
+                    ? `🔄 Aktywna sekwencja rotacji (${seq.length} SIM): ${seq.join(' ➔ ')}`
+                    : '⚠️ Brak aktywnych kart SIM (lub wszystkie osiągnęły dzisiejszy limit)!';
 
                 // Aktualizacja logów z auto-scrollem
-                const wasAtBottom = (logArea.scrollHeight - logArea.scrollTop) <= (logArea.clientHeight + 15);
+                const wasAtBottom = (logArea.scrollHeight - logArea.scrollTop) <= (logArea.clientHeight + 20);
                 const newLogs = (data.logs || []).join('\n');
                 if (logArea.innerText !== newLogs) {
                     logArea.innerText = newLogs;
