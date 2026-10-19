@@ -14,6 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+VOLUME ["/app/data"]
+
 EXPOSE 8000
 EXPOSE 80
 

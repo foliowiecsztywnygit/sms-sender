@@ -16,6 +16,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Kopiowanie kodu aplikacji webowej
 COPY web_app/ .
 
+VOLUME ["/app/data"]
+
 EXPOSE 8000
 EXPOSE 80
 
