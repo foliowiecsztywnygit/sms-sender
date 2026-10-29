@@ -22,13 +22,15 @@ from requests.auth import HTTPBasicAuth
 # ──────────────────────────────────────────────
 # KONFIGURACJA DANYCH LOGOWANIA
 # ──────────────────────────────────────────────
-API_URL = "https://api.sms-gate.app/3rdparty/v1/messages"
+API_URL = os.environ.get("SMSGATE_API_URL", "https://smsgate-api.brosystems.pl/api/3rdparty/v1/messages")
 
 # Słownik przechowujący dane dostępowe dla telefonów:
 CREDENTIALS = {
-    1: ("AQWXKB", "rxjcknnvrkwd1s"),  # Telefon 1 (Dual SIM)
-    2: ("HAIUXA", "gcbxfmsi4lqens"),  # Telefon 2 (Single SIM)
-    3: ("QL5Z7O", "4jzbmvhv6tpbmd")   # Telefon 3 (Dual SIM)
+    1: ("MYVTZQ", "eyjzqerafikelw"),   # Telefon 1 (Dual SIM)
+    2: ("JTGQYJ", "9z9mmyzswkfdxm"),   # Telefon 2 (Dual SIM)
+    3: ("DQZDJ-", "-xdgjpzxmurnns"),   # Telefon 3 (Dual SIM)
+    4: ("69VQFK", "a33g_l_ml7vkw_"),   # Telefon 4 (Dual SIM)
+    5: ("7V_QA7", "ulat1p8gnj27lb")    # Telefon 5 (Single SIM)
 }
 
 # Dostępne karty SIM w telefonach:
@@ -36,8 +38,12 @@ AVAILABLE_SIMS = [
     (1, 1, "Tel 1 – SIM 1"),
     (1, 2, "Tel 1 – SIM 2"),
     (2, 1, "Tel 2 – SIM 1"),
+    (2, 2, "Tel 2 – SIM 2"),
     (3, 1, "Tel 3 – SIM 1"),
     (3, 2, "Tel 3 – SIM 2"),
+    (4, 1, "Tel 4 – SIM 1"),
+    (4, 2, "Tel 4 – SIM 2"),
+    (5, 1, "Tel 5 – SIM 1"),
 ]
 
 def build_interleaved_sequence(selected_sims: list[tuple[int, int]]) -> list[tuple[int, int]]:
@@ -317,8 +323,12 @@ class SMSSenderApp:
             (1, 1, "Tel 1 – SIM 1", "#74c7ec"),
             (1, 2, "Tel 1 – SIM 2", "#74c7ec"),
             (2, 1, "Tel 2 – SIM 1", "#f9e2af"),
+            (2, 2, "Tel 2 – SIM 2", "#f9e2af"),
             (3, 1, "Tel 3 – SIM 1", "#a6e3a1"),
             (3, 2, "Tel 3 – SIM 2", "#a6e3a1"),
+            (4, 1, "Tel 4 – SIM 1", "#fab387"),
+            (4, 2, "Tel 4 – SIM 2", "#fab387"),
+            (5, 1, "Tel 5 – SIM 1", "#cba6f7"),
         ]
 
         for dev, sim, label, col in sim_defs:

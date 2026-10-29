@@ -36,7 +36,7 @@ from requests.auth import HTTPBasicAuth
 # ──────────────────────────────────────────────
 # STali I KONFIGURACJA PODSTAWOWA
 # ──────────────────────────────────────────────
-API_URL = "https://api.sms-gate.app/3rdparty/v1/messages"
+API_URL = os.environ.get("SMSGATE_API_URL", "https://smsgate-api.brosystems.pl/api/3rdparty/v1/messages")
 
 try:
     PL_TZ = ZoneInfo("Europe/Warsaw")
@@ -57,8 +57,8 @@ DEFAULT_DEVICES = [
     {
         "id": 1,
         "name": "Telefon 1 (Dual SIM)",
-        "username": "AQWXKB",
-        "password": "rxjcknnvrkwd1s",
+        "username": "MYVTZQ",
+        "password": "eyjzqerafikelw",
         "sims": [
             {"slot": 1, "enabled": True, "label": "Tel 1 – SIM 1"},
             {"slot": 2, "enabled": True, "label": "Tel 1 – SIM 2"},
@@ -66,22 +66,42 @@ DEFAULT_DEVICES = [
     },
     {
         "id": 2,
-        "name": "Telefon 2 (Single SIM)",
-        "username": "HAIUXA",
-        "password": "gcbxfmsi4lqens",
+        "name": "Telefon 2 (Dual SIM)",
+        "username": "JTGQYJ",
+        "password": "9z9mmyzswkfdxm",
         "sims": [
             {"slot": 1, "enabled": True, "label": "Tel 2 – SIM 1"},
-            {"slot": 2, "enabled": False, "label": "Tel 2 – SIM 2"},
+            {"slot": 2, "enabled": True, "label": "Tel 2 – SIM 2"},
         ],
     },
     {
         "id": 3,
         "name": "Telefon 3 (Dual SIM)",
-        "username": "QL5Z7O",
-        "password": "4jzbmvhv6tpbmd",
+        "username": "DQZDJ-",
+        "password": "-xdgjpzxmurnns",
         "sims": [
             {"slot": 1, "enabled": True, "label": "Tel 3 – SIM 1"},
             {"slot": 2, "enabled": True, "label": "Tel 3 – SIM 2"},
+        ],
+    },
+    {
+        "id": 4,
+        "name": "Telefon 4 (Dual SIM)",
+        "username": "69VQFK",
+        "password": "a33g_l_ml7vkw_",
+        "sims": [
+            {"slot": 1, "enabled": True, "label": "Tel 4 – SIM 1"},
+            {"slot": 2, "enabled": True, "label": "Tel 4 – SIM 2"},
+        ],
+    },
+    {
+        "id": 5,
+        "name": "Telefon 5 (Single SIM)",
+        "username": "7V_QA7",
+        "password": "ulat1p8gnj27lb",
+        "sims": [
+            {"slot": 1, "enabled": True, "label": "Tel 5 – SIM 1"},
+            {"slot": 2, "enabled": False, "label": "Tel 5 – SIM 2"},
         ],
     },
 ]

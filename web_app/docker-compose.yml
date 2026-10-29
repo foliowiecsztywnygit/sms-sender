@@ -11,6 +11,7 @@ services:
       - PYTHONUNBUFFERED=1
       - DATA_DIR=/app/data
       - PORT=8000
+      - SMSGATE_API_URL=${SMSGATE_API_URL:-https://api.sms-gate.app/3rdparty/v1/messages}
     volumes:
       - sms_data:/app/data
 
