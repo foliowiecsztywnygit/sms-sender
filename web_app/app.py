@@ -108,12 +108,16 @@ DEFAULT_DEVICES = [
 
 # ──────────────────────────────────────────────
 # GOTOWE SZABLONY NA 7 DNI TYGODNIA (PON – NIEDZ)
+# Składnia {PORA: rano (do 12:00) | popołudnie (12:00-17:00) | wieczór (od 17:00)}
+# gwarantuje brak oksymoronów (np. brak "wieczornej kawy" czy "poranka" wieczorem).
 # ──────────────────────────────────────────────
+TEMPLATES_VERSION = 2
+
 DEFAULT_DAILY_TEMPLATES = {
     # 0 = PONIEDZIAŁEK
-    "0": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Poniedziałkowy poranek po weekendowych wyjazdach gości to zazwyczaj dobra chwila na spokojną kawę i podsumowanie tygodnia. Dopytam krótko z ciekawości – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez prowizji dla portali. Podrzucić krótkie wideo z podglądem?
+    "0": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. {PORA: Poniedziałkowy poranek po weekendowych wyjazdach gości to zazwyczaj dobra chwila na spokojną kawę i podsumowanie tygodnia | Poniedziałkowe popołudnie po weekendowych wyjazdach gości to zazwyczaj dobra chwila na spokojne podsumowanie tygodnia | Poniedziałkowy wieczór po pierwszym dniu tygodnia to zazwyczaj dobra chwila na moment oddechu}. Dopytam krótko z ciekawości – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez prowizji dla portali. Podrzucić krótkie wideo z podglądem?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. Startujemy z nowym tygodniem, więc łapię w poniedziałek z krótkim pytaniem. Czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio przez telefon bez konieczności wcześniejszego dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata wpada od razu na Państwa konto bez pośredników. Mogę podesłać szybkie demo do rzucenia okiem przy poniedziałkowej kawie?
+{Dzień dobry | Witam}! Krzysztof z tej strony. Startujemy z nowym tygodniem, więc łapię w poniedziałek z krótkim pytaniem. Czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio przez telefon bez konieczności wcześniejszego dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata wpada od razu na Państwa konto bez pośredników. Mogę podesłać szybkie demo do rzucenia okiem {PORA: przy poniedziałkowej kawie | w wolnej chwili | w wolnej chwili}?
 ---
 {Dzień dobry | Cześć}! Z tej strony Krzysztof. W poniedziałek po weekendowym ruchu wreszcie można chwilę odetchnąć, zanim znów zaczną dzwonić telefony o kolejne terminy. Zastanawiałem się, czy macie już podpięty własny system rezerwacji na stronie? Uruchamiam proste kalendarze dla kwater, które same pilnują grafiku i zdejmują ciągłe odpisywanie, a pełny zysk zostaje u właściciela. Podesłać niezobowiązująco krótkie wideo, jak to działa w praktyce?
 ---
@@ -123,37 +127,37 @@ DEFAULT_DAILY_TEMPLATES = {
 ---
 {Dzień dobry | Witam}! Tu Krzysztof. Poniedziałek to dobry moment na usprawnienia przed kolejnym szczytem, stąd krótkie pytanie – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
 ---
-{Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając z poniedziałkowego rozruchu w nowym tygodniu, pozwolę sobie zadać jedno pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe do rzucenia okiem?""",
+{Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając z poniedziałkowego {PORA: rozruchu w nowym tygodniu | rytmu pracy na początku tygodnia | wieczoru na starcie tygodnia}, pozwolę sobie zadać jedno pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe do rzucenia okiem?""",
 
     # 1 = WTOREK
-    "1": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Wtorkowy poranek po weekendowym zamieszaniu to chyba wreszcie moment na spokojniejszą kawę. Dopytam krótko z ciekawości – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez oddawania prowizji portalom. Podrzucić na spokojnie krótkie wideo z podglądem?
+    "1": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. {PORA: Wtorkowy poranek po weekendowym zamieszaniu to chyba wreszcie moment na spokojniejszą kawę | Wtorkowe popołudnie to chyba wreszcie nieco spokojniejszy moment w ciągu tygodnia | Wtorkowy wieczór to chyba wreszcie moment na chwilę spokoju po całym dniu}. Dopytam krótko z ciekawości – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez oddawania prowizji portalom. Podrzucić na spokojnie krótkie wideo z podglądem?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. Złapałem chwilę we wtorkowe przedpołudnie, więc zapytam prosto z mostu. Czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio przez telefon bez konieczności wcześniejszego dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata wpada od razu na Państwa konto z pominięciem prowizji pośredników. Mogę podesłać szybkie demo do rzucenia okiem przy kawie?
+{Dzień dobry | Witam}! Krzysztof z tej strony. Złapałem chwilę {PORA: we wtorkowe przedpołudnie | we wtorkowe popołudnie | we wtorkowy wieczór}, więc zapytam prosto z mostu. Czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio przez telefon bez konieczności wcześniejszego dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata wpada od razu na Państwa konto z pominięciem prowizji pośredników. Mogę podesłać szybkie demo do rzucenia okiem {PORA: przy kawie | w wolnej chwili | w wolnej chwili}?
 ---
-{Dzień dobry | Cześć}! Z tej strony Krzysztof. Pora około południa we wtorek to zazwyczaj dobry moment, zanim od środy znowu zaczną się urywać telefony z pytaniami o weekend. Zastanawiałem się, czy macie już podpięty własny system rezerwacji na stronie? Uruchamiam proste kalendarze dla kwater, które same pilnują terminów i zdejmują ciągłe odpisywanie, a pełny zysk z pobytu zostaje u właściciela. Podesłać niezobowiązująco krótkie wideo, jak to działa w praktyce?
+{Dzień dobry | Cześć}! Z tej strony Krzysztof. {PORA: Wtorkowe przedpołudnie | Wtorkowe popołudnie | Wtorkowy wieczór} to zazwyczaj dobry moment na krótki kontakt, zanim od środy znowu zaczną się urywać telefony z pytaniami o weekend. Zastanawiałem się, czy macie już podpięty własny system rezerwacji na stronie? Uruchamiam proste kalendarze dla kwater, które same pilnują terminów i zdejmują ciągłe odpisywanie, a pełny zysk z pobytu zostaje u właściciela. Podesłać niezobowiązująco krótkie wideo, jak to działa w praktyce?
 ---
 {Dzień dobry | Witam serdecznie}! Tu Krzysztof. Łapię w nieco spokojniejszym momencie we wtorek z szybkim pytaniem branżowym. Czy korzystacie już z własnego modułu do rezerwacji online, czy większość rezerwacji wciąż wpada przez portale pośredniczące? Wdrażam lokalnie proste narzędzia, które pozwalają turystom rezerwować nocleg bezpośrednio z telefonu, dzięki czemu nie oddajecie kilkunastu procent prowizji od każdej doby. Mogę podrzucić link do 2-minutowego demo?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sprawa we wtorkowe przedpołudnie. Widzę po rynku, że coraz więcej osób szuka noclegów w biegu na telefonie i woli od razu kliknąć wolny termin oraz opłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji bez zbędnych komplikacji – system przyjmuje wpłaty 24/7, a pieniądze trafiają prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia w wolnej chwili?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sprawa {PORA: we wtorkowe przedpołudnie | we wtorkowe popołudnie | we wtorkowy wieczór}. Widzę po rynku, że coraz więcej osób szuka noclegów w biegu na telefonie i woli od razu kliknąć wolny termin oraz opłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji bez zbędnych komplikacji – system przyjmuje wpłaty 24/7, a pieniądze trafiają prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia w wolnej chwili?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Wtorek koło południa, więc mam nadzieję, że poranne sprawy w obiekcie już ogarnięte i jest chwila wytchnienia. Dopytam z ciekawości – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
+{Dzień dobry | Witam}! Tu Krzysztof. {PORA: Wtorkowe przedpołudnie, więc mam nadzieję, że poranne sprawy w obiekcie już ogarnięte | Wtorkowe popołudnie, więc mam nadzieję, że główne sprawy w obiekcie już ogarnięte | Wtorkowy wieczór, więc mam nadzieję, że dzisiejsze sprawy w obiekcie już za Wami} i jest chwila wytchnienia. Dopytam z ciekawości – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
 ---
-{Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając z luźniejszego wtorkowego przedpołudnia, pozwolę sobie zadać jedno krótkie pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe do rzucenia okiem w wolnej chwili?""",
+{Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając z {PORA: luźniejszego wtorkowego przedpołudnia | nieco spokojniejszego wtorkowego popołudnia | spokojniejszego wtorkowego wieczoru}, pozwolę sobie zadać jedno krótkie pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe do rzucenia okiem w wolnej chwili?""",
 
     # 2 = ŚRODA
     "2": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Mamy środek tygodnia, więc łapię w środę z krótkim pytaniem, zanim zacznie się główne zamieszanie przed weekendem. Czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają wolne dni i rezerwują z telefonu, a 100% kwoty zostaje u Was bez prowizji dla portali. Podrzucić krótkie wideo z podglądem?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. Odzywam się w środę przy kawie z szybkim pytaniem. Czy goście mogą u Państwa zarezerwować i opłacić pobyt bezpośrednio przez telefon bez wcześniejszego dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata trafia od razu na Państwa konto bez pośredników. Mogę podesłać szybkie demo do rzucenia okiem w wolnej chwili?
+{Dzień dobry | Witam}! Krzysztof z tej strony. Odzywam się {PORA: w środę przy porannej kawie | w środowe popołudnie | w środowy wieczór} z szybkim pytaniem. Czy goście mogą u Państwa zarezerwować i opłacić pobyt bezpośrednio przez telefon bez wcześniejszego dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata trafia od razu na Państwa konto bez pośredników. Mogę podesłać szybkie demo do rzucenia okiem w wolnej chwili?
 ---
 {Dzień dobry | Cześć}! Z tej strony Krzysztof. Środa to zazwyczaj moment, kiedy zaczynają się pierwsze telefony z pytaniami o nadchodzący weekend. Zastanawiałem się, czy macie już podpięty własny system rezerwacji online? Uruchamiam proste kalendarze dla kwater, które same pilnują dostępności i zdejmują z głowy ciągłe odpisywanie, a pełny zysk zostaje u właściciela. Podesłać niezobowiązująco krótkie wideo, jak to działa?
 ---
 {Dzień dobry | Witam serdecznie}! Tu Krzysztof. Łapię w środku tygodnia z krótkim pytaniem branżowym. Czy korzystacie już z własnego modułu do rezerwacji online, czy większość rezerwacji nadal wpada przez portale pośredniczące? Wdrażam lokalnie proste narzędzia, które pozwalają turystom rezerwować nocleg bezpośrednio ze smartfona, dzięki czemu nie oddajecie kilkunastu procent prowizji. Mogę podrzucić link do 2-minutowego demo?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sprawa w środowe przedpołudnie. W połowie tygodnia najwięcej osób planuje wyjazdy na telefonie i woli od razu kliknąć wolny termin oraz wpłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji – system przyjmuje wpłaty 24/7 prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sprawa {PORA: w środowe przedpołudnie | w środowe popołudnie | w środowy wieczór}. W połowie tygodnia najwięcej osób planuje wyjazdy na telefonie i woli od razu kliknąć wolny termin oraz wpłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji – system przyjmuje wpłaty 24/7 prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Środek tygodnia w pełni, mam nadzieję, że chwila na spokojną kawę się znajdzie. Dopytam z ciekawości – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie terminy ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje u Państwa. Podesłać krótkie nagranie z prezentacją?
+{Dzień dobry | Witam}! Tu Krzysztof. Środek tygodnia w pełni, mam nadzieję, że {PORA: chwila na spokojną kawę się znajdzie | chwila oddechu w ciągu dnia się znajdzie | po całym dniu znalazła się chwila wytchnienia}. Dopytam z ciekawości – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie terminy ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje u Państwa. Podesłać krótkie nagranie z prezentacją?
 ---
-{Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając ze środowego rytmu pracy, pozwolę sobie zadać jedno krótkie pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe?""",
+{Dzień dobry | Cześć}! Z tej strony Krzysztof. Korzystając ze środowego {PORA: przedpołudnia | popołudnia | wieczoru}, pozwolę sobie zadać jedno krótkie pytanie. Czy myśleliście o wpięciu własnego kalendarza rezerwacji online, żeby goście mogli rezerwować pobyty bezpośrednio i bez prowizji portali? Przygotowuję dla kwater niezależne strony z prostym systemem rezerwacji z telefonu. Mogę podesłać krótkie wideo poglądowe?""",
 
     # 3 = CZWARTEK
     "3": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Czwartek to zazwyczaj ostatni spokojniejszy moment przed weekendowym najazdem gości, więc dopytam krótko z ciekawości – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez prowizji dla portali. Podrzucić krótkie wideo z podglądem?
@@ -164,7 +168,7 @@ DEFAULT_DAILY_TEMPLATES = {
 ---
 {Dzień dobry | Witam serdecznie}! Tu Krzysztof. Odzywam się w czwartek z szybkim pytaniem branżowym. Czy korzystacie już z własnego modułu do rezerwacji online, czy większość rezerwacji wciąż wpada przez portale pośredniczące? Wdrażam lokalnie proste narzędzia, które pozwalają turystom rezerwować nocleg bezpośrednio z telefonu, bez oddawania kilkunastu procent prowizji od każdej doby. Mogę podrzucić link do 2-minutowego demo?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sprawa w czwartkowe przedpołudnie. Przed samym weekendem mnóstwo osób szuka noclegów na ostatnią chwilę w telefonie i woli od razu kliknąć wolny termin oraz opłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji – system przyjmuje wpłaty 24/7 prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia w wolnej chwili?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sprawa {PORA: w czwartkowe przedpołudnie | w czwartkowe popołudnie | w czwartkowy wieczór}. Przed samym weekendem mnóstwo osób szuka noclegów na ostatnią chwilę w telefonie i woli od razu kliknąć wolny termin oraz opłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji – system przyjmuje wpłaty 24/7 prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia w wolnej chwili?
 ---
 {Dzień dobry | Witam}! Tu Krzysztof. Czwartek w pełni, pewnie przygotowania obiektu na jutrzejszych gości idą pełną parą. Dopytam krótko – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
 ---
@@ -179,7 +183,7 @@ DEFAULT_DAILY_TEMPLATES = {
 ---
 {Dzień dobry | Witam serdecznie}! Tu Krzysztof. Łapię w piątek z krótkim pytaniem branżowym. Czy korzystacie już z własnego modułu do rezerwacji online, czy większość rezerwacji wciąż wpada przez portale pośredniczące? Wdrażam lokalnie proste narzędzia, które pozwalają turystom rezerwować nocleg bezpośrednio z telefonu, dzięki czemu nie oddajecie kilkunastu procent prowizji od każdej doby. Mogę podrzucić link do 2-minutowego demo?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka piątkowa wiadomość. W weekendy ludzie najczęściej przeglądają oferty noclegów na smartfonach i wolą od razu kliknąć wolny termin oraz wpłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji – system przyjmuje wpłaty 24/7 prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia po piątkowym zamieszaniu?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka piątkowa wiadomość. W weekendy ludzie najczęściej przeglądają oferty noclegów na smartfonach i wolą od razu kliknąć wolny termin oraz wpłacić zadatek zamiast dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji – system przyjmuje wpłaty 24/7 prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia {PORA: w wolnej chwili | po południu | po dzisiejszym ruchu}?
 ---
 {Dzień dobry | Witam}! Tu Krzysztof. Piątek w pełni, więc życzę udanego weekendu z gośćmi i dopytam przy okazji – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
 ---
@@ -188,13 +192,13 @@ DEFAULT_DAILY_TEMPLATES = {
     # 5 = SOBOTA
     "5": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Piszę krótko w sobotę, żeby nie przeszkadzać telefonem w trakcie weekendu. Dopytam tylko z ciekawości – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez prowizji dla portali. Podrzucić krótkie wideo do zerknięcia w wolnej chwili?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. Sobotnie przedpołudnie to czas, kiedy wielu turystów planuje kolejne wyjazdy z telefonu, dlatego zapytam krótko: czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio online bez dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata trafia od razu na Państwa konto bez pośredników. Mogę podesłać szybkie demo do rzucenia okiem?
+{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: Sobotnie przedpołudnie | Sobotnie popołudnie | Sobotni wieczór} to czas, kiedy wielu turystów planuje kolejne wyjazdy z telefonu, dlatego zapytam krótko: czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio online bez dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata trafia od razu na Państwa konto bez pośredników. Mogę podesłać szybkie demo do rzucenia okiem?
 ---
 {Dzień dobry | Cześć}! Z tej strony Krzysztof. W sobotę każdy woli odpocząć od ciągłego odbierania telefonów z pytaniami o wolne terminy. Zastanawiałem się, czy macie już podpięty własny system rezerwacji na stronie? Uruchamiam proste kalendarze dla kwater, które same pilnują terminów przez cały weekend i przyjmują zadatki, a pełny zysk zostaje u właściciela. Podesłać niezobowiązująco krótkie wideo, jak to działa?
 ---
 {Dzień dobry | Witam serdecznie}! Tu Krzysztof. Odzywam się w sobotę z krótkim pytaniem branżowym na spokojną chwilę. Czy korzystacie już z własnego modułu do rezerwacji online, czy większość weekendowych rezerwacji wpada przez portale pośredniczące? Wdrażam lokalnie proste narzędzia, które pozwalają turystom rezerwować nocleg bezpośrednio ze smartfona, bez oddawania kilkunastu procent prowizji. Mogę podrzucić link do 2-minutowego demo?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sobotnia sprawa. Statystyki pokazują, że w weekendy najwięcej rodzin szuka noclegów na kolejne tygodnie i woli od razu kliknąć wolny termin w telefonie niż dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji – system sam przyjmuje wpłaty 24/7 prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia przy weekendowej kawie?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka sobotnia sprawa. Statystyki pokazują, że w weekendy najwięcej rodzin szuka noclegów na kolejne tygodnie i woli od razu kliknąć wolny termin w telefonie niż dzwonić. Buduję dla gospodarzy proste kalendarze rezerwacji – system sam przyjmuje wpłaty 24/7 prosto na Wasze konto. Podrzucić na spokojnie krótki podgląd do zerknięcia {PORA: przy weekendowej kawie | w wolnej chwili | w wolnej chwili}?
 ---
 {Dzień dobry | Witam}! Tu Krzysztof. Spokojnej soboty życzę i przy okazji dopytam krótko – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online również w weekendy, a 100% zysku zostaje u Państwa. Podesłać krótkie nagranie z prezentacją?
 ---
@@ -203,13 +207,13 @@ DEFAULT_DAILY_TEMPLATES = {
     # 6 = NIEDZIELA
     "6": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Piszę spokojnie SMS-em w niedzielę, żeby nie zawracać głowy telefonem w weekend. Dopytam krótko na nowy tydzień – czy macie już u siebie własny kalendarz do bezpośrednich rezerwacji online? Wdrażam w regionie proste systemy, dzięki którym turyści sami sprawdzają terminy i rezerwują z telefonu, a 100% kwoty zostaje u Was bez prowizji dla portali. Podrzucić krótkie wideo do zerknięcia w wolnej chwili?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. Niedziela po wymeldowaniach gości to często moment, kiedy turyści szukają noclegów na kolejne tygodnie. Zapytam krótko: czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio przez telefon bez dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata trafia od razu na Państwa konto. Mogę podesłać szybkie demo do rzucenia okiem?
+{Dzień dobry | Witam}! Krzysztof z tej strony. Niedziela {PORA: przed południem | po wymeldowaniach gości | pod koniec weekendu} to często moment, kiedy turyści szukają noclegów na kolejne tygodnie. Zapytam krótko: czy goście mogą u Państwa zarezerwować i opłacić termin bezpośrednio przez telefon bez dzwonienia? Wdrażam dla obiektów proste, bezobsługowe kalendarze działające 24/7 – cała wpłata trafia od razu na Państwa konto. Mogę podesłać szybkie demo do rzucenia okiem?
 ---
-{Dzień dobry | Cześć}! Z tej strony Krzysztof. W niedzielne popołudnie najwięcej osób siedzi z telefonem i planuje kolejne wyjazdy. Zastanawiałem się, czy macie już podpięty własny system rezerwacji na stronie, który sam przyjmuje rezerwacje, gdy Wy odpoczywacie? Uruchamiam proste kalendarze dla kwater, które zdejmują ciągłe odpisywanie, a pełny zysk zostaje u właściciela. Podesłać niezobowiązująco krótkie wideo, jak to działa?
+{Dzień dobry | Cześć}! Z tej strony Krzysztof. {PORA: W niedzielne przedpołudnie | W niedzielne popołudnie | W niedzielny wieczór} najwięcej osób siedzi z telefonem i planuje kolejne wyjazdy. Zastanawiałem się, czy macie już podpięty własny system rezerwacji na stronie, który sam przyjmuje rezerwacje, gdy Wy odpoczywacie? Uruchamiam proste kalendarze dla kwater, które zdejmują ciągłe odpisywanie, a pełny zysk zostaje u właściciela. Podesłać niezobowiązująco krótkie wideo, jak to działa?
 ---
 {Dzień dobry | Witam serdecznie}! Tu Krzysztof. Zostawiam krótkie pytanie w niedzielę do odczytania w dogodnej chwili. Czy korzystacie już z własnego modułu do rezerwacji online, czy większość rezerwacji wciąż wpada przez portale pośredniczące? Wdrażam lokalnie proste narzędzia, które pozwalają turystom rezerwować nocleg bezpośrednio z telefonu, bez oddawania kilkunastu procent prowizji. Mogę podrzucić link do 2-minutowego demo?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka niedzielna wiadomość przed startem nowego tygodnia. Coraz więcej gości szuka noclegów w niedzielę wieczorem na smartfonie i woli od razu kliknąć wolny termin oraz wpłacić zadatek zamiast czekać z telefonem do poniedziałku. Buduję dla gospodarzy proste kalendarze rezerwacji działające 24/7. Podrzucić na spokojnie krótki podgląd do zerknięcia?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Krótka niedzielna wiadomość przed startem nowego tygodnia. Coraz więcej gości szuka noclegów w niedzielę na smartfonie i woli od razu kliknąć wolny termin oraz wpłacić zadatek zamiast czekać z telefonem do poniedziałku. Buduję dla gospodarzy proste kalendarze rezerwacji działające 24/7. Podrzucić na spokojnie krótki podgląd do zerknięcia?
 ---
 {Dzień dobry | Witam}! Tu Krzysztof. Spokojnej niedzieli życzę! Dopytam przy okazji na spokojnie – macie już na swojej stronie własny system do szybkich rezerwacji, czy wciąż potwierdzacie wszystko ręcznie przez telefon? Pomagam obiektom wdrażać przejrzyste kalendarze, które automatyzują rezerwacje online 7 dni w tygodniu, a 100% zysku zostaje w Państwa kieszeni. Podesłać krótkie nagranie z prezentacją?
 ---
@@ -243,6 +247,7 @@ state = {
     "worker_phase_detail": "Gotowy do pracy",
     "next_send_at": 0.0,            # Timestamp kolejnej wysyłki (do odliczania na żywo)
     "csv_queue": "",                # Kolejka oczekujących wierszy CSV (linia 1 = następny do wysyłki)
+    "templates_version": TEMPLATES_VERSION,
     "daily_templates": DEFAULT_DAILY_TEMPLATES.copy(),
     "devices": json.loads(json.dumps(DEFAULT_DEVICES)),
     "sim_step": 0,
@@ -362,9 +367,12 @@ def load_state():
                 if k in state:
                     state[k] = v
 
-            # Upewnij się, że wszystkie 7 dni tygodnia mają szablony
-            if not isinstance(state.get("daily_templates"), dict):
+            # Upewnij się, że wszystkie 7 dni tygodnia mają szablony oraz aktualną wersję bez oksymoronów
+            saved_tpl_ver = int(s.get("templates_version", 1))
+            if not isinstance(state.get("daily_templates"), dict) or saved_tpl_ver < TEMPLATES_VERSION:
                 state["daily_templates"] = DEFAULT_DAILY_TEMPLATES.copy()
+                state["templates_version"] = TEMPLATES_VERSION
+                _log("✨ Zaktualizowano szablony 7 dni do nowej wersji v2 (dynamiczne pory dnia bez 'wieczornej kawy' i oksymoronów).")
             else:
                 for day_idx in range(7):
                     dk = str(day_idx)
@@ -386,6 +394,8 @@ def load_state():
 
             q_len = len([l for l in state["csv_queue"].splitlines() if l.strip()])
             _log(f"🔄 Wczytano stan systemu (W kolejce: {q_len} leadów | Status: {state['status']})")
+            if saved_tpl_ver < TEMPLATES_VERSION:
+                save_state()
     except Exception as e:
         print(f"Błąd odczytu stanu: {e}")
 
@@ -463,17 +473,18 @@ def parse_csv_line(line: str) -> dict | None:
 
 
 # ──────────────────────────────────────────────
-# INTELIGENTNE POWITANIA I ADAPTACJA DO PORY DNIA
+# INTELIGENTNE POWITANIA I STRAŻNIK ANTY-OKSYMORONOWY
 # ──────────────────────────────────────────────
 DAYS_STEMS = {
-    "poniedziałek": ("poniedziałkowy", "poniedziałkowe", "poniedziałkowym"),
-    "wtorek": ("wtorkowy", "wtorkowe", "wtorkowym"),
-    "środa": ("środowy", "środowe", "środowym"),
-    "czwartek": ("czwartkowy", "czwartkowe", "czwartkowym"),
-    "piątek": ("piątkowy", "piątkowe", "piątkowym"),
-    "sobota": ("sobotni", "sobotnie", "sobotnim"),
-    "niedziela": ("niedzielny", "niedzielne", "niedzielnym"),
+    "poniedziałek": ("poniedziałkowy", "poniedziałkowe", "poniedziałkowego", "poniedziałkowym"),
+    "wtorek": ("wtorkowy", "wtorkowe", "wtorkowego", "wtorkowym"),
+    "środa": ("środowy", "środowe", "środowego", "środowym"),
+    "czwartek": ("czwartkowy", "czwartkowe", "czwartkowego", "czwartkowym"),
+    "piątek": ("piątkowy", "piątkowe", "piątkowego", "piątkowym"),
+    "sobota": ("sobotni", "sobotnie", "sobotniego", "sobotnim"),
+    "niedziela": ("niedzielny", "niedzielne", "niedzielnego", "niedzielnym"),
 }
+
 
 def get_time_of_day_context(dt: datetime | None = None) -> dict:
     if dt is None:
@@ -487,21 +498,28 @@ def get_time_of_day_context(dt: datetime | None = None) -> dict:
         greetings = ["Dzień dobry", "Witam serdecznie", "Witam", "Cześć"]
         pora_dnia = "przedpołudnie"
         pora_opis = "poranek"
+        slot_index = 0
     elif total_min < 17 * 60:
         greetings = ["Dzień dobry", "Witam serdecznie", "Witam", "Cześć"]
         pora_dnia = "popołudnie"
         pora_opis = "popołudnie"
+        slot_index = 1
     else:
         # Od 17:00 (wieczór)
-        greetings = ["Dobry wieczór", "Witam serdecznie", "Witam", "Cześć"]
+        greetings = ["Dobry wieczór", "Witam serdecznie", "Witam"]
         pora_dnia = "wieczór"
         pora_opis = "wieczór"
+        slot_index = 2
 
     return {
         "dt": dt,
         "hour": hour,
-        "is_evening": total_min >= 17 * 60,
-        "is_afternoon": 12 * 60 <= total_min < 17 * 60,
+        "total_min": total_min,
+        "slot_index": slot_index,       # 0 = rano, 1 = popołudnie, 2 = wieczór
+        "is_morning": slot_index == 0,
+        "is_afternoon": slot_index == 1,
+        "is_evening": slot_index == 2,
+        "is_late_for_coffee": total_min >= 14 * 60 + 30,  # Od 14:30 zero wzmianek o kawie!
         "greetings": greetings,
         "greeting": random.choice(greetings),
         "pora_dnia": pora_dnia,
@@ -511,14 +529,18 @@ def get_time_of_day_context(dt: datetime | None = None) -> dict:
 
 def adapt_time_of_day(text: str, dt: datetime | None = None) -> str:
     """
-    Automatycznie dostosowuje powitania i kontekstowe pory dnia w tekście:
-    - Od 17:00: zamienia 'Dzień dobry' na 'Dobry wieczór' oraz 'poranek'/'przedpołudnie' na 'wieczór'.
-    - Przed 17:00: zamienia ewentualny 'Dobry wieczór' na 'Dzień dobry'.
-    - W godzinach popołudniowych (12:00-17:00): zamienia zwroty poranne na 'popołudnie'.
+    Twardy Strażnik Anty-Oksymoronowy:
+    1. Od 14:30 wycina wszelkie wzmianki o kawie ('spokojna kawa', 'przy kawie' itp.) zamieniając na 'chwilę oddechu' / 'w wolnej chwili'.
+    2. Od 17:00 (wieczór) zamienia 'Dzień dobry' na 'Dobry wieczór' oraz wszystkie przypadki słów
+       'poranek', 'przedpołudnie', 'koło południa', 'popołudnie' na naturalne odpowiedniki wieczorne.
+    3. W popołudnie (12:00-17:00) zamienia zwroty poranne/przedpołudniowe (we wszystkich przypadkach) na popołudniowe.
+    4. Rano (przed 12:00) pilnuje, by nie pojawił się 'Dobry wieczór', 'popołudnie' lub 'wieczór'.
     """
     tod = get_time_of_day_context(dt)
-    is_evening = tod["is_evening"]
+    is_morning = tod["is_morning"]
     is_afternoon = tod["is_afternoon"]
+    is_evening = tod["is_evening"]
+    no_coffee = tod["is_late_for_coffee"]
 
     def _replace_keep_case(pattern: str, replacement: str, string: str) -> str:
         def _cb(m):
@@ -529,33 +551,71 @@ def adapt_time_of_day(text: str, dt: datetime | None = None) -> str:
             return rep
         return re.sub(pattern, _cb, string, flags=re.IGNORECASE)
 
-    # 1. Adaptacja bezpośrednich powitań
+    # ── 1. CAŁKOWITA ELIMINACJA "KAWY" PO GODZINIE 14:30 (POPOŁUDNIE I WIECZÓR) ──
+    if no_coffee:
+        text = _replace_keep_case(r"\bna\s+spokojniejszą\s+kawę\b", "na chwilę wytchnienia", text)
+        text = _replace_keep_case(r"\bna\s+spokojną\s+kawę\s+i\s+podsumowanie\b", "na chwilę oddechu i podsumowanie", text)
+        text = _replace_keep_case(r"\bna\s+(spokojną|poranną|szybką|małą|krótką)?\s*kawę\b", "na chwilę wytchnienia", text)
+        text = _replace_keep_case(r"\bchwila\s+na\s+(spokojną\s+)?kawę\b", "chwila wytchnienia", text)
+        text = _replace_keep_case(r"\bmoment\s+na\s+(spokojniejszą\s+|spokojną\s+)?kawę\b", "moment na chwilę spokoju", text)
+        text = _replace_keep_case(
+            r"\bprzy\s+(poniedziałkowej|wtorkowej|środowej|czwartkowej|piątkowej|sobotniej|niedzielnej|weekendowej|porannej|popołudniowej|spokojnej)?\s*kawie\b",
+            "w wolnej chwili",
+            text,
+        )
+        text = _replace_keep_case(r"\bkaw(a|y|ie|ę|ą)\b", "odpoczynek", text)
+
+    # ── 2. ADAPTACJA POWITAŃ ──
     if is_evening:
         text = _replace_keep_case(r"\b[Dd]zień dobry\b", "Dobry wieczór", text)
     else:
         text = _replace_keep_case(r"\b[Dd]obry wieczór\b", "Dzień dobry", text)
 
-    # 2. Zwroty z dniami tygodnia (np. wtorkowy poranek -> wtorkowy wieczór)
-    for _, (masc, neut, _) in DAYS_STEMS.items():
+    # ── 3. ADAPTACJA PÓR DNIA WE WSZYSTKICH PRZYPADKACH GRAMATYCZNYCH ──
+    for day_noun, (masc, neut, gen, _) in DAYS_STEMS.items():
+        prep_w = "we" if masc.startswith("wtork") else "w"
         if is_evening:
+            # Mianownik / Biernik (np. wtorkowy poranek, wtorkowe przedpołudnie, wtorkowe popołudnie -> wtorkowy wieczór)
+            text = _replace_keep_case(rf"\bwe?\s+{neut}\s+(przedpołudnie|popołudnie)\b", f"{prep_w} {masc} wieczór", text)
             text = _replace_keep_case(rf"\b{masc}\s+poranek\b", f"{masc} wieczór", text)
-            text = _replace_keep_case(rf"\bwe?\s+{neut}\s+przedpołudnie\b", f"w ten {masc} wieczór", text)
-            text = _replace_keep_case(rf"\b{neut}\s+przedpołudnie\b", f"{masc} wieczór", text)
-            text = _replace_keep_case(rf"\b{neut}\s+popołudnie\b", f"{masc} wieczór", text)
+            text = _replace_keep_case(rf"\b{neut}\s+(przedpołudnie|popołudnie)\b", f"{masc} wieczór", text)
+            # Dopełniacz (np. luźniejszego wtorkowego przedpołudnia -> spokojniejszego wtorkowego wieczoru)
+            text = _replace_keep_case(rf"\b{gen}\s+(poranka|przedpołudnia|popołudnia)\b", f"{gen} wieczoru", text)
+            text = _replace_keep_case(rf"\b{day_noun}\s+(o|około|koło|przed)\s+południa\b", f"{masc} wieczór", text)
         elif is_afternoon:
-            text = _replace_keep_case(rf"\b{masc}\s+poranek\b", f"{neut} popołudnie", text)
-            text = _replace_keep_case(rf"\bwe?\s+{neut}\s+przedpołudnie\b", f"w {neut} popołudnie", text)
+            # Mianownik / Biernik (np. wtorkowy poranek, wtorkowe przedpołudnie -> wtorkowe popołudnie)
+            text = _replace_keep_case(rf"\bwe?\s+{neut}\s+przedpołudnie\b", f"{prep_w} {neut} popołudnie", text)
+            text = _replace_keep_case(rf"\b{masc}\s+(poranek|wieczór)\b", f"{neut} popołudnie", text)
             text = _replace_keep_case(rf"\b{neut}\s+przedpołudnie\b", f"{neut} popołudnie", text)
+            # Dopełniacz (np. wtorkowego przedpołudnia -> wtorkowego popołudnia)
+            text = _replace_keep_case(rf"\b{gen}\s+(poranka|przedpołudnia|wieczoru)\b", f"{gen} popołudnia", text)
+        elif is_morning:
+            # Rano pilnuj, by nie wyszło "niedzielne popołudnie" czy "wtorkowy wieczór"
+            text = _replace_keep_case(rf"\b{neut}\s+popołudnie\b", f"{neut} przedpołudnie", text)
+            text = _replace_keep_case(rf"\b{masc}\s+wieczór\b", f"{masc} poranek", text)
+            text = _replace_keep_case(rf"\b{gen}\s+(popołudnia|wieczoru)\b", f"{gen} przedpołudnia", text)
 
+    # ── 4. OGÓLNE ZWROTY PORY DNIA BEZ PRZYMIOTNIKA DNIA ──
     if is_evening:
+        text = _replace_keep_case(r"\bpora\s+(o|około|koło)\s+południa\b", "wieczorna pora", text)
         text = _replace_keep_case(r"\b(o|około|koło)\s+południa\b", "wieczorem", text)
+        text = _replace_keep_case(r"\bprzed\s+południem\b", "wieczorem", text)
+        text = _replace_keep_case(r"\bpo\s+południu\b", "wieczorem", text)
         text = _replace_keep_case(r"\bwe?\s+przedpołudnie\b", "wieczorem", text)
+        text = _replace_keep_case(r"\bprzedpołudnia\b", "wieczoru", text)
+        text = _replace_keep_case(r"\bprzedpołudnie\b", "wieczór", text)
+        text = _replace_keep_case(r"\bpopołudnia\b", "wieczoru", text)
+        text = _replace_keep_case(r"\bpopołudnie\b", "wieczór", text)
+        text = _replace_keep_case(r"\bporanek\b", "wieczór", text)
         text = _replace_keep_case(r"\bporann(e|ych)\s+sprawy\b", "dzisiejsze sprawy", text)
-        text = _replace_keep_case(r"\bporanną kawę\b", "wieczorną herbatę", text)
-        text = _replace_keep_case(r"\bprzy kawie\b", "wieczorem", text)
     elif is_afternoon:
-        text = _replace_keep_case(r"\bporann(e|ych)\s+sprawy\b", "dzisiejsze sprawy", text)
-        text = _replace_keep_case(r"\bporanną kawę\b", "popołudniową kawę", text)
+        text = _replace_keep_case(r"\bpora\s+(o|około|koło)\s+południa\b", "popołudniowa pora", text)
+        text = _replace_keep_case(r"\bprzed\s+południem\b", "po południu", text)
+        text = _replace_keep_case(r"\bwe?\s+przedpołudnie\b", "po południu", text)
+        text = _replace_keep_case(r"\bprzedpołudnia\b", "popołudnia", text)
+        text = _replace_keep_case(r"\bprzedpołudnie\b", "popołudnie", text)
+        text = _replace_keep_case(r"\bporanek\b", "popołudnie", text)
+        text = _replace_keep_case(r"\bporann(e|ych)\s+sprawy\b", "bieżące sprawy", text)
 
     return text
 
@@ -571,6 +631,7 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
     city = context.get("city", "").strip()
     dt = context.get("dt") or now_pl()
     tod = get_time_of_day_context(dt)
+    smart_greeting = context.get("smart_greeting", state.get("smart_greeting_enabled", True))
 
     def replace_var(m):
         var_name = m.group(1).lower()
@@ -583,7 +644,19 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
 
     text = re.sub(r"\{(Name|City)(?::([^}]*))?\}", replace_var, text, flags=re.IGNORECASE)
 
-    # Dynamiczne tagi pory dnia i powitania: {Powitanie}, {Greeting}, {Pora_dnia}, {Pora_opis}
+    # 1. Warunkowe bloki pory dnia: {PORA: rano | popołudnie | wieczór}
+    def replace_pora_block(m):
+        parts = [p.strip() for p in m.group(1).split("|")]
+        if not parts:
+            return ""
+        if not smart_greeting:
+            return parts[0]
+        idx = min(tod["slot_index"], len(parts) - 1)
+        return parts[idx]
+
+    text = re.sub(r"\{PORA:([^{}]+)\}", replace_pora_block, text, flags=re.IGNORECASE)
+
+    # 2. Dynamiczne tagi pory dnia i powitania: {Powitanie}, {Greeting}, {Pora_dnia}, {Pora_opis}
     text = re.sub(r"\{(Powitanie|Greeting)\}", lambda m: tod["greeting"], text, flags=re.IGNORECASE)
     text = re.sub(r"\{(Pora_dnia|Time_of_day)\}", lambda m: tod["pora_dnia"], text, flags=re.IGNORECASE)
     text = re.sub(r"\{(Pora_opis)\}", lambda m: tod["pora_opis"], text, flags=re.IGNORECASE)
@@ -633,8 +706,7 @@ def resolve_spintax(text: str, context: dict | None = None) -> str:
     lines = [re.sub(r"[ \t]{2,}", " ", l).strip() for l in text.splitlines()]
     result = "\n".join(lines)
 
-    # Automatyczna adaptacja powitań i pory dnia (jeśli opcja włączona)
-    smart_greeting = context.get("smart_greeting", state.get("smart_greeting_enabled", True))
+    # 3. Strażnik anty-oksymoronowy (eliminuje "wieczorną kawę", "poranek" wieczorem itp.)
     if smart_greeting:
         result = adapt_time_of_day(result, dt)
 

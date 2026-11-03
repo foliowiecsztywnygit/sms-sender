@@ -706,8 +706,9 @@
                 </div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                     <button class="btn btn-skip btn-sm" onclick="testCurrentDaySpintax()">🎲 Testuj wg obecnej godziny</button>
-                    <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(10)" title="Zobacz jak tekst wygląda rano o 10:00 (Dzień dobry)">☀️ Test Rano (10:00)</button>
-                    <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(18)" title="Zobacz jak tekst wygląda wieczorem po 17:00 (Dobry wieczór)">🌙 Test Wieczór (18:30)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(10)" title="Zobacz jak tekst wygląda rano o 10:00 (Dzień dobry + poranek/kawa)">☀️ Test Rano (10:00)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(15)" title="Zobacz jak tekst wygląda po południu o 15:00 (Dzień dobry + popołudnie, bez kawy)">🌤️ Test Popołudnie (15:00)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(20)" title="Zobacz jak tekst wygląda wieczorem o 20:00 (Dobry wieczór + wieczór, zero kawy)">🌙 Test Wieczór (20:00)</button>
                     <button class="btn btn-secondary btn-sm" onclick="restoreDayTemplates()">🔄 Przywróć domyślne dnia</button>
                 </div>
             </div>
@@ -724,7 +725,7 @@
 
             <div style="font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                 <span id="dayTemplateInfo">Edytujesz szablony na: Poniedziałek (oddzielaj kolejne warianty linijką '---')</span>
-                <span>Tagi: <code>{Powitanie}</code>, <code>{Pora_dnia}</code>, <code>{opcja1|opcja2}</code>, <code>[opcjonalny]</code>, <code>{Name:Kliencie}</code>, <code>{City:Twojej okolicy}</code></span>
+                <span>Tagi: <code>{PORA: rano | popołudnie | wieczór}</code>, <code>{Powitanie}</code>, <code>{opcja1|opcja2}</code>, <code>{Name:Kliencie}</code>, <code>{City:Twojej okolicy}</code></span>
             </div>
 
             <textarea id="dayTemplateEditor" style="height: 175px; white-space: pre-wrap;"></textarea>
