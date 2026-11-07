@@ -228,6 +228,56 @@ DATA_DIR = Path(os.getenv("DATA_DIR", Path(__file__).resolve().parent / "data"))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 STATE_FILE = DATA_DIR / "sms_state.json"
 SENT_NUMBERS_FILE = DATA_DIR / "sent_numbers.json"
+OUTBOUND_SMS_LOG_FILE = DATA_DIR / "outbound_cold_sms.jsonl"
+AUTOMATION_BACKEND_URL = os.environ.get(
+    "AUTOMATION_BACKEND_URL",
+    "http://brosystems-automation-backend:8000",
+).rstrip("/")
+
+
+def record_outbound_cold_sms_context(
+    phone: str,
+    clean_text: str,
+    sim_label: str,
+    name: str = "",
+    city: str = "",
+) -> None:
+    """
+    Zapisuje dokładną treść pierwszego wysłanego SMS-a dla Agenta AI w Chatwoocie:
+    1. Trwale do lokalnego pliku JSONL na wolumenie,
+    2. Nieblokująco (w osobnym wątku, timeout 2.5s) do automation-backend (/api/outbound-sms).
+    """
+    entry = {
+        "phone": phone,
+        "message_text": clean_text,
+        "sim_label": sim_label,
+        "name": name,
+        "city": city,
+        "sent_at": time.time(),
+    }
+    try:
+        with OUTBOUND_SMS_LOG_FILE.open("a", encoding="utf-8") as f:
+            f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    except OSError as exc:
+        print(f"Ostrzeżenie zapisu outbound_cold_sms.jsonl: {exc}")
+
+    def _notify_backend() -> None:
+        for base_u in (
+            AUTOMATION_BACKEND_URL,
+            "https://brosystems.pl/podglad",
+            "https://demo.brosystems.pl",
+            "http://127.0.0.1:8000",
+        ):
+            if not base_u:
+                continue
+            try:
+                r = requests.post(f"{base_u}/api/outbound-sms", json=entry, timeout=2.5)
+                if r.status_code < 300:
+                    break
+            except Exception:
+                continue
+
+    threading.Thread(target=_notify_backend, daemon=True).start()
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -1049,7 +1099,15 @@ def worker_loop():
                     "city": parsed.get("city", ""),
                     "sim_label": sim_info["label"],
                     "day_name": day_label,
+                    "message_text": text_spun,
                 }
+                record_outbound_cold_sms_context(
+                    phone=phone,
+                    clean_text=text_spun,
+                    sim_label=sim_info["label"],
+                    name=parsed.get("name", ""),
+                    city=parsed.get("city", ""),
+                )
                 remaining_count = len(curr_q)
                 _log(f"✅ Wysłano do {phone} ({sim_info['label']} – dziś z tej karty: {per_sim[sim_key]}). Pozostało w kolejce: {remaining_count}")
             else:
