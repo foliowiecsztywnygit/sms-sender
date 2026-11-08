@@ -703,13 +703,15 @@
             <div class="section-header">
                 <div class="section-title">
                     <span>📅 Skrypty SMS na 7 Dni Tygodnia (Samograj sam przełącza skrypt o północy zgodnie z dniem tygodnia)</span>
+                    <span style="font-size: 11px; background: rgba(166, 227, 161, 0.2); color: var(--accent-green); padding: 2px 8px; border-radius: 4px; font-weight: 700; margin-left: 6px;">v5 Deep Spintax</span>
                 </div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                     <button class="btn btn-skip btn-sm" onclick="testCurrentDaySpintax()">🎲 Testuj wg obecnej godziny</button>
                     <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(10)" title="Zobacz jak tekst wygląda rano o 10:00 (Dzień dobry + kontekst poranny)">☀️ Test Rano (10:00)</button>
                     <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(15)" title="Zobacz jak tekst wygląda po południu o 15:00 (Dzień dobry + kontekst popołudniowy)">🌤️ Test Popołudnie (15:00)</button>
                     <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(20)" title="Zobacz jak tekst wygląda wieczorem o 20:00 (Dobry wieczór + kontekst wieczorny)">🌙 Test Wieczór (20:00)</button>
-                    <button class="btn btn-secondary btn-sm" onclick="restoreDayTemplates()">🔄 Przywróć domyślne dnia</button>
+                    <button class="btn btn-secondary btn-sm" onclick="restoreDayTemplates()" title="Przywraca domyślne szablony v5 dla wybranego dnia">🔄 Przywróć dzień</button>
+                    <button class="btn btn-secondary btn-sm" onclick="restoreAllTemplates()" title="Przywraca fabryczne szablony v5 Deep Spintax dla wszystkich 7 dni">⚡ Przywróć wszystkie 7 dni (v5)</button>
                 </div>
             </div>
 
@@ -800,6 +802,7 @@
         let isFetching = false;
         let isSaving = false;
         let selectedDayTab = "0";
+        let currentTemplatesVersion = 0;
         let dailyTemplatesCache = {};
         let devicesCache = [];
         let activeDaysCache = [0, 1, 2, 3, 4, 5, 6];
@@ -1092,7 +1095,7 @@
         }
 
         async function restoreDayTemplates() {
-            if (!confirm(`Przywrócić domyślne szablony Krzysztofa na ${DAY_NAMES[selectedDayTab]}?`)) return;
+            if (!confirm(`Przywrócić domyślne szablony v5 na ${DAY_NAMES[selectedDayTab]}?`)) return;
             const res = await fetch('/api/restore_default_templates', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -1103,6 +1106,22 @@
                 dailyTemplatesCache = data.daily_templates;
                 dayTemplateEditor.value = dailyTemplatesCache[selectedDayTab] || '';
                 updateDayTemplateInfo();
+            }
+        }
+
+        async function restoreAllTemplates() {
+            if (!confirm("Przywrócić fabryczne szablony v5 Deep Spintax dla WSZYSTKICH 7 dni tygodnia?")) return;
+            const res = await fetch('/api/restore_default_templates', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ day: 'all' })
+            });
+            const data = await res.json();
+            if (data.daily_templates) {
+                dailyTemplatesCache = data.daily_templates;
+                dayTemplateEditor.value = dailyTemplatesCache[selectedDayTab] || '';
+                updateDayTemplateInfo();
+                alert("Pomyślnie przywrócono szablony v5 Deep Spintax dla wszystkich 7 dni!");
             }
         }
 
@@ -1231,8 +1250,19 @@
                         `${ls.sim_label} • ${ls.name || 'Brak nazwy'} (${ls.day_name})`;
                 }
 
+                // Automatyczna synchronizacja wersji szablonów (chroni przed trzymaniem przestarzałych wersji w cache)
+                if (data.templates_version && data.templates_version > currentTemplatesVersion) {
+                    currentTemplatesVersion = data.templates_version;
+                    dailyTemplatesCache = data.daily_templates || {};
+                    if (isInitialized && document.activeElement !== dayTemplateEditor && !isSaving) {
+                        dayTemplateEditor.value = dailyTemplatesCache[selectedDayTab] || '';
+                        updateDayTemplateInfo();
+                    }
+                }
+
                 // Pierwsza inicjalizacja formularzy
                 if (!isInitialized) {
+                    currentTemplatesVersion = data.templates_version || 5;
                     dailyTemplatesCache = data.daily_templates || {};
                     selectedDayTab = String(data.current_weekday || 0);
                     selectDayTab(selectedDayTab);
