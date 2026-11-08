@@ -703,15 +703,15 @@
             <div class="section-header">
                 <div class="section-title">
                     <span>📅 Skrypty SMS na 7 Dni Tygodnia (Samograj sam przełącza skrypt o północy zgodnie z dniem tygodnia)</span>
-                    <span style="font-size: 11px; background: rgba(166, 227, 161, 0.2); color: var(--accent-green); padding: 2px 8px; border-radius: 4px; font-weight: 700; margin-left: 6px;">v5 Deep Spintax</span>
+                    <span style="font-size: 11px; background: rgba(166, 227, 161, 0.2); color: var(--accent-green); padding: 2px 8px; border-radius: 4px; font-weight: 700; margin-left: 6px;">v6 Deep Spintax (Natural)</span>
                 </div>
                 <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                     <button class="btn btn-skip btn-sm" onclick="testCurrentDaySpintax()">🎲 Testuj wg obecnej godziny</button>
                     <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(10)" title="Zobacz jak tekst wygląda rano o 10:00 (Dzień dobry + kontekst poranny)">☀️ Test Rano (10:00)</button>
                     <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(15)" title="Zobacz jak tekst wygląda po południu o 15:00 (Dzień dobry + kontekst popołudniowy)">🌤️ Test Popołudnie (15:00)</button>
                     <button class="btn btn-secondary btn-sm" onclick="testCurrentDaySpintax(20)" title="Zobacz jak tekst wygląda wieczorem o 20:00 (Dobry wieczór + kontekst wieczorny)">🌙 Test Wieczór (20:00)</button>
-                    <button class="btn btn-secondary btn-sm" onclick="restoreDayTemplates()" title="Przywraca domyślne szablony v5 dla wybranego dnia">🔄 Przywróć dzień</button>
-                    <button class="btn btn-secondary btn-sm" onclick="restoreAllTemplates()" title="Przywraca fabryczne szablony v5 Deep Spintax dla wszystkich 7 dni">⚡ Przywróć wszystkie 7 dni (v5)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="restoreDayTemplates()" title="Przywraca domyślne szablony v6 dla wybranego dnia">🔄 Przywróć dzień</button>
+                    <button class="btn btn-secondary btn-sm" onclick="restoreAllTemplates()" title="Przywraca fabryczne szablony v6 Deep Spintax dla wszystkich 7 dni">⚡ Przywróć wszystkie 7 dni (v6)</button>
                 </div>
             </div>
 
@@ -727,7 +727,7 @@
 
             <div style="font-size: 12px; color: var(--text-muted); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px;">
                 <span id="dayTemplateInfo">Edytujesz szablony na: Poniedziałek (oddzielaj kolejne warianty linijką '---')</span>
-                <span>Tagi: <code>{PORA: rano | popołudnie | wieczór}</code>, <code>{Powitanie}</code>, <code>{opcja1|opcja2}</code>, <code>{Name:Kliencie}</code>, <code>{City:Twojej okolicy}</code></span>
+                <span>Tagi: <code>{PORA: rano | popołudnie | wieczór}</code>, <code>{Powitanie}</code>, <code>{opcja1|opcja2}</code> (naturalny język bez sztucznego wstrzykiwania surowych nazw)</span>
             </div>
 
             <textarea id="dayTemplateEditor" style="height: 175px; white-space: pre-wrap;"></textarea>
