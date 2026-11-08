@@ -111,113 +111,113 @@ DEFAULT_DEVICES = [
 # Składnia {PORA: rano (do 12:00) | popołudnie (12:00-17:00) | wieczór (od 17:00)}
 # gwarantuje brak oksymoronów (np. brak "wieczornej kawy" czy "poranka" wieczorem).
 # ──────────────────────────────────────────────
-TEMPLATES_VERSION = 3
+TEMPLATES_VERSION = 4
 
 DEFAULT_DAILY_TEMPLATES = {
     # 0 = PONIEDZIAŁEK
-    "0": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. {PORA: Nowy tydzień po weekendowych wyjazdach gości to świetny moment na uporządkowanie rezerwacji | Nowy tydzień to świetny moment na usprawnienie rezerwacji | Poniedziałkowy wieczór na starcie tygodnia to dobry czas na usprawnienie rezerwacji}. Wdrażam w obiektach noclegowych bezpośrednie kalendarze rezerwacji na telefon – goście sami sprawdzają wolne terminy i wpłacają zadatki 24/7, a 100% zysku zostaje u Państwa bez prowizji dla portali. Mogę przygotować darmowe demo wizualne i krótki film, jak dokładnie wyglądałoby to u Państwa?
+    "0": """{Dzień dobry | Witam}! Tu Krzysztof. Wdrażam w {City:regionie} bezpośrednie kalendarze rezerwacji na telefon – goście rezerwują 24/7 z BLIKiem, a 100% kwoty zostaje u Was bez prowizji portali. Podesłać darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. Wdrażam dla gospodarzy niezależne kalendarze rezerwacji online. Turyści rezerwują i opłacają pobyt bezpośrednio ze smartfona w 30 sekund, a wpłaty trafiają od razu na Państwa konto z pominięciem prowizji pośredników. Mogę podesłać krótki film i bezpłatne demo wizualne, jak wyglądałoby takie rozwiązanie przygotowane pod Państwa obiekt?
+{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Na start tygodnia: pomagam obiektom noclegowym uniezależnić się od prowizji portali. Goście rezerwują i opłacają zadatki z telefonu w 30 sekund. Mogę przygotować darmowe demo, jak wyglądałoby to u Państwa?
 ---
-{Dzień dobry | Cześć}! Tu Krzysztof. Startujemy z nowym tygodniem i wdrażam dla kolejnych kwater bezpośrednie moduły rezerwacji z telefonu. Goście klikają wolny termin, wpłacają zadatek BLIKiem lub kartą, a system sam pilnuje grafiku – bez konieczności ciągłego odbierania telefonów i bez prowizji portali. Przygotować dla Państwa darmowe demo i krótki film pokazujący, jak wyglądałoby to bezpośrednio u Was?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Przygotowuję dla kwater bezobsługowe kalendarze rezerwacji online. Turyści sami sprawdzają grafik i płacą zadatek BLIKiem, a pełny zysk trafia do Was. Przygotować bezpłatne demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Pomagam obiektom noclegowym uruchomić własny system rezerwacji bezpośrednich. Zamiast oddawać kilkanaście procent prowizji portalom, turyści rezerwują nocleg prosto z telefonu, a cała kwota trafia od razu do Państwa. Podesłać krótki film i darmowe demo wizualne, żeby zobaczyli Państwo na żywo, jak takie rozwiązanie wyglądałoby u Was?
+{Dzień dobry | Witam}! Tu Krzysztof. Wdrażam dla gospodarzy proste kalendarze rezerwacji 24/7 na telefon. Zdejmują z głowy ciągłe odbieranie telefonów, a pieniądze wpadają od razu na Wasze konto. Podesłać darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Po weekendzie goście od razu szukają noclegów na kolejne tygodnie i najchętniej rezerwują od ręki na telefonie. Uruchamiam proste, bezobsługowe kalendarze z płatnościami online, które przyjmują rezerwacje 24/7 prosto na Państwa konto. Mogę przygotować darmowe demo wizualne i podesłać krótki film, jak taki kalendarz wyglądałby u Państwa?
+{Dzień dobry | Witam serdecznie}! Krzysztof z tej strony. Czy w {Name:Państwa obiekcie} goście mogą już rezerwować i opłacać pobyty bezpośrednio z telefonu bez dzwonienia i prowizji pośredników? Mogę podesłać darmowe demo wizualne przygotowane pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Uruchamiam dla obiektów noclegowych własne kalendarze rezerwacji zintegrowane z szybkimi płatnościami na telefonie. Koniec z ręcznym potwierdzaniem każdego zapytania – gość klika, płaci zadatek, a 100% kwoty zostaje u właściciela bez pośredników. Mogę przesłać krótki filmik oraz bezpłatne demo pokazujące, jak to rozwiązanie wyglądałoby u Państwa?
+{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla obiektów noclegowych bezpośrednie rezerwacje z telefonu. 100% zysku zostaje w Państwa kieszeni, a goście rezerwują w 30 sekund z BLIKiem. Podesłać bezpłatne demo przygotowane pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: Na starcie poniedziałku | W poniedziałek | W poniedziałkowy wieczór} krótko i do rzeczy: wdrażam dla właścicieli kwater własne systemy rezerwacji online na telefon. Goście rezerwują pobyty 24/7, a pełna kwota za pobyt trafia bezpośrednio do Państwa bez prowizji portali. Przygotować bezpłatne demo wizualne i krótki film, jak wyglądałoby takie rozwiązanie wdrożone u Państwa?""",
+{Dzień dobry | Witam}! Tu Krzysztof. {PORA: W poniedziałek | W poniedziałkowe popołudnie | W poniedziałkowy wieczór} krótko i do rzeczy: wdrażam dla kwater własne systemy rezerwacji z telefonu bez oddawania prowizji portalom. Przygotować darmowe demo, jak wyglądałoby to u Państwa?""",
 
     # 1 = WTOREK
-    "1": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Wdrażam w regionie bezpośrednie kalendarze rezerwacji noclegów na telefon dla gości. Turyści sami sprawdzają wolne pokoje i opłacają zadatki przez smartfon, a 100% wpłaty trafia prosto na Państwa konto – zero prowizji dla portali i zero wiszenia na telefonie. Mogę przygotować darmowe demo wizualne i krótki film, jak dokładnie wyglądałoby to u Państwa?
+    "1": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Wdrażam dla obiektów noclegowych bezpośrednie kalendarze rezerwacji na telefon. Turyści sami sprawdzają wolne pokoje i płacą zadatki przez smartfon, a 100% wpłat trafia do Was bez prowizji. Podesłać darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: We wtorkowy poranek | We wtorek | We wtorkowy wieczór} krótko i konkretnie: pomagam obiektom noclegowym uniezależnić się od prowizji portali rezerwacyjnych. Wdrażam prosty kalendarz 24/7 na telefon, w którym goście sami rezerwują i wpłacają zadatki bezpośrednio do Was. Podesłać krótki film i bezpłatne demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: We wtorek | We wtorkowe popołudnie | We wtorkowy wieczór} krótko i konkretnie: pomagam gospodarzom uniezależnić się od prowizji portali. Wdrażam prosty kalendarz 24/7 na telefon z BLIKiem. Mogę przygotować darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla gospodarzy własne kalendarze rezerwacji online. Zamiast ciągle odpisywać na wiadomości i odbierać telefony o wolne terminy, system robi to automatycznie, a pełna kwota za nocleg trafia od razu na Państwa konto bez pośredników. Mogę przygotować bezpłatne demo wizualne i podesłać krótki film pokazujący, jak to działa u Państwa?
+{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater własne moduły rezerwacji online. Zamiast ciągle odpisywać na wiadomości o wolne terminy, system robi to sam, a pełny zysk zostaje u Państwa. Przygotować bezpłatne demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Coraz więcej turystów rezerwuje wyjazdy z telefonu w trakcie tygodnia i oczekuje natychmiastowego potwierdzenia rezerwacji bez dzwonienia. Tworzę dla kwater i domków proste narzędzia rezerwacji 24/7, które przyjmują zadatki bez pośredników. Mogę przesłać krótki film oraz darmowe demo, jak wyglądałoby takie rozwiązanie u Państwa?
+{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Turyści coraz częściej rezerwują noclegi w biegu na telefonie i chcą potwierdzenia od ręki. Tworzę dla kwater proste narzędzia rezerwacji 24/7 bez pośredników. Podesłać darmowe demo, jak wyglądałoby to u Państwa?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Wdrażam bezpośrednie systemy rezerwacji online na telefony dla obiektów turystycznych. Zyskujecie 100% ceny pobytu bez oddawania prowizji pośrednikom, a goście mają wygodny kalendarz z natychmiastową płatnością. Podesłać krótki filmik i darmowe demo pokazujące, jak takie rozwiązanie wyglądałoby przygotowane pod Państwa obiekt?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Wdrażam systemy rezerwacji online na telefon dla obiektów noclegowych. Zyskujecie 100% ceny pobytu bez prowizji, a goście wygodny kalendarz z BLIKiem. Podesłać darmowe demo wizualne przygotowane pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Pomagam gospodarzom zautomatyzować przyjmowanie rezerwacji. Wdrażam przejrzysty kalendarz na telefon z płatnościami online – gość sam klika wolny termin i płaci zadatek, a 100% kwoty zostaje w Państwa kieszeni. Mogę przygotować dla Państwa bezpłatne demo wizualne i krótki film pokazujący, jak taki system wyglądałby u Was?
+{Dzień dobry | Witam}! Tu Krzysztof. Pomagam gospodarzom zautomatyzować rezerwacje: gość sam klika wolny termin i płaci zadatek przez telefon, a 100% kwoty wpada na Państwa konto. Mogę przygotować bezpłatne demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: We wtorek | We wtorkowe popołudnie | We wtorkowy wieczór} prosto do sedna: pomagam właścicielom kwater wdrożyć własny kalendarz rezerwacji z telefonu bez prowizji portali. Goście rezerwują pobyt 24/7, a pieniądze wpadają bezpośrednio do Was. Przygotować darmowe demo wizualne i podesłać krótki film, jak wyglądałoby to u Państwa?""",
+{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: We wtorek | We wtorkowe popołudnie | We wtorkowy wieczór} prosto do sedna: wdrażam kalendarze rezerwacji z telefonu bez prowizji portali (płatności 24/7). Przygotować darmowe demo, jak wyglądałoby to u Państwa?""",
 
     # 2 = ŚRODA
-    "2": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. W połowie tygodnia zaczyna się fala zapytań o rezerwacje na kolejne terminy. Wdrażam dla kwater bezpośrednie kalendarze na telefon – goście sami sprawdzają grafik i wpłacają zadatki 24/7, a 100% wpłat trafia prosto na Państwa konto bez prowizji pośredników. Mogę przygotować darmowe demo wizualne i krótki film, jak takie rozwiązanie wyglądałoby u Państwa?
+    "2": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. W połowie tygodnia zaczyna się fala zapytań o kolejne terminy. Wdrażam dla kwater bezpośrednie kalendarze na telefon – goście rezerwują 24/7 z BLIKiem, a 100% kwoty zostaje u Was bez prowizji. Podesłać darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. Pomagam obiektom noclegowym uruchomić własny, bezobsługowy kalendarz rezerwacji na smartfony. Turyści rezerwują termin w 30 sekund i natychmiast opłacają zadatek, dzięki czemu nie oddajecie kilkunastu procent prowizji portalom. Podesłać krótki film i bezpłatne demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam}! Krzysztof z tej strony. Pomagam obiektom noclegowym uruchomić bezobsługowy kalendarz rezerwacji na telefon. Turyści rezerwują w 30 sekund i płacą zadatek bez oddawania prowizji portalom. Mogę przygotować darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Tu Krzysztof. {PORA: W środę | W środowe popołudnie | W środowy wieczór} krótko i rzeczowo: tworzę dla gospodarzy proste systemy rezerwacji bezpośrednich na telefon. Zdejmują z głowy ciągłe odbieranie telefonów i pilnowanie grafiku, a cała kwota za nocleg zostaje w Państwa kieszeni. Mogę przygotować darmowe demo i przesłać krótki film pokazujący działanie u Państwa?
+{Dzień dobry | Cześć}! Tu Krzysztof. {PORA: W środę | W środowe popołudnie | W środowy wieczór} krótko i rzeczowo: wdrażam systemy bezpośrednich rezerwacji z telefonu. Zdejmują z głowy ciągłe telefony, a cały zysk zostaje w Państwa kieszeni. Podesłać darmowe demo, jak to działa u Państwa?
 ---
-{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Wdrażam dla obiektów turystycznych własne moduły rezerwacji z telefonu. Zamiast oddawać prowizję portalom, zyskujecie niezależny kalendarz, w którym turyści sami rezerwują i wpłacają pieniądze bezpośrednio na Wasze konto. Podesłać krótki filmik i darmowe demo wizualne, żeby zobaczyli Państwo, jak wyglądałoby to u Was?
+{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Zamiast oddawać prowizję portalom, uruchamiam dla kwater niezależne kalendarze na smartfony. Turyści sami rezerwują i wpłacają zadatki bezpośrednio na Wasze konto. Przygotować bezpłatne demo pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. W środku tygodnia najwięcej osób szuka noclegów na smartfonach i woli od razu kliknąć termin oraz wpłacić zadatek BLIKiem bez dzwonienia. Buduję dla gospodarzy proste kalendarze rezerwacji działające 24/7. Mogę przygotować bezpłatne demo wizualne i podesłać krótki film, jak takie rozwiązanie wyglądałoby u Państwa?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. W środku tygodnia najwięcej osób szuka noclegów na telefonie i woli od razu kliknąć termin oraz wpłacić zadatek BLIKiem. Buduję dla gospodarzy kalendarze 24/7. Mogę podesłać darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Uruchamiam dla kwater i domków bezpośrednie kalendarze rezerwacji online. Koniec z traceniem czasu na wiadomości „czy termin wolny” – gość sam sprawdza grafik i płaci, a 100% zysku zostaje u Państwa bez pośredników. Mogę podesłać krótki film i darmowe demo przygotowane bezpośrednio pod Państwa obiekt?
+{Dzień dobry | Witam}! Tu Krzysztof. Koniec z traceniem czasu na wiadomości „czy termin wolny” – gość sam sprawdza grafik na telefonie i płaci, a 100% kwoty trafia do Państwa bez pośredników. Podesłać darmowe demo przygotowane pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: W środę | W środowe popołudnie | W środowy wieczór} konkretna sprawa: pomagam właścicielom noclegów uruchomić własny system rezerwacji z telefonu z pominięciem portali pobierających prowizję. Goście rezerwują 24/7 prosto do Was. Przygotować bezpłatne demo wizualne i krótki film, jak takie rozwiązanie wyglądałoby u Państwa?""",
+{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: W środę | W środowe popołudnie | W środowy wieczór} konkretna sprawa: pomagam właścicielom noclegów uruchomić własny system rezerwacji z telefonu z pominięciem prowizji portali. Przygotować darmowe demo wizualne pod Państwa obiekt?""",
 
     # 3 = CZWARTEK
-    "3": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Przed weekendem telefony o wolne terminy urywają się najczęściej. Wdrażam dla obiektów noclegowych proste kalendarze rezerwacji na telefon – goście sami sprawdzają grafik i wpłacają zadatki 24/7, a 100% kwoty zostaje u Państwa bez prowizji dla portali. Mogę przygotować darmowe demo wizualne i krótki film, jak takie rozwiązanie wyglądałoby u Państwa?
+    "3": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. Zamiast wisieć na telefonie przed weekendem: wdrażam dla obiektów noclegowych kalendarze rezerwacji na telefon. Goście rezerwują 24/7 z BLIKiem, a 100% kwoty zostaje u Państwa bez prowizji. Podesłać darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: W czwartek | W czwartkowe popołudnie | W czwartkowy wieczór} krótko i do rzeczy: pomagam gospodarzom zautomatyzować rezerwacje noclegów. Turyści rezerwują i opłacają pobyt bezpośrednio z telefonu w kilkadziesiąt sekund, a cała wpłata wpada od razu na Państwa konto bez pośredników. Podesłać krótki film i bezpłatne demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: W czwartek | W czwartkowe popołudnie | W czwartkowy wieczór} krótko i do rzeczy: pomagam gospodarzom zautomatyzować rezerwacje noclegów. Turyści rezerwują i płacą z telefonu w 30 sekund bezpośrednio do Was. Mogę przygotować darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater bezpośrednie moduły rezerwacji online na telefon. Zamiast wisieć na telefonie i ręcznie potwierdzać terminy, kalendarz sam pilnuje grafiku i przyjmuje zadatki, a pełny zysk zostaje u Was. Mogę przygotować darmowe demo i podesłać krótki film pokazujący, jak to działa u Państwa?
+{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater moduły rezerwacji online na telefon. Kalendarz sam pilnuje grafiku i przyjmuje zadatki, dzięki czemu nie trzeba wisieć na telefonie, a pełny zysk zostaje u Was. Podesłać bezpłatne demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Przed samym weekendem turyści szukają noclegów na telefonach i wolą od razu kliknąć wolny termin oraz wpłacić zadatek zamiast dzwonić. Wdrażam niezależne kalendarze 24/7, które pozwalają zachować 100% ceny pobytu bez oddawania prowizji pośrednikom. Podesłać krótki filmik i bezpłatne demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Przed weekendem turyści szukają noclegów na telefonach i wolą od razu kliknąć termin oraz wpłacić zadatek. Wdrażam niezależne kalendarze 24/7 bez prowizji pośredników. Przygotować darmowe demo, jak wyglądałoby to u Państwa?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Buduję dla właścicieli kwater i domków proste kalendarze rezerwacji z płatnościami online. System działa 24/7 na smartfonie klienta, a pieniądze trafiają prosto na Państwa konto bez prowizji pośredników. Mogę przygotować darmowe demo wizualne i podesłać krótki film, jak taki system wyglądałby u Państwa?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Buduję dla właścicieli kwater i domków proste kalendarze rezerwacji na telefon. System działa 24/7 z płatnościami BLIK, a wpłaty trafiają prosto na Wasze konto. Mogę podesłać darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Pomagam obiektom noclegowym wprowadzić bezpośrednie rezerwacje z telefonu. Goście klikają termin, płacą BLIKiem lub kartą, a Wy nie tracicie czasu na odpisywanie ani zysku na prowizje portali. Mogę przesłać krótki film oraz bezpłatne demo pokazujące, jak to rozwiązanie wyglądałoby u Państwa?
+{Dzień dobry | Witam}! Tu Krzysztof. Pomagam obiektom noclegowym wprowadzić bezpośrednie rezerwacje z telefonu. Goście klikają termin, płacą zadatek, a Wy nie oddajecie prowizji portalom rezerwacyjnym. Podesłać darmowe demo przygotowane pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: W czwartek | W czwartkowe popołudnie | W czwartkowy wieczór} prosto do sedna: wdrażam dla obiektów niezależne kalendarze rezerwacji online na telefon. Pełna kwota za pobyt trafia bezpośrednio do Państwa bez pośredników. Przygotować darmowe demo wizualne i krótki film, jak takie rozwiązanie wyglądałoby wdrożone u Państwa?""",
+{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: W czwartek | W czwartkowe popołudnie | W czwartkowy wieczór} prosto do sedna: wdrażam kalendarze rezerwacji online na telefon, dzięki którym 100% kwoty za pobyt trafia bezpośrednio do Państwa. Przygotować darmowe demo wizualne pod Państwa obiekt?""",
 
     # 4 = PIĄTEK
-    "4": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. W piątek przy obsłudze przyjazdów gości trudno odbierać każdy telefon z pytaniem o kolejne terminy. Wdrażam proste kalendarze rezerwacji na telefon – goście sami rezerwują i opłacają zadatki 24/7, a 100% wpłat trafia na Państwa konto bez prowizji dla portali. Mogę przygotować darmowe demo wizualne i krótki film, jak dokładnie wyglądałoby to u Państwa?
+    "4": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. W weekendowym ruchu trudno odbierać każdy telefon o kolejne terminy. Wdrażam kalendarze rezerwacji na smartfony – goście sami rezerwują i wpłacają zadatki 24/7, a 100% wpłat trafia do Państwa bez prowizji. Podesłać darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. Pomagam obiektom turystycznym uniezależnić się od prowizji portali i zautomatyzować grafik. Turyści sami wybierają wolne dni i wpłacają zadatek przez smartfon, a cała kwota wpada od razu do Państwa bez pośredników. Podesłać krótki film i bezpłatne demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam}! Krzysztof z tej strony. Pomagam obiektom turystycznym uniezależnić się od prowizji portali i zautomatyzować grafik. Turyści sami wybierają wolne dni i płacą zadatek przez smartfon w 30 sekund. Mogę przygotować darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater i domków bezpośrednie kalendarze rezerwacji działające 24/7 na telefonie. Zdejmują z głowy ciągłe odbieranie telefonów o wolne terminy, a pełny zysk z pobytów zostaje u właściciela. Mogę przygotować darmowe demo i podesłać krótki film pokazujący, jak to działa u Państwa?
+{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater i domków bezpośrednie kalendarze rezerwacji 24/7 na telefon. Zdejmują z głowy ciągłe odbieranie telefonów, a pełny zysk z pobytów zostaje u właściciela. Przygotować bezpłatne demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. {PORA: W piątek | W piątkowe popołudnie | W piątkowy wieczór} krótko i na temat: turyści planujący wyjazdy w weekend wolą kliknąć termin i opłacić pobyt z telefonu bez czekania na telefon. Wdrażam proste systemy rezerwacji z płatnościami online bez pośredników. Podesłać krótki filmik i darmowe demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. {PORA: W piątek | W piątkowe popołudnie | W piątkowy wieczór} krótko i na temat: turyści planujący wyjazdy wolą kliknąć termin i opłacić pobyt z telefonu bez czekania na telefon. Wdrażam kalendarze z BLIKiem bez pośredników. Podesłać darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Buduję dla gospodarzy bezobsługowe kalendarze rezerwacji na telefon. System przyjmuje wpłaty 24/7 bezpośrednio na Państwa konto, a turyści rezerwują bez pośrednictwa portali zabierających prowizję. Mogę przygotować darmowe demo wizualne i przesłać krótki film, jak wyglądałoby to u Państwa?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Buduję dla gospodarzy bezobsługowe kalendarze rezerwacji na telefon. System przyjmuje wpłaty 24/7 bezpośrednio na Państwa konto, bez oddawania prowizji portalom. Mogę podesłać darmowe demo wizualne, jak wyglądałoby to u Państwa?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Pomagam kwaterom noclegowym zautomatyzować rezerwacje online. Gość sam sprawdza wolne terminy i natychmiast płaci zadatek przez telefon, a 100% kwoty zostaje w Państwa kieszeni. Mogę podesłać krótki film i bezpłatne demo wizualne przygotowane pod Państwa obiekt?
+{Dzień dobry | Witam}! Tu Krzysztof. Pomagam kwaterom noclegowym zautomatyzować rezerwacje online. Gość sam sprawdza grafik i płaci zadatek z telefonu, a 100% zysku zostaje w Państwa kieszeni. Podesłać darmowe demo przygotowane bezpośrednio pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: W piątek | W piątkowe popołudnie | W piątkowy wieczór} krótka wiadomość: wdrażam dla właścicieli noclegów własne moduły rezerwacji z telefonu. Goście rezerwują 24/7 bezpośrednio u Was, bez oddawania kilkunastu procent prowizji. Przygotować bezpłatne demo wizualne i krótki film, jak wyglądałoby takie rozwiązanie u Państwa?""",
+{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: W piątek | W piątkowe popołudnie | W piątkowy wieczór} krótka sprawa: wdrażam dla właścicieli noclegów własne moduły rezerwacji z telefonu bez oddawania prowizji pośrednikom. Przygotować darmowe demo wizualne pod Państwa obiekt?""",
 
     # 5 = SOBOTA
-    "5": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. W weekendy turyści najczęściej szukają kolejnych wyjazdów na smartfonach i wolą od razu zarezerwować termin online. Wdrażam dla obiektów noclegowych proste kalendarze na telefon – goście sami sprawdzają grafik i wpłacają zadatki 24/7, a 100% zysku zostaje u Państwa bez prowizji dla portali. Mogę przygotować darmowe demo wizualne i krótki film, jak takie rozwiązanie wyglądałoby u Państwa?
+    "5": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. W weekendy turyści najczęściej szukają kolejnych wyjazdów w telefonie i wolą od razu zarezerwować termin online. Wdrażam kalendarze na telefon – goście rezerwują 24/7 z BLIKiem, a 100% zysku zostaje u Was bez prowizji. Podesłać darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: W sobotę | W sobotnie popołudnie | W sobotni wieczór} krótko i konkretnie: pomagam gospodarzom uruchomić własny system rezerwacji bezpośrednich z telefonu. Turyści rezerwują i opłacają pobyt w 30 sekund, a wpłaty trafiają od razu na Państwa konto z pominięciem prowizji pośredników. Podesłać krótki film i bezpłatne demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: W sobotę | W sobotnie popołudnie | W sobotni wieczór} krótko i konkretnie: pomagam gospodarzom uruchomić rezerwacje bezpośrednie z telefonu. Turyści rezerwują i opłacają pobyt w 30 sekund bezpośrednio na Wasze konto. Mogę przygotować darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater i domków bezobsługowe kalendarze rezerwacji online. Zamiast ciągle odbierać telefony o wolne terminy w trakcie weekendu, system sam przyjmuje rezerwacje i zadatki, a pełna kwota zostaje u właściciela. Mogę przygotować darmowe demo i podesłać krótki film pokazujący, jak to działa u Państwa?
+{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater i domków bezobsługowe kalendarze rezerwacji. Zamiast ciągle odbierać telefony o wolne terminy w weekend, system sam przyjmuje rezerwacje i zadatki, a cały zysk zostaje u Was. Podesłać bezpłatne demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Weekend to czas, kiedy najwięcej rodzin planuje urlopy na smartfonach i wybiera obiekty, w których można natychmiast kliknąć i opłacić termin. Wdrażam niezależne kalendarze 24/7 bez prowizji pośredników. Podesłać krótki filmik i darmowe demo wizualne, żeby zobaczyli Państwo, jak wyglądałoby to u Was?
+{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. Weekend to czas, kiedy najwięcej rodzin planuje urlopy na smartfonach i wybiera obiekty z natychmiastową rezerwacją online. Wdrażam kalendarze 24/7 bez prowizji pośredników. Przygotować darmowe demo, jak wyglądałoby to u Państwa?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Buduję dla gospodarzy proste kalendarze rezerwacji noclegów z płatnościami online na telefon. System sam przyjmuje wpłaty 24/7 bezpośrednio na Państwa konto, bez oddawania prowizji portalom rezerwacyjnym. Mogę przygotować bezpłatne demo i przesłać krótki film, jak taki kalendarz wyglądałby u Państwa?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Buduję dla gospodarzy kalendarze rezerwacji noclegów z płatnościami BLIK na telefon. System sam przyjmuje wpłaty 24/7 prosto na Państwa konto, bez prowizji dla portali. Mogę podesłać darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Pomagam obiektom noclegowym wprowadzić bezpośrednie rezerwacje online 7 dni w tygodniu. Gość klika wolny termin, płaci zadatek BLIKiem lub kartą, a 100% kwoty zostaje w Państwa kieszeni bez pośredników. Mogę podesłać krótki film i bezpłatne demo wizualne pokazujące, jak to rozwiązanie wyglądałoby u Państwa?
+{Dzień dobry | Witam}! Tu Krzysztof. Pomagam obiektom noclegowym wprowadzić bezpośrednie rezerwacje online. Gość klika wolny termin, płaci zadatek BLIKiem, a 100% kwoty zostaje w Państwa kieszeni bez pośredników. Podesłać darmowe demo przygotowane pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: W sobotę | W sobotnie popołudnie | W sobotni wieczór} konkretnie: wdrażam dla kwater własne systemy rezerwacji bezpośrednich na telefon. Goście rezerwują 24/7, a pełny zysk z noclegów zostaje u Państwa bez prowizji portali. Przygotować darmowe demo wizualne i krótki film, jak takie rozwiązanie wyglądałoby u Państwa?""",
+{Dzień dobry | Cześć}! Krzysztof z tej strony. {PORA: W sobotę | W sobotnie popołudnie | W sobotni wieczór} konkretnie: wdrażam dla kwater systemy rezerwacji bezpośrednich na telefon (100% zysku bez prowizji portali). Przygotować darmowe demo wizualne pod Państwa obiekt?""",
 
     # 6 = NIEDZIELA
-    "6": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. W niedziele turyści masowo planują noclegi na kolejne tygodnie w telefonach i wolą od razu kliknąć wolny termin oraz wpłacić zadatek. Wdrażam proste kalendarze rezerwacji online – system działa 24/7 na smartfonie gościa, a 100% wpłat trafia na Państwa konto bez prowizji pośredników. Mogę przygotować darmowe demo wizualne i krótki film, jak takie rozwiązanie wyglądałoby u Państwa?
+    "6": """{Dzień dobry | Witam serdecznie}! Tu Krzysztof. W niedziele turyści masowo planują noclegi w telefonach i wolą od razu kliknąć wolny termin oraz wpłacić zadatek. Wdrażam kalendarze rezerwacji online 24/7 – 100% wpłat trafia na Państwa konto bez prowizji pośredników. Podesłać darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: W niedzielę | W niedzielne popołudnie | W niedzielny wieczór} krótko i konkretnie: pomagam obiektom noclegowym uruchomić bezpośrednie rezerwacje z telefonu. Turyści rezerwują termin w kilkadziesiąt sekund i natychmiast wpłacają zadatek, a cała kwota wpada prosto do Państwa. Podesłać krótki film i bezpłatne demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam}! Krzysztof z tej strony. {PORA: W niedzielę | W niedzielne popołudnie | W niedzielny wieczór} krótko i konkretnie: pomagam obiektom noclegowym uruchomić bezpośrednie rezerwacje z telefonu. Turyści rezerwują w kilkadziesiąt sekund z BLIKiem prosto do Państwa. Mogę przygotować darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater i domków bezobsługowe kalendarze rezerwacji na telefon. Zdejmują z głowy ciągłe odpisywanie na zapytania o wolne pokoje, a pełna kwota za pobyt zostaje u właściciela bez oddawania prowizji portalom. Mogę przygotować darmowe demo i podesłać krótki film pokazujący, jak to działa u Państwa?
+{Dzień dobry | Cześć}! Tu Krzysztof. Uruchamiam dla kwater i domków bezobsługowe kalendarze rezerwacji na telefon. Zdejmują z głowy ciągłe odpisywanie na zapytania, a pełna kwota za pobyt zostaje u właściciela bez prowizji. Przygotować darmowe demo pod Państwa obiekt?
 ---
-{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. {PORA: W niedzielę | W niedzielne popołudnie | W niedzielny wieczór} najwięcej osób rezerwuje wyjazdy prosto ze smartfona bez wcześniejszego dzwonienia. Wdrażam dla gospodarzy niezależne kalendarze 24/7 z płatnościami online, dzięki czemu nie oddajecie kilkunastu procent prowizji portalom. Podesłać krótki filmik i darmowe demo wizualne, jak wyglądałoby to u Państwa?
+{Dzień dobry | Witam serdecznie}! Z tej strony Krzysztof. {PORA: W niedzielę | W niedzielne popołudnie | W niedzielny wieczór} najwięcej osób rezerwuje wyjazdy ze smartfona. Wdrażam dla gospodarzy niezależne kalendarze 24/7 z płatnościami BLIK, bez oddawania kilkunastu procent portalom. Podesłać darmowe demo wizualne pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Buduję dla gospodarzy proste kalendarze rezerwacji noclegów. System przyjmuje wpłaty i zadatki 24/7 prosto na Państwa konto, a turyści rezerwują bez pośredników. Mogę przygotować bezpłatne demo wizualne i przesłać krótki film, jak takie rozwiązanie wyglądałoby u Państwa?
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Buduję dla gospodarzy proste kalendarze rezerwacji noclegów. System przyjmuje zadatki 24/7 prosto na Państwa konto, a turyści rezerwują bez pośredników. Mogę podesłać darmowe demo, jak wyglądałoby to u Państwa?
 ---
-{Dzień dobry | Witam}! Tu Krzysztof. Pomagam obiektom turystycznym wprowadzić bezpośrednie rezerwacje online. Gość sam sprawdza grafik i płaci zadatek z telefonu, a 100% zysku zostaje w Państwa kieszeni bez prowizji pośredników. Mogę podesłać krótki film i darmowe demo przygotowane bezpośrednio pod Państwa obiekt?
+{Dzień dobry | Witam}! Tu Krzysztof. Pomagam obiektom turystycznym wprowadzić bezpośrednie rezerwacje z telefonu. Gość sam sprawdza grafik i płaci zadatek, a 100% zysku zostaje w Państwa kieszeni bez prowizji portali. Podesłać darmowe demo przygotowane pod Państwa obiekt?
 ---
-{Dzień dobry | Cześć}! Krzysztof z tej strony. Przed startem nowego tygodnia krótko i do rzeczy: wdrażam dla kwater własne systemy rezerwacji bezpośrednich z telefonu. Goście rezerwują 24/7, a pełna kwota trafia prosto na Państwa konto bez prowizji portali. Przygotować bezpłatne demo wizualne i krótki film, jak takie rozwiązanie wyglądałoby wdrożone u Państwa?""",
+{Dzień dobry | Cześć}! Krzysztof z tej strony. Przed startem nowego tygodnia krótko i do rzeczy: wdrażam dla kwater systemy rezerwacji bezpośrednich z telefonu (płatności 24/7 bez prowizji portali). Przygotować darmowe demo wizualne pod Państwa obiekt?""",
 }
 
 
@@ -422,7 +422,7 @@ def load_state():
             if not isinstance(state.get("daily_templates"), dict) or saved_tpl_ver < TEMPLATES_VERSION:
                 state["daily_templates"] = DEFAULT_DAILY_TEMPLATES.copy()
                 state["templates_version"] = TEMPLATES_VERSION
-                _log("✨ Zaktualizowano szablony 7 dni do nowej wersji v3 (konkretny ton bez przepraszania, darmowe demo wizualne pod obiekt + film).")
+                _log("✨ Zaktualizowano szablony 7 dni do wersji v4 (ultra-zwięzłe SMS-y 190-230 zn., bezpośrednie demo pod obiekt).")
             else:
                 for day_idx in range(7):
                     dk = str(day_idx)
